@@ -1,0 +1,463 @@
+/**
+ * Tailwind, imported in parts so the stock preflight can be swapped for one
+ * that stays out of `.lh` subtrees (header, footer, homepage). Those carry the
+ * live site's own stylesheet — src/styles/live.css — and must render with the
+ * live Bootstrap reboot, not Tailwind's reset.
+ */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "../styles/preflight-scoped.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/*
+ * The ported live components use the live class names (Bootstrap's
+ * `collapse`, `container`, `fixed`, `mt-30`…). Tailwind would read those as
+ * its own utilities — `collapse` is `visibility: collapse` — so it must not
+ * scan them.
+ */
+@source not "../components/home";
+@source not "../components/layout";
+@source not "../components/sections";
+@source not "../components/pricelist";
+@source not "../content";
+
+/**
+ * DESIGN TOKENS
+ *
+ * Every value below was read from the live site's own CSS custom properties
+ * (see REBUILD-SPEC.md), not eyeballed from a screenshot. Keep them in sync
+ * with the live site — they are the contract for "looks identical".
+ */
+@theme {
+  /* Brand */
+  --color-gold: #a78627;
+  --color-ink: #1c1a1d;
+
+  /* Text */
+  --color-body: #707070;
+  --color-muted: #c4c4c4;
+  --color-review: #ffc737;
+
+  /* Surfaces */
+  --color-white: #ffffff;
+  --color-cream: #f2e6dd;
+  --color-sand: #f5f2ec;
+  --color-blush: #fdf6f2;
+  --color-shell: #f8f6f1;
+
+  /* Darks used by the footer and dark panels */
+  --color-dark-1: #111111;
+  --color-dark-2: #232323;
+  --color-dark-3: #343434;
+  --color-dark-4: #212529;
+
+  /* Families — the live site's own self-hosted files, declared in
+     src/styles/live.css (public/webfonts). */
+  --font-display: "Literata", serif;
+  --font-sans: "Mulish", sans-serif;
+
+  /**
+   * Type scale — these are the values the live site actually RENDERS, read out
+   * of the theme stylesheet, not the --h1..--h6 custom properties it declares.
+   * The two disagree: the properties say 72/50/36, the winning rules say
+   * 110/55/36. Individual sections override further (the hero h1 is 72px/600),
+   * so treat these as the base only.
+   */
+  --text-h1: 110px;
+  --text-h1--line-height: 130px;
+  --text-h1--font-weight: 700;
+  --text-h2: 55px;
+  --text-h2--line-height: 65px;
+  --text-h2--font-weight: 300;
+  --text-h3: 36px;
+  --text-h3--line-height: 1.2;
+  --text-h4: 24px;
+  --text-h4--line-height: 1.2;
+  --text-h5: 22px;
+  --text-h5--line-height: 1.35;
+  --text-h6: 20px;
+  --text-h6--line-height: 1.35;
+}
+
+/**
+ * ANIMATIONS
+ *
+ * `frangipani-drift` matches the live site's 13s ease-in-out loop on the
+ * flower ornaments: a slow tilt and rise, never far from the start point.
+ */
+@keyframes frangipani-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+  25% {
+    transform: translate3d(-5px, -11px, 0) rotate(-2.4deg) scale(1.03);
+  }
+  50% {
+    transform: translate3d(4px, -18px, 0) rotate(1.8deg) scale(0.98);
+  }
+  75% {
+    transform: translate3d(-3px, -8px, 0) rotate(-1deg) scale(1.02);
+  }
+}
+
+/**
+ * SCROLL REVEAL
+ *
+ * The live site animates blocks in as they scroll into view (WOW.js with
+ * animate.css: fadeInUp on 25 elements, fadeInDown on 8, fadeInLeft on 4, plus
+ * zoomIn). Its fadeInUp is opacity 0 -> 1 with translateY(20px) -> 0 over
+ * 1500ms, delays staggered in 200ms steps. Reproduced here with an
+ * IntersectionObserver, so no extra library ships.
+ *
+ * Deliberately a TRANSITION, not a keyframe animation. A keyframe animation
+ * with `fill-mode: both` keeps painting its 0% frame whenever the animation
+ * clock is stalled — a throttled or unpainted tab, for instance — which leaves
+ * whole sections stuck at opacity 0. With a transition the revealed state is a
+ * real declaration: worst case the element appears without the fade, it never
+ * disappears.
+ *
+ * Delay comes from an inline `transitionDelay` on the element.
+ */
+[data-reveal] {
+  transition:
+    opacity 1500ms ease,
+    transform 1500ms ease;
+}
+
+[data-reveal][data-reveal-ready="1"]:not([data-reveal-in="1"]) {
+  opacity: 0;
+}
+
+[data-reveal-ready="1"]:not([data-reveal-in="1"])[data-reveal="fadeInUp"] {
+  transform: translateY(20px);
+}
+[data-reveal-ready="1"]:not([data-reveal-in="1"])[data-reveal="fadeInDown"] {
+  transform: translateY(-20px);
+}
+[data-reveal-ready="1"]:not([data-reveal-in="1"])[data-reveal="fadeInLeft"] {
+  transform: translateX(-20px);
+}
+[data-reveal-ready="1"]:not([data-reveal-in="1"])[data-reveal="fadeInRight"] {
+  transform: translateX(20px);
+}
+[data-reveal-ready="1"]:not([data-reveal-in="1"])[data-reveal="zoomIn"] {
+  transform: scale(0.9);
+}
+
+[data-reveal][data-reveal-in="1"] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/**
+ * Pricing panel in the treatment menu. The live site slides it open over
+ * 400ms; here the panel's visibility is handled by the `hidden` attribute and
+ * this only adds the slide, with no fill-mode, so a stalled animation clock
+ * can never leave the prices invisible.
+ */
+.panel-open {
+  animation: panel-open 400ms ease;
+}
+
+/* Opacity only — no transform. A transform here would shift the text while
+   the animation runs, and hold it shifted if the animation clock stalls. */
+@keyframes panel-open {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes arry-up-down {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+/**
+ * BASE
+ *
+ * The live site sets body 16px/1.75 in Mulish with #707070 text, and gives
+ * every heading Literata at weight 400 — unusually light for headings, and a
+ * large part of why the site reads the way it does. Keep the 400.
+ */
+@layer base {
+  /* Element rules skip `.lh` subtrees: those use the live theme (live.css). */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-white);
+    color: var(--color-body);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+    /* As on the live site: decorations may bleed past the right edge. */
+    overflow-x: hidden;
+  }
+
+  :where(h1, h2, h3, h4, h5, h6):where(:not(.lh *)) {
+    color: var(--color-ink);
+    font-family: var(--font-display);
+    line-height: 1.2;
+  }
+
+  /* Weights differ per level on the live site — h2 is deliberately light. */
+  h1:where(:not(.lh *)) {
+    font-size: 110px;
+    font-weight: 700;
+    line-height: 130px;
+  }
+
+  h2:where(:not(.lh *)) {
+    font-size: 55px;
+    font-weight: 300;
+    line-height: 65px;
+    text-transform: capitalize;
+  }
+
+  h3:where(:not(.lh *)) {
+    font-size: 36px;
+    font-weight: 400;
+  }
+
+  h4:where(:not(.lh *)) {
+    font-size: 24px;
+    font-weight: 400;
+  }
+
+  h5:where(:not(.lh *)) {
+    font-size: 22px;
+    font-weight: 400;
+  }
+
+  h6:where(:not(.lh *)) {
+    font-size: 20px;
+    font-weight: 400;
+  }
+
+  a:where(:not(.lh *)) {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* Respect people who ask for less motion; the live site does not, but the
+     floating ornaments and sliders are decorative, so stopping them is safe. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/**
+ * UTILITIES
+ */
+@layer components {
+  /**
+   * Content column. The live site uses Bootstrap's responsive .container with
+   * the theme widening the largest step, so the max-widths step rather than
+   * scale. These are the measured breakpoints — do not "simplify" them to a
+   * single max-width or every section's line lengths shift.
+   */
+  .container-site {
+    margin-inline: auto;
+    width: 100%;
+    padding-inline: 12px;
+  }
+
+  @media (min-width: 576px) {
+    .container-site {
+      max-width: 540px;
+    }
+  }
+  @media (min-width: 768px) {
+    .container-site {
+      max-width: 720px;
+    }
+  }
+  @media (min-width: 992px) {
+    .container-site {
+      max-width: 960px;
+    }
+  }
+  @media (min-width: 1200px) {
+    .container-site {
+      max-width: 1140px;
+    }
+  }
+  @media (min-width: 1400px) {
+    .container-site {
+      max-width: 1434px;
+    }
+  }
+
+  /**
+   * Typography for the guide articles. Their HTML comes straight from the old
+   * site, so it carries no classes and has to be styled by element.
+   *
+   * Measured on the live article pages: headings 27.2px/300 in #2f281e,
+   * body 16px/400 with line-height 29px in #6b5e4e — warmer than the greys
+   * used on the rest of the site.
+   */
+  .article-body {
+    color: #6b5e4e;
+    font-size: 16px;
+    line-height: 29px;
+  }
+
+  .article-body h2,
+  .article-body h3,
+  .article-body h4 {
+    color: #2f281e;
+    font-family: var(--font-display);
+    font-weight: 300;
+    margin-top: 2rem;
+  }
+
+  .article-body h2 {
+    font-size: 27.2px;
+    line-height: 65px;
+  }
+
+  .article-body h3 {
+    font-size: 24px;
+    line-height: 40px;
+  }
+
+  .article-body h4 {
+    font-size: 20px;
+    line-height: 34px;
+  }
+
+  .article-body p {
+    margin-top: 1rem;
+  }
+
+  .article-body ul,
+  .article-body ol {
+    margin-top: 1rem;
+    padding-left: 1.5rem;
+    list-style: disc;
+  }
+
+  .article-body ol {
+    list-style: decimal;
+  }
+
+  .article-body li {
+    margin-top: 0.5rem;
+  }
+
+  .article-body a {
+    color: var(--color-gold);
+    text-decoration: underline;
+  }
+
+  .article-body img {
+    height: auto;
+    max-width: 100%;
+    border-radius: 2px;
+    margin-top: 1.5rem;
+  }
+
+  .article-body strong {
+    color: #2f281e;
+    font-weight: 600;
+  }
+
+  .article-body blockquote {
+    border-left: 3px solid var(--color-gold);
+    margin-top: 1.5rem;
+    padding-left: 1.25rem;
+    font-style: italic;
+  }
+
+  .article-body table {
+    margin-top: 1.5rem;
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .article-body th,
+  .article-body td {
+    border: 1px solid rgb(0 0 0 / 0.1);
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+  }
+
+  /**
+   * The torn edges between sections. On the live site these are ::before and
+   * ::after on the section itself (76px at the top, 74px at the bottom), and
+   * they are a large part of why the page reads as layered rather than flat.
+   *
+   * The shapes sit ON TOP of the section they belong to, so a section with a
+   * coloured background gets its edge feathered into the neighbouring one.
+   */
+  .section-decoration-top,
+  .section-decoration-bottom {
+    position: relative;
+  }
+
+  .section-decoration-top::before,
+  .section-decoration-bottom::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    background-repeat: repeat-x;
+    background-position: center;
+    pointer-events: none;
+  }
+
+  .section-decoration-top::before {
+    top: 0;
+    height: 76px;
+    background-image: url("/images/shape/section-shape-top.png");
+  }
+
+  .section-decoration-bottom::after {
+    bottom: 0;
+    height: 74px;
+    background-image: url("/images/shape/section-shape-bottom.png");
+  }
+
+  /**
+   * The small label above most section headings ("Our Spa Menu",
+   * "Beyond Relaxation", "Why It Matters"). It reads gold on screen but the
+   * computed colour is the body grey — the gold comes from an icon or rule
+   * beside it, so keep this grey and add the gold separately.
+   */
+  .kicker {
+    color: var(--color-body);
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 30px;
+    text-transform: capitalize;
+  }
+}

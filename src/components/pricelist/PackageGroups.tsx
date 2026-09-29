@@ -1,0 +1,86 @@
+/* eslint-disable @next/next/no-img-element -- the live site serves these as plain <img> */
+import Link from "next/link";
+import type { PackageGroup } from "@/data/pages/pricelist";
+
+/** "IDR 449K" -> "449K". */
+const shortPrice = (price: string) => price.replace(/^IDR\s*/i, "");
+
+/**
+ * The eight package groups on the price list, sorted by title as live. Each
+ * is a "pricing-section-five" band; the first gets the torn top edge and the
+ * last the torn bottom edge, so together they read as one paper band.
+ */
+export default function PackageGroups({ groups, icons }: { groups: PackageGroup[]; icons: Record<string, string> }) {
+  const sorted = [...groups].sort((a, b) => a.title.localeCompare(b.title));
+  return (
+    <>
+      {sorted.map((group, s) => {
+        const first = s === 0;
+        const last = s === sorted.length - 1;
+        const edges = `${first ? "section__decoration-top" : ""} ${last ? "section__decoration-bottom" : ""}`.trim();
+        const icon = icons[group.cardTitle];
+        return (
+          <section
+            key={s}
+            className={`pricing-section-five package-pricing-section bg-sub ${edges}${first ? " pt-100" : " pt-40"}${last ? " pb-100" : " pb-40"}`}
+          >
+            <div className="container">
+              <div className="section-header mb-60 center">
+                <h4 className="sub-title wow fadeInUp" data-wow-delay="00ms" data-wow-duration="1500ms">
+                  {group.subTitle}
+                </h4>
+                <h2 className="title wow fadeInUp" data-wow-delay="200ms" data-wow-duration="1500ms">
+                  {group.title}
+                </h2>
+                <p className="wow fadeInUp" data-wow-delay="400ms" data-wow-duration="1500ms">
+                  {group.description}
+                </p>
+              </div>
+              <div className="row g-4">
+                {group.packages.map((pack, i) => (
+                  <div
+                    key={i}
+                    className="col-sm-6 col-xl-3 col-lg-4 pricing-block-five wow fadeInLeft"
+                    data-wow-delay={`${200 * i}ms`}
+                    data-wow-duration="1500ms"
+                  >
+                    <div className="inner-box">
+                      <div className="shape">
+                        <img loading="lazy" decoding="async" src="/images/pricing/shape.png" alt="image" />
+                      </div>
+                      <div className="icon">
+                        <img loading="lazy" decoding="async" src={icon} alt={`${group.cardTitle} icon`} />
+                      </div>
+                      <h4>
+                        {group.cardTitle} <br /> Package {String.fromCharCode(65 + i)}
+                      </h4>
+                      <h2 className="price">
+                        {shortPrice(pack.price)}
+                        {group.twoPax && <span className="pax-note">2 pax</span>}
+                      </h2>
+                      <ul>
+                        {pack.items.map((item, j) => (
+                          <li key={j}>
+                            <span className="duration">{item.duration}</span>
+                            <span className="service">{item.service}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <Link prefetch={false} href="/contact/" className="btn-two mt-35">
+                        Reserve
+                        <span className="icon_box">
+                          <i className="fa-regular icon_first fa-arrow-right-long" />
+                          <i className="fa-regular icon_second fa-arrow-right-long" />
+                        </span>
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      })}
+    </>
+  );
+}
