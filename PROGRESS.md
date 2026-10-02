@@ -1270,6 +1270,20 @@ Cek ulang, masih 2 Oktober:
   - Tombol bawaan "Learn More" ke `/seminyak/` di `AboutSplit`/`AboutSplitAlt`
     (`learnMoreLabel.tsx`) mendapat " about our Seminyak spa, prices and
     packages". Ini dipakai di massage-kuta, day-spa dan villa-hotel-massage.
+- **Header cache belum ikut dipindah dari live.**
+  - `next.config.js` project lama mengirim `Cache-Control` untuk
+    `/images/*` (30 hari + stale-while-revalidate 1 hari) dan
+    `/webfonts/*` (1 tahun, immutable). Rebuild masih memakai `max-age=0`.
+  - Kini sudah ada di `next.config.ts` (`headers()`).
+  - Pingdom (San Francisco) untuk https://spa-redesign.vercel.app/ naik dari
+    C 74 menjadi B 83, dan load time turun dari 2,34 detik menjadi 2,05 detik.
+  - Yang tersisa adalah artefak domain vercel.app, jadi tidak bisa diubah:
+    - "Compress with gzip" F, karena Vercel mengirim brotli dan Pingdom hanya
+      menghitung gzip;
+    - "Use a CDN" 0;
+    - "Make fewer HTTP requests" E52 (10 file JS + 7 file CSS).
+  - spabalimoon.com sendiri tidak bisa dites Pingdom selama Cloudflare
+    memblokir IP-nya.
 - **Skor 75 di coconut-oil hanya variasi antar-run.** Dijalankan sendiri 3x,
   hasilnya 80/82/82, sama dengan hot-stone. Sesekali Chrome menunda gambar
   pertama sampai sekitar 2,2 detik di mesin ini, di halaman mana saja.
