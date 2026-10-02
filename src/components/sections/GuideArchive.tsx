@@ -51,8 +51,10 @@ export default function GuideArchive({ posts }: { posts: PostSummary[] }) {
                         <h4 className="title">
                           <Link href={href}>{post.title}</Link>
                         </h4>
+                        {/* The hidden title makes the link text say which
+                            article it opens (a bare "Read More" is flagged). */}
                         <Link className="readMore-btn" href={href}>
-                          Read More
+                          Read More<span className="sr-only">: {post.title}</span>
                         </Link>
                       </div>
                     </div>

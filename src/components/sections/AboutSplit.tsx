@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element -- the live site serves these as plain <img> */
 import { leftLeafShape, rightLeafShape, isLeafShape } from "@/lib/leafShapes";
+import { learnMoreLabel } from "@/components/sections/learnMoreLabel";
 import { LotusIcon } from "@/components/ui/Lotus";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -40,7 +41,7 @@ export default function AboutSplit({
     "Total Bliss Massage and Its Features",
     "Use of soft towel and bathrobe",
   ],
-  buttonText = "Learn More",
+  buttonText,
   buttonLink = "/seminyak",
   image = "/images/about/about-image.png",
   treatmentLayout = false,
@@ -118,7 +119,7 @@ export default function AboutSplit({
                   data-wow-delay="400ms"
                   data-wow-duration="1500ms"
                 >
-                  {buttonText}
+                  {buttonText ?? learnMoreLabel(buttonLink)}
                   <span className="icon_box">
                     <i className="fa-regular icon_first fa-arrow-right-long" />
                     <i className="fa-regular icon_second fa-arrow-right-long" />

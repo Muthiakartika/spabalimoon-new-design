@@ -1256,6 +1256,24 @@ Perubahan lanjutan, sama-sama dari 2 Oktober:
 
 Kini tidak ada lagi file `.webp` yang isinya bukan WebP.
 
+Cek ulang, masih 2 Oktober:
+
+- **Lighthouse mobile di 42 halaman:** rata-rata 83, median 82. Desktop 99–100.
+- **Overflow beranda karena saya sendiri:** teks `sr-only` "Learn More about …"
+  lolos dari baris treatment yang bisa di-scroll, sehingga lebar beranda
+  menjadi 7132 px. Diperbaiki dengan `position: relative` pada
+  `.v2-treat__link`.
+- **SEO 92 di 4 halaman** karena link bertuliskan "Read More" / "Learn More".
+  Kini SEO 100. Tampilannya identik piksel per piksel, tetapi markup-nya beda
+  dari live:
+  - `GuideArchive` mendapat teks tersembunyi ": {judul artikel}".
+  - Tombol bawaan "Learn More" ke `/seminyak/` di `AboutSplit`/`AboutSplitAlt`
+    (`learnMoreLabel.tsx`) mendapat " about our Seminyak spa, prices and
+    packages". Ini dipakai di massage-kuta, day-spa dan villa-hotel-massage.
+- **Skor 75 di coconut-oil hanya variasi antar-run.** Dijalankan sendiri 3x,
+  hasilnya 80/82/82, sama dengan hot-stone. Sesekali Chrome menunda gambar
+  pertama sampai sekitar 2,2 detik di mesin ini, di halaman mana saja.
+
 ## Draf: beranda v2 di `/home-v2/` (30 September)
 
 Duplikat beranda dengan layout sedikit diubah; isi, warna, huruf dan dekorasi
