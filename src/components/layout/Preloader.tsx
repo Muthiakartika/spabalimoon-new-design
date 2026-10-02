@@ -5,8 +5,10 @@ import { useEffect, useState } from "react";
 
 /**
  * The live site's loading screen: the lotus logo over four panels, shown on
- * the first page load only. It leaves two frames after 250ms, or at 1s at the
- * latest — the same timing as the live _app.
+ * the first page load only. It is removed two frames after 250ms, or at 1s at
+ * the latest — the same timing as the live _app. Since 2 Oct it no longer
+ * waits for that: custom.css hides it 0.5s after it is first styled, so a
+ * slow phone does not sit on "Loading..." until the JavaScript has run.
  */
 export default function Preloader() {
   const [visible, setVisible] = useState(true);

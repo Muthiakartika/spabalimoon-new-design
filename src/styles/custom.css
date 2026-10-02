@@ -291,3 +291,17 @@
   width: 36.49cqw;
   height: 24.74cqw;
 }
+
+/* Preloader (owner, 2 Oct, "option b"): it leaves by itself 0.5s after the
+   page is first styled instead of waiting for JavaScript. On a slow phone the
+   page was ready about 1.7s before hydration removed the preloader; now it
+   shows for about half a second there too. Preloader.tsx still removes the
+   element after hydration, which on fast devices happens first. */
+#preloader {
+  animation: sbm-preloader-out 0s linear 0.5s forwards;
+}
+@keyframes sbm-preloader-out {
+  to {
+    visibility: hidden;
+  }
+}

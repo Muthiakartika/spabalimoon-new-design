@@ -14,6 +14,15 @@ const FEATURES = [
 ];
 
 /**
+ * How wide the hero photo is drawn, for picking its file. Below 992px it
+ * covers a full-width box clamp(280px, 64vw, 440px) tall, so a 1920x850
+ * photo is drawn at least 2.26 times that height wide; phones up to about
+ * 1.8x pixel density then get the 1200px file, sharper ones the original.
+ * Wider screens always get the original.
+ */
+const PHOTO_SIZES = "(max-width: 991px) max(100vw, calc(clamp(280px, 64vw, 440px) * 2.26)), 1920px";
+
+/**
  * Homepage v2 hero — text left (kicker, title, copy, two buttons, three
  * facts) over the live banner's cream background, with a treatment photo
  * filling the right side and fading into the cream. Below 992px the photo
@@ -25,7 +34,13 @@ export default function Hero() {
   return (
     <section id="home" className="banner-five-area section__decoration-bottom mb-130 v2-hero">
       <div className="v2-hero__photo">
-        <img src="/images/contact/contact-1.webp" alt="A guest relaxing during a back massage at Spa Bali Moon" fetchPriority="high" />
+        <img
+          src="/images/contact/contact-1.webp"
+          srcSet="/images/contact/contact-1-1200.webp 1200w, /images/contact/contact-1.webp 1920w"
+          sizes={PHOTO_SIZES}
+          alt="A guest relaxing during a back massage at Spa Bali Moon"
+          fetchPriority="high"
+        />
       </div>
       <div className="container">
         <div className="v2-hero__inner">

@@ -21,8 +21,10 @@ export default function TreatmentCard({ name, href, image, icon, desc, price }: 
         </h3>
         {price && <h6 className="v2-treat__price">{price}</h6>}
         <p className="v2-treat__text">{desc}</p>
-        <Link prefetch={false} href={href} className="v2-treat__link" aria-label={`Learn more about ${name}`}>
-          Learn More
+        {/* The hidden words make the link text say where it goes (search
+            engines and Lighthouse flag a bare "Learn More"). */}
+        <Link prefetch={false} href={href} className="v2-treat__link">
+          Learn More<span className="sr-only"> about {name}</span>
           <i className="fa-regular fa-arrow-right" aria-hidden="true" />
         </Link>
       </div>

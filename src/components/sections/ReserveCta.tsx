@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import LazyBackground from "@/components/ui/LazyBackground";
 import { LotusIcon } from "@/components/ui/Lotus";
 import { whatsappChatUrl } from "@/lib/whatsapp";
 
@@ -45,10 +46,13 @@ export default function ReserveCta({
         className={`jsx-cta reserve-cta-section${standardSpacing ? " pt-100 pb-100" : ""}`}
       >
         <div className="jsx-cta container">
-          <div
+          {/* The banner sits at the bottom of the page, so its photo waits
+              until the reader scrolls near it (LazyBackground). */}
+          <LazyBackground
+            image={reserve.backgroundImage}
+            overlay="linear-gradient(rgba(28, 26, 29, 0.45), rgba(28, 26, 29, 0.45))"
             style={{
               position: "relative",
-              backgroundImage: `linear-gradient(rgba(28, 26, 29, 0.45), rgba(28, 26, 29, 0.45)), url(${reserve.backgroundImage})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",
@@ -119,7 +123,7 @@ export default function ReserveCta({
                 <i aria-hidden="true" className="jsx-cta fa-light fa-arrow-down-right" />
               </a>
             </div>
-          </div>
+          </LazyBackground>
         </div>
       </section>
   );

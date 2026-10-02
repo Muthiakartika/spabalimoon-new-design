@@ -1194,6 +1194,68 @@ halaman di folder `pages/` lama.
   list `/seminyak/` dan outcall (semua nama treatment dan harga live tetap
   ada), serta header, menu mobile, dan footer.
 
+## Kecepatan mobile (2 Oktober)
+
+Patokan live di PageSpeed Insights: mobile 77, desktop 98. Pingdom tidak bisa
+dipakai: Cloudflare menjawab server Pingdom dengan halaman blokir 403.
+
+Diukur dengan Lighthouse 13.5 (versi yang sama dengan PSI) pada `next start`
+lewat proxy brotli, karena Vercel/Cloudflare mengirim HTML dengan brotli
+(beranda 65 KB). `next start` lokal memakai gzip (133 KB). Perubahan, semuanya
+tanpa beda tampilan (dicek piksel per piksel):
+
+- **Foto banner penutup (ReserveCta) dimuat saat mendekati layar**
+  (`src/components/ui/LazyBackground.tsx`). Berlaku di sekitar 30 halaman;
+  fotonya 35 sampai 508 KB per halaman.
+- **Foto hero beranda:** `srcSet` dengan `contact-1-1200.webp`. Hanya ponsel
+  dengan kepadatan piksel ≤ 1,8x yang mendapat file 1200 px. Ponsel yang lebih
+  tajam dan desktop tetap mendapat 1920 px.
+- **"Learn More" di kartu treatment beranda:** teks tersembunyi " about …"
+  (`sr-only`) menggantikan `aria-label`. SEO beranda naik dari 92 ke 100.
+
+Hasil mobile: beranda 79–84 (median 81, SEO 100). `/seminyak/`,
+`/outcall-home-service-massage/` dan `/seminyak/balinese-massage/` mendapat
+84–85. Hambatan yang tersisa ada di desain:
+- Literata variable font 108 KB.
+- JS framework sekitar 105 KB.
+- Halaman yang panjang.
+Tanpa JS sama sekali, beranda baru mencapai 85–87.
+
+Perubahan lanjutan, sama-sama dari 2 Oktober:
+
+- **Preloader (pemilik memilih opsi b):** `custom.css` kini menyembunyikan
+  preloader 0,5 detik setelah halaman pertama kali di-style. Ia tidak lagi
+  menunggu JavaScript.
+  - Di ponsel lambat (4G lambat, CPU 4x) preloader tampil sekitar 0,4–0,6
+    detik dan hilang di sekitar 2,9–3,2 detik. Sebelumnya tampil 1,8 detik dan
+    hilang di sekitar 4,1 detik.
+  - Di perangkat cepat tidak ada perubahan (sekitar 0,35–0,4 detik).
+  - `Preloader.tsx` tetap menghapus elemennya setelah hydration.
+- **Swiper testimoni dimuat saat mendekati layar.** Kodenya dipecah menjadi
+  tiga file:
+  - `Testimonials.tsx` merender markup statis yang sama dengan output server
+    swiper/react, sehingga semua ulasan tetap ada di HTML.
+  - `TestimonialsSlider.tsx` dimuat lewat `next/dynamic` begitu section
+    berjarak 1500 px dari layar (`src/lib/useNearViewport.ts`, juga dipakai
+    `LazyBackground`).
+  - `TestimonialCard.tsx` berisi satu kartu ulasan dan dipakai keduanya.
+
+  Hasilnya, JS awal beranda turun dari 192 KB menjadi 166 KB. Geometri slider
+  di `/seminyak/` sama persis dengan live (0 beda di 390 dan 1440). Bedanya
+  hanya emas B dan posisi watermark karena aturan spasi, yang memang sudah
+  disengaja.
+- **Gambar Head Massage dan Lymphatic:** 11 file `.webp` ternyata PNG
+  (headmassage-2 sampai 9, lymphaticmassage-3/6/9), masing-masing ada di
+  `images/services/` dan `images/treatments/`.
+  - Semuanya diubah menjadi WebP asli q85 dengan nama dan ukuran yang sama
+    (PSNR 40–43 dB).
+  - Total turun dari 6,2 MB menjadi 294 KB per salinan. headmassage-2 sendiri
+    turun dari 1,6 MB menjadi 61 KB.
+  - Halaman `/seminyak/head-massage/` saat pertama dimuat turun dari sekitar
+    3,9 MB menjadi 718 KB.
+
+Kini tidak ada lagi file `.webp` yang isinya bukan WebP.
+
 ## Draf: beranda v2 di `/home-v2/` (30 September)
 
 Duplikat beranda dengan layout sedikit diubah; isi, warna, huruf dan dekorasi
