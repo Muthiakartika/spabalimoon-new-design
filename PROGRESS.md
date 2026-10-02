@@ -1284,6 +1284,16 @@ Cek ulang, masih 2 Oktober:
     - "Make fewer HTTP requests" E52 (10 file JS + 7 file CSS).
   - spabalimoon.com sendiri tidak bisa dites Pingdom selama Cloudflare
     memblokir IP-nya.
+- **Purge Cloudflare otomatis setelah deploy**
+  (`.github/workflows/purge-cloudflare.yml`). Setiap deploy Production yang
+  sukses di Vercel memicu event `deployment_status`. Action menunggu 30 detik
+  lalu menjalankan Purge Everything untuk zone spabalimoon.com.
+  - Butuh repository secret `CLOUDFLARE_ZONE_ID` dan `CLOUDFLARE_API_TOKEN`.
+  - Bisa juga dijalankan manual dari tab Actions.
+  - Alasannya: setelah go-live, Cloudflare menyimpan HTML 2 jam
+    (`max-age=7200`) dan gambar 30 hari.
+  - Sejak go-live 2 Oktober malam, `/admin/` tidak di-cache (DYNAMIC). `/api/`
+    masih ikut di-cache dan sebaiknya diberi aturan Bypass.
 - **Skor 75 di coconut-oil hanya variasi antar-run.** Dijalankan sendiri 3x,
   hasilnya 80/82/82, sama dengan hot-stone. Sesekali Chrome menunda gambar
   pertama sampai sekitar 2,2 detik di mesin ini, di halaman mana saja.
