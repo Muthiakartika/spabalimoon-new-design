@@ -2,6 +2,8 @@
 
 /* eslint-disable @next/next/no-img-element -- the live site serves these as plain <img> */
 import Link from "next/link";
+import { useEffect, useRef } from "react";
+import type { Swiper as SwiperInstance } from "swiper";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { LotusPaths25 } from "@/components/ui/Lotus";
@@ -39,6 +41,20 @@ export default function PageBanner({
   buttonLink = whatsappChatUrl,
 }: PageBannerProps) {
   const small = image.replace(/(\.[a-z0-9]+)$/i, "-sm$1");
+
+  // Swiper adds `swiper-backface-hidden` (translateZ(0) on the slide) straight
+  // to the DOM while it initialises, then React re-renders the class list it
+  // was told about and drops it. Live ends with the class last in the list;
+  // running Swiper's own check once more after that re-render does the same.
+  const swiperRef = useRef<SwiperInstance | null>(null);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      const swiper = swiperRef.current;
+      if (swiper && !swiper.destroyed) swiper.updateSlides();
+    });
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
   return (
     <>
       <link rel="preload" as="image" href={small} media="(max-width: 767px)" fetchPriority="high" />
@@ -53,6 +69,7 @@ export default function PageBanner({
           loop={false}
           allowTouchMove={false}
           pagination={{ clickable: false }}
+          onSwiper={(swiper) => (swiperRef.current = swiper)}
           className="swiper  banner-two__slider"
         >
           <SwiperSlide className="swiper-slide">

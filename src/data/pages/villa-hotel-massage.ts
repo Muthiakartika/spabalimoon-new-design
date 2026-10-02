@@ -9,7 +9,7 @@ import type { LandingPage } from "../types";
 export const villaHotelPage: LandingPage = {
   path: "/villa-hotel-massage/",
   seo: {
-    title: "In-Room Villa & Hotel Massage Services - Seminyak, Bali",
+    title: "In-Room Villa & Hotel Massage Services",
     description: "In-room massage service with authentic Balinese techniques. Feel great in Bali with our villa and hotel massage.",
   },
   hero: {

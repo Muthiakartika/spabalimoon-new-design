@@ -1,0 +1,465 @@
+/**
+ * MOBILE HEADER AND MENU (owner, 2 Oct), below 992px where the header shows
+ * the menu button:
+ *  - the logo in the middle of the header ("center the spa bali moon text"),
+ *    the WhatsApp phone on its left, the menu button on its right;
+ *  - the menu button is the logo's lotus instead of four squares ("could
+ *    this be a flower", then "a flower like the Spa Bali Moon logo"), gold
+ *    like the phone;
+ *  - the menu ("modernize the menu"; the owner picked "opsi 2" of three)
+ *    fills the screen on phones and is a 420px panel on tablets. Its top row
+ *    repeats the header (logo in the middle, the close button where the
+ *    lotus was). First panel, on paper: each item a white row with its icon
+ *    in a circle, its name and a line about it (the current page gold, with
+ *    a gold border), then a white card with the opening hours, address,
+ *    phone and a WhatsApp pill. "Treatments" and "Blog" slide in a panel of
+ *    their own with a back button: photo, name and starting price per
+ *    treatment, in two groups; cover photo and title per article; a pill to
+ *    the full list at the end. Type is the site's own: Literata 20/30 (h5)
+ *    for the panel titles, Literata 18/26 (h4 on phones) for the rows,
+ *    Mulish 15/22, 14/20 and 13/18 for the rest.
+ * Markup: src/components/layout/Header.tsx and MobileMenu.tsx.
+ */
+
+/* ---- Header ---- */
+@media (max-width: 991px) {
+  .header__main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    column-gap: 12px;
+  }
+  .header__main > .logo {
+    grid-row: 1;
+    grid-column: 2;
+  }
+  .header__main > .main-menu {
+    display: none;
+  }
+  .header__main > .menu-btns {
+    display: contents;
+  }
+  .header__main .menu-btns .header-call {
+    grid-row: 1;
+    grid-column: 1;
+    justify-self: start;
+  }
+  .header__main .menu-btns .menubars {
+    grid-row: 1;
+    grid-column: 3;
+    justify-self: end;
+    /* a 44px target around the 30px lotus, reaching 7px past it */
+    width: 44px;
+    height: 44px;
+    margin: -7px;
+    padding: 7px;
+    line-height: 0;
+    color: var(--theme-color1);
+    background: none;
+    border: 0;
+    transition: color 0.3s;
+  }
+}
+.header__main .menubars .menubars__lotus {
+  display: block;
+  width: 30px;
+  height: 30px;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* live fills the old icon's path gold on hover */
+.header__main .menubars svg.menubars__lotus path,
+.header__main .menubars:hover svg.menubars__lotus path {
+  fill: currentColor;
+}
+.header__main .menubars:is(:hover, :focus-visible) {
+  color: #987426;
+}
+.header__main .menubars:is(:hover, :focus-visible) .menubars__lotus {
+  transform: scale(1.08);
+}
+
+/* ---- The menu ---- */
+.mnav.sidebar-area.offcanvas {
+  width: 420px !important;
+  max-width: 100%;
+  border-left: 0 !important;
+  background-color: var(--theme-color-white);
+  box-shadow: -24px 0 60px rgba(28, 26, 29, 0.12);
+  transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+}
+@media (max-width: 575px) {
+  .mnav.sidebar-area.offcanvas {
+    width: 100% !important;
+    box-shadow: none;
+  }
+}
+html.mnav-open,
+html.mnav-open body {
+  overflow: hidden;
+}
+
+/* Top row: the header's height (12 + 44 + 12px), its logo in the middle. */
+.mnav .mnav__top {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  align-items: center;
+  column-gap: 12px;
+  padding: 12px 7px;
+  border-bottom: 1px solid rgba(95, 90, 84, 0.1);
+}
+@media (min-width: 576px) {
+  .mnav .mnav__top {
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+}
+.mnav .mnav__logo {
+  grid-column: 2;
+  justify-self: center;
+}
+.mnav .mnav__close {
+  grid-column: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  color: var(--theme-color1);
+  background: none;
+  border: 0;
+  border-radius: 50%;
+  transition: transform 0.4s ease, color 0.3s;
+}
+.mnav .mnav__close:is(:hover, :focus-visible) {
+  color: #987426;
+  transform: rotate(90deg);
+}
+
+/* Panels: the first one, and Treatments or Blog sliding in over it. */
+.mnav .mnav__body {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.mnav .mnav__panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 24px calc(24px + env(safe-area-inset-bottom, 0px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background-color: var(--theme-color-white);
+  transition: transform 0.45s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s ease;
+}
+.mnav .mnav__panel--main.is-behind {
+  opacity: 0;
+  transform: translateX(-24%);
+}
+.mnav .mnav__panel--sub {
+  transform: translateX(100%);
+}
+.mnav .mnav__panel--sub.is-open {
+  transform: none;
+}
+
+/* First panel: paper, every item a white row with its icon in a circle,
+   its name and a line about it, then the contact card, white too. */
+.mnav .mnav__panel--main {
+  background-color: var(--theme-color-gray);
+}
+.mnav .mnav__list {
+  display: grid;
+  gap: 8px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.mnav .mnav__row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 10px 14px 10px 10px;
+  font-family: var(--title-font);
+  font-weight: 400;
+  text-align: left;
+  color: var(--headings-color);
+  background-color: var(--theme-color-white);
+  border: 1px solid transparent;
+  border-radius: 18px;
+  transition: border-color 0.3s;
+}
+.mnav .mnav__row.is-current {
+  border-color: var(--theme-color1);
+}
+.mnav .mnav__icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--theme-color1);
+  background-color: var(--theme-color-gray);
+  border-radius: 50%;
+}
+.mnav .mnav__icon svg {
+  width: 22px;
+  height: 22px;
+}
+.mnav .mnav__row-text {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+}
+.mnav .mnav__row-label {
+  font-size: 18px;
+  line-height: 26px;
+  transition: color 0.3s;
+}
+.mnav .mnav__row:is(:hover, :focus-visible, .is-current) .mnav__row-label {
+  color: var(--theme-color1);
+}
+.mnav .mnav__note {
+  font-family: var(--text-font);
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--text-color);
+}
+.mnav .mnav__arrow {
+  display: flex;
+  flex: none;
+  color: var(--theme-color1);
+  transition: transform 0.3s;
+}
+.mnav .mnav__row:is(:hover, :focus-visible) .mnav__arrow {
+  transform: translateX(3px);
+}
+
+/* Contact card */
+.mnav .mnav__card {
+  margin-top: 20px;
+  padding: 22px 20px 20px;
+  background-color: var(--theme-color-white);
+  border-radius: 24px;
+}
+.mnav .mnav__info {
+  display: grid;
+  gap: 12px;
+  margin: 0 0 20px;
+  padding: 0;
+  list-style: none;
+}
+.mnav .mnav__info li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-family: var(--text-font);
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--text-color);
+}
+.mnav .mnav__info i {
+  flex: 0 0 18px;
+  margin-top: 3px;
+  font-size: 16px;
+  text-align: center;
+  color: var(--theme-color1);
+}
+.mnav .mnav__info a {
+  font: inherit;
+  color: inherit;
+  transition: color 0.3s;
+}
+.mnav .mnav__info a:is(:hover, :focus-visible) {
+  color: var(--theme-color1);
+}
+/* the site's pill (.btn-two) at the phone pill size, as the bottom bar */
+.mnav .mnav__cta,
+.mnav .mnav__panel-cta {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 48px;
+  padding: 0 20px;
+  font-family: var(--title-font);
+  font-size: 15px;
+  background-color: var(--theme-color-white);
+}
+.mnav .mnav__cta .fa-whatsapp {
+  font-size: 18px;
+}
+
+/* Treatments and Blog panels */
+.mnav .mnav__subhead {
+  position: sticky;
+  top: -8px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: -8px -24px 4px;
+  padding: 12px 24px 12px 12px;
+  background-color: var(--theme-color-white);
+  border-bottom: 1px solid rgba(95, 90, 84, 0.1);
+}
+.mnav .mnav__back {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  color: var(--theme-color1);
+  background: none;
+  border: 0;
+  border-radius: 50%;
+  transition: background-color 0.3s, transform 0.3s;
+}
+.mnav .mnav__back:is(:hover, :focus-visible) {
+  background-color: var(--theme-color-gray);
+  transform: translateX(-2px);
+}
+.mnav .mnav__subtitle {
+  margin: 0;
+  font-family: var(--title-font);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 30px;
+  color: var(--headings-color);
+}
+.mnav .mnav__group {
+  margin-top: 20px;
+}
+.mnav .mnav__group-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 4px;
+  font-family: var(--text-font);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: var(--theme-color1);
+}
+.mnav .mnav__group-title span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 20px;
+  padding: 0 6px;
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--theme-color1);
+  background-color: rgba(var(--theme-color1-rgb), 0.1);
+  border-radius: 10px;
+}
+.mnav .mnav__entries {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.mnav .mnav__entries li + li {
+  border-top: 1px solid rgba(95, 90, 84, 0.08);
+}
+.mnav .mnav__entry {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+  color: var(--headings-color);
+}
+.mnav .mnav__thumb {
+  position: relative;
+  flex: none;
+  width: 56px;
+  height: 56px;
+  overflow: hidden;
+  background-color: var(--theme-color-gray);
+  border-radius: 14px;
+}
+.mnav .mnav__entry--blog .mnav__thumb {
+  width: 72px;
+}
+.mnav .mnav__thumb img {
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.mnav .mnav__entry:is(:hover, :focus-visible) .mnav__thumb img {
+  transform: scale(1.06);
+}
+.mnav .mnav__entry-text {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+}
+.mnav .mnav__entry-name {
+  font-family: var(--title-font);
+  font-size: 18px;
+  line-height: 26px;
+  transition: color 0.3s;
+}
+.mnav .mnav__entry--blog .mnav__entry-name {
+  font-size: 16px;
+  line-height: 23px;
+}
+.mnav .mnav__entry-note {
+  font-family: var(--text-font);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--text-color);
+}
+.mnav .mnav__entry-arrow {
+  display: flex;
+  flex: none;
+  color: var(--text-color2);
+  transition: color 0.3s, transform 0.3s;
+}
+.mnav .mnav__entry:is(:hover, :focus-visible) .mnav__entry-name,
+.mnav .mnav__entry[aria-current="page"] .mnav__entry-name {
+  color: var(--theme-color1);
+}
+.mnav .mnav__entry:is(:hover, :focus-visible) .mnav__entry-arrow {
+  color: var(--theme-color1);
+  transform: translateX(3px);
+}
+.mnav .mnav__panel-cta {
+  margin-top: 24px;
+}
+
+/* The items come in one after another as the menu opens. */
+@keyframes mnav-in {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.mnav.show .mnav__anim {
+  animation: mnav-in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(140ms + var(--i, 0) * 40ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .mnav.sidebar-area.offcanvas,
+  .mnav .mnav__panel,
+  .header__main .menubars .menubars__lotus {
+    transition: none;
+  }
+  .mnav.show .mnav__anim {
+    animation: none;
+  }
+}

@@ -1,0 +1,80 @@
+/**
+ * ROW BUTTONS (owner, 2 Oct: the homepage's buttons "more like these", the
+ * rows of the mobile menu, src/styles/mobile-nav.css): white, rounded, a
+ * gold line icon in a paper circle, the label (Literata 18/26, as the menu
+ * rows), a line under it (Mulish 13/18) and a gold arrow. On hover the
+ * site's rollover: a gold border and the soft gold shadow (rollover.css).
+ * Used in the homepage hero only (owner, 2 Oct: "keep these in the home page
+ * banner … the rest of the site can stay the original shape buttons").
+ * Markup: src/components/ui/RowButton.tsx.
+ */
+.row-btn {
+  display: inline-flex;
+  vertical-align: top; /* no room for the line's descenders under it */
+  align-items: center;
+  gap: 14px;
+  min-width: 280px;
+  max-width: 100%;
+  padding: 10px 16px 10px 10px;
+  text-align: left;
+  color: var(--headings-color);
+  background-color: var(--theme-color-white);
+  border: 1px solid rgba(95, 90, 84, 0.14);
+  border-radius: 18px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.row-btn:is(:hover, :focus-visible) {
+  border-color: var(--theme-color1);
+  box-shadow: var(--rollover-shadow, none);
+}
+.row-btn__icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--theme-color1);
+  background-color: var(--theme-color-gray);
+  border-radius: 50%;
+}
+.row-btn__icon svg {
+  width: 22px;
+  height: 22px;
+}
+.row-btn__icon .fa-whatsapp {
+  font-size: 21px;
+}
+.row-btn__text {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+}
+.row-btn__label {
+  font-family: var(--title-font);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 26px;
+  color: var(--headings-color);
+  transition: color 0.3s;
+}
+.row-btn:is(:hover, :focus-visible) .row-btn__label {
+  color: var(--theme-color1);
+}
+.row-btn__note {
+  font-family: var(--text-font);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 18px;
+  color: var(--text-color);
+}
+.row-btn__arrow {
+  display: flex;
+  flex: none;
+  color: var(--theme-color1);
+  transition: transform 0.3s;
+}
+.row-btn:is(:hover, :focus-visible) .row-btn__arrow {
+  transform: translateX(3px);
+}

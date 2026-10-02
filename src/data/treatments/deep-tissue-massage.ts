@@ -13,7 +13,7 @@ const deepTissueMassage: Treatment = {
   shortDescription: "A focused full-body massage using deeper pressure to release knots and improve mobility.",
   cardImage: { src: "/images/treatments/cards/deeptissuemassage.webp", alt: "Deep Tissue Massage", width: 630, height: 580 },
   seo: {
-    title: "Deep Tissue Massage Bali – Relieve Tension & Stress",
+    title: "Deep Tissue Massage Bali – Relieve Tension",
     description: "Relax deeply with professional deep tissue massage therapy in Seminyak. Perfect for easing tension, restoring energy, and enhancing overall wellness.",
   },
   hero: {

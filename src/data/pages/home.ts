@@ -292,5 +292,7 @@ export const treatmentSlides = SLIDES.map((slide) => {
     href: item?.href ?? NOT_IN_MENU[slide.name]?.href,
     image: item?.image ?? slide.image,
     price: fromPrice(item, slide.name),
+    /** The spa-menu entry behind the card (none for Hair Braiding and Nail Art). */
+    menuItem: item,
   };
 });

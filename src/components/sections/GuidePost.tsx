@@ -4,20 +4,21 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+// The database answers null for empty columns, so null is accepted throughout.
 export type GuidePostSummary = {
   id: string;
   slug: string;
   title: string;
-  excerpt?: string;
-  cover_image?: string;
-  category?: string;
-  author?: string;
-  published_at?: string;
+  excerpt?: string | null;
+  cover_image?: string | null;
+  category?: string | null;
+  author?: string | null;
+  published_at?: string | null;
 };
 
 export type GuidePostFull = GuidePostSummary & {
   content_html: string;
-  tags?: string[];
+  tags?: string[] | null;
   [key: string]: unknown;
 };
 
@@ -25,7 +26,7 @@ const S = "jsx-guide-post";
 const FALLBACK_IMAGE = "/images/resource/news-details.jpg";
 
 /** "December 9, 2024", as the live site prints dates. */
-const formatDate = (iso?: string) =>
+const formatDate = (iso?: string | null) =>
   iso ? new Date(iso).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" }) : "";
 
 /**

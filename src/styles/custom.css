@@ -1,0 +1,293 @@
+/**
+ * DELIBERATE CHANGES FROM THE LIVE SITE
+ *
+ * live.css is generated from spabalimoon.com (tools/live-port) and must stay
+ * untouched. Changes the owner asked for go here, loaded after it, so each rule
+ * wins at the same specificity. compare.mjs will report these as differences.
+ */
+
+/* Mobile menu: the header's logo at the header's size (.logo is 240px, 210px
+   below 576px) instead of live's 32px-tall mark. */
+.sidebar-area .offcanvas-header .offcanvas-logo img {
+  width: 100%;
+  height: auto;
+}
+
+/* /seminyak/ price list (the homepage design since 1 October): on phones the
+   four tabs sit in two even rows of two (owner, 1 Oct), as they did on this
+   page's old tabs, instead of 3 + 1. The homepage and outcall keep 3 + 1. */
+@media (max-width: 767px) {
+  .pricing-package-section .treatment-catalog__categories {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 400px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .pricing-package-section .treatment-catalog__category {
+    min-width: 0;
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+}
+/* "Couple Packages" is 123px: below 360px it only stays on one line with
+   8px either side. */
+@media (max-width: 359px) {
+  .pricing-package-section .treatment-catalog__category {
+    padding-right: 8px;
+    padding-left: 8px;
+  }
+}
+
+/* Since 1 October /seminyak/ and the outcall page show the homepage price
+   list instead (MenuDurations, styled in spa-menu.css). The next three blocks
+   style the old tabbed list (PackageTabs), kept in case it comes back; none
+   of them matches the new one. */
+
+/* /seminyak/ price list: with a fourth tab ("Couple Packages") the buttons no
+   longer fit one row below 768px; two even rows of two instead of 3 + 1. */
+@media (max-width: 767px) {
+  .pricing-package-section .package-tab ul.nav.nav-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .pricing-package-section .package-tab ul.nav.nav-tabs li.nav-item button.nav-link {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+/* Price lists (/seminyak/ and /outcall-home-service-massage/, the only two
+   .package-spread-toggles sections): the thumbnail stays level with the title
+   instead of sliding to the middle of the row when its prices open. */
+.package-spread-toggles .package-block .inner-box {
+  align-items: flex-start;
+}
+
+/* Price lists: keep the right column clear of the decoration in the
+   bottom-right corner (.shape2, hidden below 992px), so it never sits under
+   the text and prices. The space only adds height when that column is the
+   taller one. /seminyak/ lifts the decoration to bottom: 60px, outcall keeps
+   live's 20px, hence 40px less there — both leave a ~40px gap. */
+@media (min-width: 992px) {
+  .pricing-package-section .package-spread-toggles .package-block + .package-block {
+    padding-bottom: 145px;
+  }
+  .outcall-package-pricing .package-block + .package-block {
+    padding-bottom: 105px;
+  }
+}
+
+/* /privacy-policy/ and /terms-and-conditions/: the owner's photo banner
+   (see the pages' PageTitle backgroundImage) with a lighter overlay than
+   live's 70%, so the photo shows; the white title keeps its contrast. */
+.p-privacy-policy .page-title::before,
+.p-terms-and-conditions .page-title::before {
+  opacity: 0.45;
+}
+
+/* Homepage About card (and the /home-v2/ drafts): "Seminyak · Since 2009"
+   larger than live's 12px (11px below 992px), which the owner found too small,
+   and as written instead of live's spaced capitals (owner, 2 Oct: "no
+   capital"). It fits one line: the card is at least 233px wide inside. */
+.about-section-three .image-column .inner-column .info .about-brand-mark__meta {
+  font-size: 14px;
+  letter-spacing: normal;
+  text-transform: none;
+}
+@media (max-width: 991px) {
+  .about-section-three .image-column .inner-column .info .about-brand-mark__meta {
+    font-size: 13px;
+  }
+}
+
+/* Phones (below 768px): a white bar fixed to the bottom of the screen with a
+   WhatsApp button (src/components/layout/MobileActionBar.tsx) instead of
+   the round green floating button. The owner's pick (1 Oct): one outlined
+   button, the site's pill .btn-two as it is, at the phone pill size (the
+   price-list switches and tabs: Literata 15px 600, 40–48px tall; 44px here)
+   and half the bar wide, centred until a short text (opening hours) joins it.
+   The bar's shadow is the sticky header's, turned upward. The floating
+   button and the extra page padding depend on the bar being there, so
+   taking it out of layout.tsx undoes all of this. */
+.mobile-action-bar {
+  display: none;
+}
+@media (max-width: 767px) {
+  .mobile-action-bar {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100; /* the floating button's layer: under the menu, dialogs and preloader */
+    display: block;
+    padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px));
+    background-color: #fff;
+    box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.05);
+  }
+  .mobile-action-bar .mobile-action-bar__row {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+  }
+  .mobile-action-bar .mobile-action-bar__btn {
+    display: flex;
+    flex: 0 1 calc(50% - 4px); /* half the row, as beside a second button */
+    min-width: 0;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 44px;
+    padding: 0 12px;
+    /* Pinned: a .btn-two takes its page's font (Mulish on the homepage,
+       Literata elsewhere), and this bar is the same on every page. */
+    font-family: var(--title-font);
+    font-size: 15px;
+    white-space: nowrap;
+  }
+  .mobile-action-bar .mobile-action-bar__btn .fa-whatsapp {
+    font-size: 18px;
+  }
+  :root:has(.mobile-action-bar) .whatsapp-float {
+    display: none;
+  }
+  /* Room under the footer (and the 404 page) so nothing ends behind the bar:
+     8 + 44 + 8px. */
+  :root:has(.mobile-action-bar) body {
+    padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px));
+  }
+  /* Owner, 2 Oct: "delete some space here" (under the copyright line). Live
+     kept 96px under it for the round floating button, plus the footer's
+     own 60px: 156px of white above the bar. With the bar, the line ends
+     28px above it (src/styles/footer.css). */
+  :root:has(.mobile-action-bar) footer.site-footer {
+    padding-bottom: 28px;
+  }
+}
+/* A phone turned sideways (short screen): a 40px button, 6px around it. */
+@media (max-width: 767px) and (max-height: 500px) {
+  .mobile-action-bar {
+    padding-top: 6px;
+    padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px));
+  }
+  .mobile-action-bar .mobile-action-bar__btn {
+    height: 40px;
+  }
+  :root:has(.mobile-action-bar) body {
+    padding-bottom: calc(52px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* Homepage About photos (owner, 1 Oct: "this box needs a tidy in
+   placement"). Live hangs the "Spa Bali Moon · Since 2009" card in the
+   top-right corner over both photos: it covered 59px of the left photo and
+   stopped 5px above the stone photo, where the photos are 24px apart. Here
+   the photos are a grid: the tall photo on the left, and in the right
+   column the card at the stone photo's width, a 24px gap, then the stone
+   photo filling the rest (cropped to fit), so every edge lines up and every
+   gap is 24px. Phones (576px and less) keep live's layout: both photos side
+   by side and the card under them. */
+@media (min-width: 577px) {
+  .homepage-about-paper-section .about-section-three .image-column .inner-column {
+    display: grid;
+    /* The right column never narrower than the stone photo (237px): "Seminyak
+       · Since 2009" needs 192px of the card on one line. */
+    grid-template-columns: minmax(0, 360fr) minmax(237px, 237fr);
+    grid-template-rows: auto 1fr;
+    gap: 24px;
+  }
+  /* Live cuts a notch out of the tall photo's top-right corner (a mask) for
+     the card that hung over it; with the card beside it, the photo is a
+     plain rounded rectangle like the stone photo. */
+  .homepage-about-paper-section .about-section-three .image-column .inner-column .image {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .homepage-about-paper-section .about-section-three .image-column .inner-column .info {
+    position: static;
+    grid-column: 2;
+    grid-row: 1;
+    width: auto;
+  }
+  .homepage-about-paper-section .about-section-three .image-column .inner-column .image2 {
+    grid-column: 2;
+    grid-row: 2;
+    width: 100%;
+    /* No height of its own (it would make the grid taller than the left
+       photo): it fills whatever the card leaves. */
+    height: 0;
+    min-height: 100%;
+    max-width: none;
+    object-fit: cover;
+  }
+}
+
+/* Closing banners (owner, 1 Oct: the lymphatic page's "is the good size …
+   we can have all the same including home page"). All 29 were the same
+   width and padding; only their height followed their text (413–512px on
+   desktop). Each is now at least as tall as the lymphatic banner at the
+   same screen width, with its content centred: 483px from 992px up, 512px on
+   tablets, 444px from 576px, and on phones a line through the lymphatic
+   banner's own heights (679px at 320, 534px at 430, 444px at 575), which
+   grow as its text wraps. A banner with more text than lymphatic's (Shiatsu
+   on desktop) is still taller by that text. */
+.reserve-cta-banner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 483px;
+}
+.reserve-cta-banner > div {
+  width: 100%;
+}
+@media (max-width: 991px) {
+  .reserve-cta-banner {
+    min-height: 512px;
+  }
+}
+@media (max-width: 767px) {
+  .reserve-cta-banner {
+    min-height: 444px;
+  }
+}
+@media (max-width: 575px) {
+  .reserve-cta-banner {
+    min-height: calc(534px + (430px - 100vw) * 0.62);
+  }
+}
+@media (max-width: 430px) {
+  .reserve-cta-banner {
+    min-height: calc(679px - (100vw - 320px) * 1.318);
+  }
+}
+
+/* 404 page (live's own markup, same on live): its wrapper has no gutter, so
+   the grid row's -12px margins ran past the screen (12px of sideways scroll
+   on desktop), and the 700px image ran past a phone screen (up to 380px).
+   The wrapper gets the grid's 12px gutter and the image fits the screen. */
+.p-404 .auto-container {
+  padding-right: 12px;
+  padding-left: 12px;
+}
+.p-404 .error-page__title-box img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Photo badge in the corner notch of the about photos ("17 + Years
+   Experience", "Where Tension Lives", "The Art of Focus"…). Owner, 2 Oct:
+   "these need to come out into the larger image framing". Live floats it
+   1.4cqw (8px at full size) inside the notch on every side; it now fills the
+   notch out to the photo's outer left and bottom edges, keeping the 8px gap
+   toward the photo (notch 216x146 of the 570x496 mask). */
+.about-section .image-column .inner-column .info {
+  bottom: 0;
+  left: 0;
+  width: 36.49cqw;
+  height: 24.74cqw;
+}

@@ -1,0 +1,321 @@
+/**
+ * ONE VISUAL GAP BETWEEN SECTIONS (owner, 1 Oct: "all the gaps the same
+ * visually from the front UI … some kind of visual rule regardless of code
+ * padding").
+ *
+ * The rule: from the last thing you can see in one section (text, photo,
+ * card, button) to the first thing in the next is --sp-gap — 200px on
+ * desktop, 160px on tablets, 140px on phones — whatever the sections are.
+ * Live spaced them with each section's own padding classes (pt-100 … pt-170,
+ * inline padding, !important fixes per pair), which left gaps from 39 to
+ * 420px. Where a torn paper edge sits between two sections (76px at a
+ * section's top, 74px at its bottom), it is centred in the gap. A top banner
+ * photo's torn edge lies over the photo, so the gap after it is measured
+ * from the middle of that edge; after a page-title band, from the band.
+ *
+ * How: every top-level section gets its padding from the variables below
+ * (--sp-pt / --sp-pb, set by what is at its top and bottom: its own edge,
+ * the neighbour's edge, or none), less any empty space a section type keeps
+ * inside itself (--sp-in-top / --sp-in-bottom, e.g. a slider's room for its
+ * hover arrow). Wrappers around sections lose their padding, so the section
+ * alone decides. Change --sp-gap to change every gap on the site.
+ *
+ * Sections are the top-level <section>s of the page (.page-wrapper, or the
+ * outcall and Balinese pages' inner wrappers), directly or inside one
+ * wrapper <div>. Loaded last (src/app/layout.tsx). The rules that set padding
+ * start with ":root:root:root:not(#sp#sp#sp) body" and use !important, to
+ * outrank live's own !important padding (some of it written with two ids,
+ * on the Balinese page); the :not() adds weight without changing what
+ * matches. Check with: node tools/spacing/measure-gaps.mjs
+ */
+:root {
+  --sp-gap: 200px;
+  --sp-edge-top: 76px;
+  --sp-edge-bottom: 74px;
+}
+@media (max-width: 991px) {
+  :root {
+    --sp-gap: 160px;
+  }
+}
+@media (max-width: 767px) {
+  :root {
+    --sp-gap: 140px;
+  }
+}
+:root {
+  --sp-half: calc(var(--sp-gap) / 2);
+  /* Space either side of a torn edge, so the edge sits in the middle. */
+  --sp-x-top: calc((var(--sp-gap) - var(--sp-edge-top)) / 2);
+  --sp-x-bottom: calc((var(--sp-gap) - var(--sp-edge-bottom)) / 2);
+}
+
+/* Wrappers around sections carry no spacing of their own. */
+:root:root:root:not(#sp#sp#sp) body :is(.page-wrapper, .outcall-page, .balinese-massage-page) > :not(section):has(section) {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* 1. Every section: half the gap above and below. */
+:root body :is(.page-wrapper, .outcall-page, .balinese-massage-page) > section,
+:root body :is(.page-wrapper, .outcall-page, .balinese-massage-page) > :not(section) > section {
+  --sp-pt: var(--sp-half);
+  --sp-pb: var(--sp-half);
+}
+
+/* 2. Its own torn edge at the top: the edge, then half the rest. */
+:root body :is(.page-wrapper, .outcall-page, .balinese-massage-page) > section.section__decoration-top,
+:root body :is(.page-wrapper, .outcall-page, .balinese-massage-page) > :not(section) > section.section__decoration-top,
+:root body :is(.page-wrapper, .outcall-page, .balinese-massage-page) > .section__decoration-top:not(section) > section:first-of-type {
+  --sp-pt: calc(var(--sp-edge-top) + var(--sp-x-top));
+}
+
+/* 3. Its own torn edge at the bottom. */
+:root body :is(.page-wrapper, .outcall-page, .balinese-massage-page) > section.section__decoration-bottom,
+:root body :is(.page-wrapper, .outcall-page, .balinese-massage-page) > :not(section) > section.section__decoration-bottom,
+:root body :is(.page-wrapper, .outcall-page, .balinese-massage-page) > .section__decoration-bottom:not(section) > section:last-of-type {
+  --sp-pb: calc(var(--sp-edge-bottom) + var(--sp-x-bottom));
+}
+
+/* 4. The next section starts with a torn edge: only the space before it.
+      (":has(+ * > .x)" rather than a :has() inside :has(), which CSS does
+      not allow.) */
+:root body :is(.page-wrapper, .outcall-page, .balinese-massage-page) > section:not(.section__decoration-bottom):has(+ .section__decoration-top, + * > .section__decoration-top),
+:root body :is(.page-wrapper, .outcall-page, .balinese-massage-page) > :not(section, .section__decoration-bottom):has(+ .section__decoration-top, + * > .section__decoration-top) > section:not(.section__decoration-bottom):last-of-type {
+  --sp-pb: var(--sp-x-top);
+}
+
+/* 5. The previous section ended with a torn edge: only the space after it
+      (not a top banner: see 6). */
+:root body :is(.page-wrapper, .outcall-page, .balinese-massage-page) > :is(.section__decoration-bottom, :has(> .section__decoration-bottom)):not(.banner-two-area, .banner-five-area, :has(> .banner-two-area)) + section:not(.section__decoration-top),
+:root body :is(.page-wrapper, .outcall-page, .balinese-massage-page) > :is(.section__decoration-bottom, :has(> .section__decoration-bottom)):not(.banner-two-area, .banner-five-area, :has(> .banner-two-area)) + :not(section, .section__decoration-top) > section:not(.section__decoration-top):first-of-type {
+  --sp-pt: var(--sp-x-bottom);
+}
+
+/* 6. After a top banner: its torn edge lies over the photo, so the gap runs
+      from the middle of the edge. After a page-title band: the full gap. */
+:root body :is(.page-wrapper, .outcall-page, .balinese-massage-page) > :is(.banner-two-area, .banner-five-area, :has(> .banner-two-area)) + section,
+:root body :is(.page-wrapper, .outcall-page, .balinese-massage-page) > :is(.banner-two-area, .banner-five-area, :has(> .banner-two-area)) + :not(section) > section:first-of-type {
+  --sp-pt: calc(var(--sp-gap) - var(--sp-edge-bottom) / 2);
+}
+:root body :is(.page-wrapper, .outcall-page, .balinese-massage-page) > .page-title + section,
+:root body :is(.page-wrapper, .outcall-page, .balinese-massage-page) > .page-title + :not(section) > section:first-of-type {
+  --sp-pt: var(--sp-gap);
+}
+
+/* 6b. Two paper bands meet: the first one's bottom edge and the next one's
+       top edge both sit in the gap, with what is left split around them
+       (nothing on phones, where 140px is less than the two edges). */
+:root {
+  --sp-x-double: max(0px, calc((var(--sp-gap) - var(--sp-edge-top) - var(--sp-edge-bottom)) / 2));
+}
+:root body :is(.page-wrapper, .outcall-page, .balinese-massage-page) > section.section__decoration-bottom:has(+ .section__decoration-top, + * > .section__decoration-top),
+:root body :is(.page-wrapper, .outcall-page, .balinese-massage-page) > :not(section):has(+ .section__decoration-top, + * > .section__decoration-top) > section.section__decoration-bottom:last-of-type,
+:root body :is(.page-wrapper, .outcall-page, .balinese-massage-page) > .section__decoration-bottom:not(section):has(+ .section__decoration-top, + * > .section__decoration-top) > section:last-of-type {
+  --sp-pb: calc(var(--sp-edge-bottom) + var(--sp-x-double));
+}
+:root body :is(.page-wrapper, .outcall-page, .balinese-massage-page) > :is(.section__decoration-bottom, :has(> .section__decoration-bottom)):not(.banner-two-area, .banner-five-area, :has(> .banner-two-area)) + section.section__decoration-top,
+:root body :is(.page-wrapper, .outcall-page, .balinese-massage-page) > :is(.section__decoration-bottom, :has(> .section__decoration-bottom)):not(.banner-two-area, .banner-five-area, :has(> .banner-two-area)) + :not(section) > section.section__decoration-top:first-of-type,
+:root body :is(.page-wrapper, .outcall-page, .balinese-massage-page) > :is(.section__decoration-bottom, :has(> .section__decoration-bottom)):not(.banner-two-area, .banner-five-area, :has(> .banner-two-area)) + .section__decoration-top:not(section) > section:first-of-type {
+  --sp-pt: calc(var(--sp-edge-top) + var(--sp-x-double));
+}
+
+/* 7. Homepage: the packages and "Why it matters" share one paper band (live
+      hides the edges between them), so no edge there (and not 6b). The note
+      under the packages sits in the middle of that gap (owner, 1 Oct): half
+      the gap above it (home-v3.css) and half below, so the packages section
+      ends at the note. */
+:root:root:root:root body .page-wrapper > .homepage-pricing-section > .pricing-section-five {
+  --sp-pb: 0px;
+}
+:root:root:root:root body .page-wrapper > .homepage-services-section > .service-section {
+  --sp-pt: var(--sp-half);
+}
+
+/* 7b. Price list (/seminyak/): the eight package groups are one paper band
+       (edges only at its top and bottom; live: 40px either side of each
+       group). Between two groups, half the gap, like the parts of one
+       section (owner, 2 Oct: "check mobile gaps on price page" — a whole gap
+       there sat 140px over each heading on phones, 30px under it). Under a
+       group's text, 40px to its cards on phones (live: 30px). */
+:root body .page-wrapper > .package-pricing-section:has(+ .package-pricing-section) {
+  --sp-pb: calc(var(--sp-half) / 2);
+}
+:root body .page-wrapper > .package-pricing-section + .package-pricing-section {
+  --sp-pt: calc(var(--sp-half) / 2);
+}
+@media (max-width: 767px) {
+  :root body .package-pricing-section .section-header.mb-60 {
+    margin-bottom: 40px;
+  }
+}
+
+/* 8. Empty space some sections keep inside themselves under their last
+      visible content, taken off their padding (or, where it is larger,
+      taken back with a negative margin). */
+:root body .service-section-two {
+  /* the treatment slider's own bottom padding (live: 35px), under cards
+     that show (white cards on paper) */
+  --sp-in-bottom: 35px;
+}
+:root body div[class*="-services"]:not(.balinese-massage-services, .day-spa-services) > .service-section-two {
+  /* treatment pages: white cards on white, so the cards' own padding (40px,
+     room for the arrow that shows on hover) is empty too, and the row is as
+     tall as its tallest card, hidden ones included */
+  --sp-in-bottom: 115px;
+}
+@media (max-width: 991px) {
+  :root body div[class*="-services"]:not(.balinese-massage-services, .day-spa-services) > .service-section-two {
+    --sp-in-bottom: 121px;
+  }
+}
+@media (max-width: 767px) {
+  :root body div[class*="-services"]:not(.balinese-massage-services, .day-spa-services) > .service-section-two {
+    --sp-in-bottom: 110px;
+  }
+}
+/* At 324px and less a card's text wraps once more: the row is 29px taller
+   than the cards in view (every slider measured). */
+@media (max-width: 324px) {
+  :root body .service-section-two {
+    --sp-in-bottom: 64px;
+  }
+  :root body div[class*="-services"]:not(.balinese-massage-services, .day-spa-services) > .service-section-two {
+    --sp-in-bottom: 139px;
+  }
+}
+/* Where that room is larger than the space before the next section, the
+   section reaches into it (negative margin): it paints above the next one,
+   so a card's hover arrow is never cut off by the torn edge below (the
+   slider section has no background of its own). */
+:root:root:root:not(#sp#sp#sp) body .service-section-two {
+  position: relative;
+  z-index: 2;
+}
+/* A slider inside a paper band has no bottom padding (live). */
+:root body .section__decoration-bottom > .service-section-two {
+  --sp-in-bottom: 0px;
+}
+/* Testimonials with dots under the slider: the dots sit 14px above the
+   bottom of their row. */
+:root body .testimonial-section-two:has(.swiper-pagination-bullets) {
+  --sp-in-bottom: 14px;
+}
+/* FAQs on paper: the questions sit in a box the colour of the paper, so its
+   padding (90px, 30px on phones) is empty space. Side by side with the photo
+   (1400px and up) the photo ends the section; stacked, the box does (with
+   the last question's own 20px under its text). */
+@media (max-width: 1399px) {
+  :root body :is(.faq-section--paper, .location-faq-paper .faq-section) {
+    --sp-in-bottom: 112px;
+  }
+  :root body .balinese-massage-faq .faq-section--paper {
+    --sp-in-bottom: 62px;
+  }
+  :root body .homepage-faq-section .faq-section {
+    --sp-in-bottom: 60px;
+  }
+}
+@media (max-width: 991px) {
+  :root body .balinese-massage-faq .faq-section--paper {
+    --sp-in-bottom: 46px;
+  }
+}
+@media (max-width: 767px) {
+  :root body :is(.faq-section--paper, .location-faq-paper .faq-section) {
+    --sp-in-bottom: 48px;
+  }
+  :root body .balinese-massage-faq .faq-section--paper {
+    --sp-in-bottom: 42px;
+  }
+  :root body .homepage-faq-section .faq-section {
+    --sp-in-bottom: 41px;
+  }
+}
+/* The outcall page's FAQ without a photo: the same invisible box, top and
+   bottom. */
+:root body .faq-section--no-image {
+  --sp-in-top: 66px;
+  --sp-in-bottom: 90px;
+}
+@media (max-width: 767px) {
+  :root body .faq-section--no-image {
+    --sp-in-top: 7px;
+    --sp-in-bottom: 30px;
+  }
+}
+
+/* Contact page: the info rail's cards end above the section's padding. */
+:root body .contact-details--rail {
+  --sp-in-bottom: 48px;
+}
+@media (max-width: 767px) {
+  :root body .contact-details--rail {
+    --sp-in-bottom: 32px;
+  }
+}
+/* At 322px and less a rail card's text wraps once more. */
+@media (max-width: 322px) {
+  :root body .contact-details--rail {
+    --sp-in-bottom: 44px;
+  }
+}
+/* Guide index: room under the post grid. */
+:root body .blog-section-two {
+  --sp-in-bottom: 30px;
+}
+/* Guide articles below 992px: the article starts 27px under its padding. */
+@media (max-width: 991px) {
+  :root body .blog-details {
+    --sp-in-top: 27px;
+  }
+}
+/* Homepage About, 576–1199px: live drops the photos 25px. */
+@media (min-width: 576px) and (max-width: 1199px) {
+  :root body .about-section-three {
+    --sp-in-top: 25px;
+  }
+}
+/* Homepage FAQ on tablets: the stacked photo ends 44px above the padding. */
+@media (min-width: 768px) and (max-width: 991px) {
+  :root body .homepage-faq-section .faq-section {
+    --sp-in-bottom: 44px;
+  }
+}
+
+/* The homepage hero below 992px: the photo sits above the text, so the hero
+   ends in text like any section with a torn bottom edge (from 992px the
+   photo runs to its bottom, under the edge: see 6). */
+@media (max-width: 991px) {
+  :root:root:root:not(#sp#sp#sp) body .page-wrapper > section.banner-five-area {
+    padding-bottom: calc(var(--sp-edge-bottom) + var(--sp-x-bottom)) !important;
+  }
+  :root body .page-wrapper > .banner-five-area + section {
+    --sp-pt: var(--sp-x-bottom);
+  }
+}
+
+/* The padding itself: the banners and title bands keep theirs (the photo is
+   their content). */
+:root:root:root:not(#sp#sp#sp) body :is(.page-wrapper, .outcall-page, .balinese-massage-page) > section:not(.banner-two-area, .banner-five-area, .page-title),
+:root:root:root:not(#sp#sp#sp) body :is(.page-wrapper, .outcall-page, .balinese-massage-page) > :not(section) > section:not(.banner-two-area, .banner-five-area, .page-title) {
+  margin-top: 0 !important;
+  padding-top: max(0px, calc(var(--sp-pt) - var(--sp-in-top, 0px))) !important;
+  padding-bottom: max(0px, calc(var(--sp-pb) - var(--sp-in-bottom, 0px))) !important;
+  margin-bottom: min(0px, calc(var(--sp-pb) - var(--sp-in-bottom, 0px))) !important;
+}
+/* The homepage hero's margin under it (live: mb-130). */
+:root body .page-wrapper > .banner-five-area {
+  margin-bottom: 0 !important;
+}
+
+/* The footer: after a page that ends on a torn edge, the space after it;
+   otherwise half the gap. */
+:root:root:root:not(#sp#sp#sp) body main + footer.site-footer {
+  padding-top: var(--sp-half) !important;
+}
+:root:root:root:not(#sp#sp#sp) body main:has(> .page-wrapper > .section__decoration-bottom:last-child, > .page-wrapper > :last-child > .section__decoration-bottom:last-child, > .page-wrapper > :last-child > :last-child > .section__decoration-bottom:last-child) + footer.site-footer {
+  padding-top: var(--sp-x-bottom) !important;
+}

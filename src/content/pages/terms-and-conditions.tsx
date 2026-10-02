@@ -5,7 +5,7 @@ import PageTitle from "@/components/sections/PageTitle";
 export default function TermsPage() {
   return (
     <div className="page-wrapper lh p-terms-and-conditions">
-      <PageTitle pageName="Terms & Conditions" />
+      <PageTitle pageName="Terms & Conditions" backgroundImage="/images/legal/privacy-terms.webp" />
       <section
         className="terms-conditions-section pt-120 pb-120"
         style={{ backgroundColor: "#fcfaf6", position: "relative", overflow: "hidden", zIndex: 1 }}
@@ -41,7 +41,7 @@ export default function TermsPage() {
                     lineHeight: "1.8",
                     color: "#5f5a54",
                     marginBottom: "40px",
-                    borderLeft: "3px solid #A78627",
+                    borderLeft: "3px solid var(--theme-color1)",
                     paddingLeft: "20px",
                   }}
                 >
@@ -63,7 +63,7 @@ export default function TermsPage() {
                   >
                     <i
                       className="fa-solid fa-spa"
-                      style={{ color: "#A78627", fontSize: "28px", width: "32px", textAlign: "center" }}
+                      style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     Spa Etiquette
                   </h3>
@@ -88,7 +88,7 @@ export default function TermsPage() {
                   >
                     <i
                       className="fa-solid fa-calendar-check"
-                      style={{ color: "#A78627", fontSize: "28px", width: "32px", textAlign: "center" }}
+                      style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     {"Bookings & Arrival"}
                   </h3>
@@ -113,7 +113,7 @@ export default function TermsPage() {
                   >
                     <i
                       className="fa-solid fa-hands-holding-heart"
-                      style={{ color: "#A78627", fontSize: "28px", width: "32px", textAlign: "center" }}
+                      style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     Maintaining Serenity
                   </h3>
@@ -195,7 +195,7 @@ export default function TermsPage() {
                   >
                     <i
                       className="fa-solid fa-user-shield"
-                      style={{ color: "#A78627", fontSize: "28px", width: "32px", textAlign: "center" }}
+                      style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     {"Respect & Professional Conduct"}
                   </h3>
@@ -220,7 +220,7 @@ export default function TermsPage() {
                   >
                     <i
                       className="fa-solid fa-calendar-xmark"
-                      style={{ color: "#A78627", fontSize: "28px", width: "32px", textAlign: "center" }}
+                      style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     {"Cancellation & Rescheduling"}
                   </h3>
@@ -245,7 +245,7 @@ export default function TermsPage() {
                   >
                     <i
                       className="fa-solid fa-car-side"
-                      style={{ color: "#A78627", fontSize: "28px", width: "32px", textAlign: "center" }}
+                      style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     Home Service Transport
                   </h3>
@@ -270,7 +270,7 @@ export default function TermsPage() {
                   >
                     <i
                       className="fa-solid fa-file-contract"
-                      style={{ color: "#A78627", fontSize: "28px", width: "32px", textAlign: "center" }}
+                      style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     Liability
                   </h3>
@@ -301,7 +301,7 @@ export default function TermsPage() {
                   >
                     <i
                       className="fa-solid fa-clock"
-                      style={{ color: "#A78627", marginRight: "10px", fontSize: "22px" }}
+                      style={{ color: "var(--theme-color1)", marginRight: "10px", fontSize: "22px" }}
                     />
                     Hours of Operation
                   </h4>

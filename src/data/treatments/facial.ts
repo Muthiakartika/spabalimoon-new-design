@@ -12,7 +12,7 @@ const facial: Treatment = {
   category: "beauty",
   cardImage: { src: "/images/beauty/cards/balimoonteatreefacial.webp", alt: "Facial", width: 630, height: 580 },
   seo: {
-    title: "Seminyak Facial – Organic Scrub & Lymphatic Face Massage",
+    title: "Seminyak Facial – Organic Scrub & Lymphatic Massage",
     description: "Enjoy facials at Spa Bali Moon in Seminyak. Treatments include organic scrubs, Argan Oil massage, warm steam therapy, natural masks, and lymphatic face massage.",
   },
   hero: {

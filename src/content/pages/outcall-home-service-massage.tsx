@@ -4,7 +4,8 @@ import Link from "next/link";
 import Funfacts from "@/components/sections/Funfacts";
 import AboutSplit from "@/components/sections/AboutSplit";
 import AboutSplitAlt from "@/components/sections/AboutSplitAlt";
-import PackageTabs from "@/components/sections/PackageTabs";
+import MenuDurations from "@/components/home/MenuDurations";
+import { menuTabs } from "@/components/pricelist/menuTabs";
 import HomeServiceInfo from "@/components/sections/HomeServiceInfo";
 import FaqSection from "@/components/sections/FaqSection";
 import ReserveCta from "@/components/sections/ReserveCta";
@@ -99,11 +100,15 @@ export default function OutcallPage() {
           buttonLink="https://wa.me/6287863175144"
           image="/images/outcall/outcall-4.webp"
         />
+        {/* The homepage price list (prices by duration), on the owner's request
+            (1 Oct); the tabs and prices are this page's, as on live. */}
         <div id="outcall-prices">
-          <PackageTabs
+          <MenuDurations
             subTitle="Prices"
             title="Professional Care with Thoughtful Details Focused on Comfort and Relaxation"
-            tabs={[
+            spacing="pt-130 pb-130"
+            sticky
+            tabs={menuTabs([
               {
                 label: "Most Popular",
                 services: [
@@ -669,7 +674,8 @@ export default function OutcallPage() {
                     id: "couple-package-a",
                     name: "Couple Massage Package A",
                     desc: "",
-                    image: "/images/listmenu/couplebalinesemassage.webp",
+                    // One photo per package, as on /seminyak/ (live repeats A=B and C=D).
+                    image: "/images/listmenu/couplemassagepackage.webp",
                     options: [{ time: "1.5 Hours – Balinese Massage + Ear Candle · 2 pax", price: "639K" }],
                   },
                   {
@@ -690,13 +696,12 @@ export default function OutcallPage() {
                     id: "couple-package-d",
                     name: "Couple Massage Package D",
                     desc: "",
-                    image: "/images/listmenu/couplewarmcandle.webp",
+                    image: "/images/listmenu/couplemassage.webp",
                     options: [{ time: "2.5 Hours – Warm Candle + Bali Moon Facial · 2 pax", price: "929K" }],
                   },
                 ],
               },
-            ]}
-            outcallPricing
+            ])}
           />
         </div>
         <HomeServiceInfo plain />

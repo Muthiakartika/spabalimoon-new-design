@@ -1,6 +1,6 @@
 import { LotusIcon } from "@/components/ui/Lotus";
 
-const RULE = { width: "60px", height: "1px", background: "rgba(167, 134, 39, 0.45)" };
+const RULE = { width: "60px", height: "1px", background: "rgba(var(--theme-color1-rgb), 0.45)" };
 
 export type PackageIntroProps = {
   subTitle?: string;

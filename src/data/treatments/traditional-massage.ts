@@ -14,7 +14,7 @@ const traditionalMassage: Treatment = {
   shortDescription: "A firmer full-body massage using deeper pressure to release muscle tension.",
   cardImage: { src: "/images/treatments/cards/traditionalmassage.webp", alt: "Traditional Massage", width: 630, height: 580 },
   seo: {
-    title: "Traditional Massage — Spa Bali Moon in Seminyak",
+    title: "Traditional Massage — Spa Bali Moon",
     description: "Relieve tensions with traditional massage. Let our hands guide you through a journey of passive techniques and soothing recovery.",
   },
   hero: {

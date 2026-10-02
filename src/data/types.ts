@@ -299,19 +299,4 @@ export type Testimonial = {
   text: string;
 };
 
-export type BlogPost = {
-  slug: string;
-  title: string;
-  excerpt: string;
-  seoTitle: string;
-  seoDescription: string;
-  /** ISO date, e.g. "2026-06-24T08:59:15+00:00" */
-  publishedAt: string;
-  updatedAt: string;
-  author: string;
-  category: string;
-  tags: string[];
-  coverImage: SiteImage;
-  /** Article body as HTML, copied exactly from the old site. */
-  contentHtml: string;
-};
+// Guide articles: see src/lib/blog/types.ts (they live in the blog database).

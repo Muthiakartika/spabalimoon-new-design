@@ -13,7 +13,7 @@ const sunburnMassage: Treatment = {
   shortDescription: "A cooling full-body massage that soothes the skin and supports gentle recovery.",
   cardImage: { src: "/images/treatments/cards/aloeveramassage.webp", alt: "Sunburn Treatment", width: 630, height: 580 },
   seo: {
-    title: "Sunburn Massage Treatment in Bali - Skin Repair with Soft Aloe Vera",
+    title: "Sunburn Massage Treatment in Bali - Skin Repair",
     description: "Our sunburn massage treatment provides quick relief with the healing power of cold aloe vera, known for its soothing effects.",
   },
   hero: {

@@ -14,9 +14,10 @@ function Tick() {
 
 /**
  * "Why Spa Bali Moon Is Part of the Bali Experience" — the live
- * about-section-three inside its paper-textured band.
+ * about-section-three inside its paper-textured band. `subTitle` replaces
+ * live's kicker ("Beyond Relaxation"; the homepage has "About Us").
  */
-export default function About() {
+export default function About({ subTitle }: { subTitle?: string } = {}) {
   const { about } = home;
   const lists = [about.features.slice(0, 3), about.features.slice(3)];
   return (
@@ -66,7 +67,7 @@ export default function About() {
                 <div className="jsx-about section-header">
                   <h4 data-wow-delay="00ms" data-wow-duration="1500ms" className="jsx-about sub-title wow fadeInUp">
                     <LotusIcon className="icon" scope="jsx-about" />
-                    {about.subTitle}
+                    {subTitle ?? about.subTitle}
                   </h4>
                   <h2 data-wow-delay="200ms" data-wow-duration="1500ms" className="jsx-about title wow fadeInUp">
                     {about.title}

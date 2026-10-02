@@ -1,17 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import MainMenu from "@/components/layout/MainMenu";
 import MobileMenu from "@/components/layout/MobileMenu";
-import { SidebarBloom } from "@/components/ui/Frangipani";
+import type { MobileMenuData } from "@/components/layout/mobileMenuData";
 import { LotusPaths } from "@/components/ui/Lotus";
 import { business } from "@/data/business";
 import { searchIndex } from "@/data/navigation";
 import { whatsappChatUrl } from "@/lib/whatsapp";
 
 type Sidebar = "closed" | "open" | "closing";
+
 
 /**
  * Site header, search and off-canvas menu — the live "HeaderOne" component,
@@ -21,8 +22,10 @@ type Sidebar = "closed" | "open" | "closing";
  *     the first result, Escape or a click outside closes it;
  *   - the sidebar slides out over 400ms ("closing") before it unmounts.
  * Every root element carries `lh` so src/styles/live.css applies.
+ * `menu` (built on the server, src/app/(site)/layout.tsx) fills the mobile
+ * menu's Treatments and Blog panels.
  */
-export default function Header() {
+export default function Header({ menu }: { menu: MobileMenuData }) {
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -30,6 +33,11 @@ export default function Header() {
   const [sidebar, setSidebar] = useState<Sidebar>("closed");
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+  const [lastPath, setLastPath] = useState(pathname);
 
   const q = query.trim().toLowerCase();
   const results = q ? searchIndex.filter((e) => e.title.toLowerCase().includes(q) || e.keywords.includes(q)) : [];
@@ -38,7 +46,13 @@ export default function Header() {
     setSearchOpen(false);
     setQuery("");
   };
-  const closeSidebar = () => setSidebar("closing");
+  const closeSidebar = () => setSidebar((s) => (s === "open" ? "closing" : s));
+
+  // Another page (a link, or Back) closes the menu.
+  if (pathname !== lastPath) {
+    setLastPath(pathname);
+    if (sidebar === "open") setSidebar("closing");
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 100);
@@ -56,6 +70,26 @@ export default function Header() {
   useEffect(() => {
     if (searchOpen) inputRef.current?.focus();
   }, [searchOpen]);
+
+  // While the menu is open: the page behind it stays put, Escape closes it,
+  // and focus moves into it and back to the lotus button afterwards.
+  useEffect(() => {
+    if (sidebar !== "open") return;
+    const root = document.documentElement;
+    const drawer = drawerRef.current;
+    const menuButton = menuButtonRef.current;
+    root.classList.add("mnav-open");
+    closeButtonRef.current?.focus({ preventScroll: true });
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSidebar("closing");
+    };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      root.classList.remove("mnav-open");
+      document.removeEventListener("keydown", onKey);
+      if (drawer?.contains(document.activeElement)) menuButton?.focus({ preventScroll: true });
+    };
+  }, [sidebar]);
 
   useEffect(() => {
     if (!searchOpen) return;
@@ -180,6 +214,7 @@ export default function Header() {
                 </svg>
               </a>
               <button
+                ref={menuButtonRef}
                 onClick={() => setSidebar("open")}
                 type="button"
                 aria-controls="menubar"
@@ -187,12 +222,9 @@ export default function Header() {
                 aria-label="Open menu"
                 className="jsx-header menubars d-block d-lg-none"
               >
-                <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg" className="jsx-header">
-                  <path
-                    d="M8.55566 11H1.55566C1.29045 11 1.03609 11.1054 0.848557 11.2929C0.661021 11.4804 0.555664 11.7348 0.555664 12V19C0.555664 19.2652 0.661021 19.5196 0.848557 19.7071C1.03609 19.8946 1.29045 20 1.55566 20H8.55566C8.82088 20 9.07523 19.8946 9.26277 19.7071C9.45031 19.5196 9.55566 19.2652 9.55566 19V12C9.55566 11.7348 9.45031 11.4804 9.26277 11.2929C9.07523 11.1054 8.82088 11 8.55566 11ZM7.55566 18H2.55566V13H7.55566V18ZM19.5557 0H12.5557C12.2904 0 12.0361 0.105357 11.8486 0.292893C11.661 0.48043 11.5557 0.734784 11.5557 1V8C11.5557 8.26522 11.661 8.51957 11.8486 8.70711C12.0361 8.89464 12.2904 9 12.5557 9H19.5557C19.8209 9 20.0752 8.89464 20.2628 8.70711C20.4503 8.51957 20.5557 8.26522 20.5557 8V1C20.5557 0.734784 20.4503 0.48043 20.2628 0.292893C20.0752 0.105357 19.8209 0 19.5557 0ZM18.5557 7H13.5557V2H18.5557V7ZM19.5557 11H12.5557C12.2904 11 12.0361 11.1054 11.8486 11.2929C11.661 11.4804 11.5557 11.7348 11.5557 12V19C11.5557 19.2652 11.661 19.5196 11.8486 19.7071C12.0361 19.8946 12.2904 20 12.5557 20H19.5557C19.8209 20 20.0752 19.8946 20.2628 19.7071C20.4503 19.5196 20.5557 19.2652 20.5557 19V12C20.5557 11.7348 20.4503 11.4804 20.2628 11.2929C20.0752 11.1054 19.8209 11 19.5557 11ZM18.5557 18H13.5557V13H18.5557V18ZM8.55566 0H1.55566C1.29045 0 1.03609 0.105357 0.848557 0.292893C0.661021 0.48043 0.555664 0.734784 0.555664 1V8C0.555664 8.26522 0.661021 8.51957 0.848557 8.70711C1.03609 8.89464 1.29045 9 1.55566 9H8.55566C8.82088 9 9.07523 8.89464 9.26277 8.70711C9.45031 8.51957 9.55566 8.26522 9.55566 8V1C9.55566 0.734784 9.45031 0.48043 9.26277 0.292893C9.07523 0.105357 8.82088 0 8.55566 0ZM7.55566 7H2.55566V2H7.55566V7Z"
-                    fill="#707070"
-                    className="jsx-header"
-                  />
+                {/* The logo's lotus (owner, 2 Oct: "a flower like the Spa Bali Moon logo") */}
+                <svg viewBox="0 0 25 26" aria-hidden="true" className="menubars__lotus">
+                  <LotusPaths fill="currentColor" />
                 </svg>
               </button>
             </div>
@@ -204,79 +236,78 @@ export default function Header() {
         <div
           onClick={closeSidebar}
           aria-hidden="true"
+          data-lenis-prevent
           className={`jsx-header sidebar-backdrop${sidebar === "open" ? " is-visible" : ""} lh`}
         />
       )}
+      {/* The menu (owner, 2 Oct: "modernize the menu"): the whole screen on
+          phones, 420px from the right on tablets; its top row repeats the
+          header (logo in the middle, the close button where the lotus was).
+          Styles: src/styles/mobile-nav.css. */}
       <div
+        ref={drawerRef}
         id="menubar"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menu"
         aria-hidden={sidebar === "closed"}
+        inert={sidebar === "closed"}
+        data-lenis-prevent
         onTransitionEnd={(e) => {
           if (e.target === e.currentTarget && e.propertyName === "transform" && sidebar === "closing") setSidebar("closed");
         }}
-        style={{ backgroundColor: "#ffffff", borderLeft: "1px solid rgba(95, 90, 84, 0.12)" }}
-        className={`jsx-header sidebar-area sidebar-area--white offcanvas offcanvas-end ${sidebar === "open" ? "show" : ""} ${
+        className={`jsx-header sidebar-area sidebar-area--white offcanvas offcanvas-end mnav ${sidebar === "open" ? "show" : ""} ${
           sidebar === "closing" ? "hiding" : ""
         } lh`}
       >
-        <div className="jsx-header offcanvas-header">
-          <Link prefetch={false} href="/" className="logo">
+        <div className="jsx-header offcanvas-header mnav__top">
+          <Link prefetch={false} href="/" onClick={closeSidebar} className="logo offcanvas-logo mnav__logo">
             {/* eslint-disable-next-line @next/next/no-img-element -- the live site's plain <img> */}
-            <img src="/images/logo/sbm.webp" alt="" aria-hidden="true" width="56" height="44" className="jsx-header" />
-            <span className="jsx-header offcanvas-brand">{business.name}</span>
+            <img src="/images/logo/SMBtitle.svg" alt={business.name} width="444" height="80" className="jsx-header" />
           </Link>
-          <button type="button" onClick={closeSidebar} aria-label="Close menu" className="jsx-header btn-close">
-            <i className="jsx-header fa-regular fa-xmark" />
+          <button
+            ref={closeButtonRef}
+            type="button"
+            onClick={closeSidebar}
+            aria-label="Close menu"
+            className="jsx-header mnav__close"
+          >
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+              <path d="M5 5l12 12M17 5L5 17" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            </svg>
           </button>
         </div>
-        <div className="jsx-header offcanvas-body sidebar__body">
-          <div className="jsx-header mobile-menu overflow-hidden">
-            <MobileMenu />
-          </div>
-          <div className="jsx-header d-none d-lg-block">
-            <p style={SIDEBAR_HEADING} className="jsx-header mb-20">
-              About Us
-            </p>
-            <p style={{ color: "#5f5a54" }} className="jsx-header sidebar__text">
-              Spa Bali Moon offers high-quality traditional massages and spa therapies, with outcall and home services
-              by skilled therapists specializing in Balinese Body Massage.
-            </p>
-          </div>
-          <div className="jsx-header sidebar__contact-info mt-30">
-            <p style={SIDEBAR_HEADING} className="jsx-header mb-20">
-              Contact Info
-            </p>
-            <ul className="jsx-header">
-              <li className="jsx-header">
-                <i style={{ color: "#A78627" }} className="jsx-header fa-solid fa-location-dot" />{" "}
-                <Link prefetch={false} href="/#0" style={{ color: "#5f5a54" }}>
-                  {business.address.short}
-                </Link>
-              </li>
-              <li className="jsx-header py-2">
-                <i style={{ color: "#A78627" }} className="jsx-header fa-solid fa-phone-volume" />{" "}
-                <a
-                  href={whatsappChatUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: "#5f5a54" }}
-                  className="jsx-header"
-                >
-                  {business.phoneDisplay}
-                </a>
-              </li>
-            </ul>
-          </div>
-          <SidebarBloom />
+        <div className="jsx-header offcanvas-body mnav__body">
+          <MobileMenu data={menu} open={sidebar === "open"} onNavigate={closeSidebar}>
+            <div className="mnav__card mnav__anim" style={{ "--i": 7 } as CSSProperties}>
+              <ul className="mnav__info">
+                <li>
+                  <i className="fa-light fa-clock" aria-hidden="true" />
+                  <span>
+                    {business.openingHours.label} · {business.openingHours.display}
+                  </span>
+                </li>
+                <li>
+                  <i className="fa-light fa-location-dot" aria-hidden="true" />
+                  <a href={business.mapsUrl} target="_blank" rel="noopener noreferrer">
+                    {business.address.short}
+                  </a>
+                </li>
+                <li>
+                  <i className="fa-light fa-phone-volume" aria-hidden="true" />
+                  <a href={whatsappChatUrl} target="_blank" rel="noopener noreferrer">
+                    {business.phoneDisplay}
+                  </a>
+                </li>
+              </ul>
+              <a href={whatsappChatUrl} target="_blank" rel="noopener noreferrer" className="btn-two mnav__cta">
+                <i className="fa-brands fa-whatsapp" aria-hidden="true" />
+                Book on WhatsApp
+              </a>
+            </div>
+          </MobileMenu>
         </div>
       </div>
     </>
   );
 }
-
-const SIDEBAR_HEADING = {
-  color: "#2f2924",
-  fontFamily: "var(--title-font)",
-  fontSize: "20px",
-  fontWeight: 500,
-  lineHeight: "30px",
-} as const;

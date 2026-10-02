@@ -6,6 +6,11 @@ const nextConfig: NextConfig = {
   // Visiting /contact redirects to /contact/.
   trailingSlash: true,
 
+  // The dev server refuses its own scripts/HMR to any host other than localhost,
+  // so a page opened through an ngrok tunnel loaded without JavaScript.
+  // Dev-only — has no effect on the production build.
+  allowedDevOrigins: ["*.ngrok-free.app", "*.ngrok-free.dev", "*.ngrok.app"],
+
   images: {
     // Modern formats: smaller files, same quality.
     formats: ["image/avif", "image/webp"],
@@ -27,11 +32,13 @@ const nextConfig: NextConfig = {
   },
 
   // Old URLs → new URLs. The list lives in src/data/redirects.ts (see migration/url-map.md).
+  // 301, not `permanent: true` (308): the live site answers 301, and older crawlers and
+  // link checkers do not all treat a 308 the same way.
   async redirects() {
     return liveRedirects.map((redirect) => ({
       source: redirect.from,
       destination: redirect.to,
-      permanent: true,
+      statusCode: 301 as const,
     }));
   },
 };

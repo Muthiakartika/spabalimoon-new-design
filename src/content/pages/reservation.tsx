@@ -49,7 +49,7 @@ function Option({
       >
         <div className="section-header">
           <h3 style={{ marginBottom: "10px" }}>{title}</h3>
-          <p style={{ color: "#A78627", marginBottom: "30px" }}>{tagline}</p>
+          <p style={{ color: "var(--theme-color1)", marginBottom: "30px" }}>{tagline}</p>
         </div>
         <div className="list mt-25">
           <ul>

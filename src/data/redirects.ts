@@ -2,13 +2,15 @@
  * REDIRECTS FROM OLD URLS
  * Source: migration/url-map.md
  *
- * `liveRedirects`     = redirects the old website ALREADY serves (url-map section B).
+ * `liveRedirects`     = redirects the old website ALREADY serves (url-map section B, plus the
+ *                       rules of the live project's next.config.js, checked 2 October 2026).
  *                       They are active: next.config.ts loads this list.
  * `proposedRedirects` = ideas that still need the owner's approval (url-map sections C and D).
  *                       They are NOT active. To approve one, move it into `liveRedirects`.
  *
- * All redirects are permanent (HTTP 308, which Google treats like a 301).
+ * All redirects answer HTTP 301, as the live site does.
  * Write every path with a trailing slash, except file names ending in ".html" / ".xml".
+ * Next uses the first rule that matches, so keep a specific rule above a ":slug" pattern.
  */
 
 export type OldUrlRedirect = {
@@ -62,6 +64,83 @@ export const liveRedirects: OldUrlRedirect[] = [
 
   // Section G: the live site redirects /sitemap_index.xml (301, checked 29 September 2026)
   { from: "/sitemap_index.xml", to: "/sitemap.xml" },
+
+  // --- Rules of the live project's next.config.js, missing above (checked 2 October 2026) ---
+
+  // Old Yoast sitemaps
+  { from: "/page-sitemap.xml", to: "/sitemap.xml" },
+  { from: "/post-sitemap.xml", to: "/sitemap.xml" },
+
+  // Treatment pages of the first Next.js site, before they moved under /seminyak/
+  { from: "/bali-moon-facial/", to: "/seminyak/facial/" },
+  { from: "/balinese-massage/", to: "/seminyak/balinese-massage/" },
+  { from: "/body-scrub/", to: "/seminyak/body-scrub/" },
+  { from: "/cellulite-massage/", to: "/seminyak/anti-cellulite-massage/" },
+  { from: "/couple-massage/", to: "/seminyak/couple-spa/" },
+  { from: "/deep-tissue-massage/", to: "/seminyak/deep-tissue-massage/" },
+  { from: "/ear-candle/", to: "/seminyak/ear-wax-removal/" },
+  { from: "/foot-massage/", to: "/seminyak/foot-massage/" },
+  { from: "/foot-reflexology/", to: "/seminyak/foot-reflexology/" },
+  { from: "/hair-braiding/", to: "/seminyak/hair-braiding/" },
+  { from: "/hair-creambath/", to: "/seminyak/creambath/" },
+  { from: "/head-massage/", to: "/seminyak/head-massage/" },
+  { from: "/hot-stone-massage/", to: "/seminyak/hot-stone-massage/" },
+  { from: "/lymphatic-massage/", to: "/seminyak/lymphatic-drainage-massage/" },
+  { from: "/manicure-pedicure/", to: "/seminyak/manicure-pedicure/" },
+  { from: "/nail-art/", to: "/seminyak/nail-spa/" },
+  { from: "/shiatsu-massage/", to: "/seminyak/shiatsu-massage/" },
+  { from: "/sports-massage/", to: "/seminyak/sport-massage/" },
+  { from: "/sunburn-treatment/", to: "/seminyak/sunburn-massage/" },
+  { from: "/thai-massage/", to: "/seminyak/thai-massage/" },
+  { from: "/traditional-massage/", to: "/seminyak/traditional-massage/" },
+  { from: "/virgin-coconut-oil-massage/", to: "/seminyak/coconut-oil-massage/" },
+  { from: "/waxing/", to: "/seminyak/waxing-salon/" },
+
+  // Old slugs under /seminyak/
+  { from: "/seminyak/bali-moon-facial/", to: "/seminyak/facial/" },
+  { from: "/seminyak/cellulite-massage/", to: "/seminyak/anti-cellulite-massage/" },
+  { from: "/seminyak/couple-massage/", to: "/seminyak/couple-spa/" },
+  { from: "/seminyak/ear-candle/", to: "/seminyak/ear-wax-removal/" },
+  { from: "/seminyak/hair-creambath/", to: "/seminyak/creambath/" },
+  { from: "/seminyak/lymphatic-massage/", to: "/seminyak/lymphatic-drainage-massage/" },
+  { from: "/seminyak/nail-art/", to: "/seminyak/nail-spa/" },
+  { from: "/seminyak/sports-massage/", to: "/seminyak/sport-massage/" },
+  { from: "/seminyak/sunburn-treatment/", to: "/seminyak/sunburn-massage/" },
+  { from: "/seminyak/virgin-coconut-oil-massage/", to: "/seminyak/coconut-oil-massage/" },
+  { from: "/seminyak/waxing/", to: "/seminyak/waxing-salon/" },
+  { from: "/seminyak/pricing/", to: "/seminyak/" },
+
+  // More old /spa-treatments/ slugs
+  { from: "/spa-treatments/balinese-massage/", to: "/seminyak/balinese-massage/" },
+  { from: "/spa-treatments/foot-massage-seminyak-bali/", to: "/seminyak/foot-massage/" },
+  { from: "/spa-treatments/lymphatic-massage/", to: "/seminyak/lymphatic-drainage-massage/" },
+  { from: "/spa-treatments/traditional-massage/", to: "/seminyak/traditional-massage/" },
+
+  // More old page names
+  { from: "/massage-petitenget/", to: "/contact/" },
+  { from: "/spa-bali-massage-packages/", to: "/seminyak/" },
+  { from: "/day-spa-seminyak-6/", to: "/seminyak/day-spa/" },
+  { from: "/reservation-spa-bali-moon-massage/", to: "/reservation/" },
+  { from: "/wellness-bali/", to: "/wellness-in-bali/" },
+  { from: "/terms-conditions/", to: "/terms-and-conditions/" },
+  { from: "/massage-hotel-villa/", to: "/villa-hotel-massage/" },
+  { from: "/page-about/", to: "/seminyak/" },
+  { from: "/page-contact/", to: "/contact/" },
+  { from: "/page-team/", to: "/seminyak/" },
+  // Not carried over: /page-faq/, /page-testimonial/ and /page-team-details/. Live sends them
+  // to theme-demo pages (/faq/, /testimonials/, /team-details/) that this site does not have
+  // (url-map section E), so they would only redirect into a 404.
+
+  // Old blog addresses. The two renamed articles stay above the ":slug" rules.
+  { from: "/iv-drip-bali/", to: "/guide/iv-drip/" },
+  { from: "/news-grid/", to: "/guide/" },
+  { from: "/local-health-wellness-news/", to: "/guide/" },
+  { from: "/news/best-massage-after-flight/", to: "/guide/best-massages-after-a-long-flight/" },
+  { from: "/blog/best-massage-after-flight/", to: "/guide/best-massages-after-a-long-flight/" },
+  { from: "/news/a-practical-guide-to-slimming-massage/", to: "/guide/understanding-slimming-massage/" },
+  { from: "/blog/a-practical-guide-to-slimming-massage/", to: "/guide/understanding-slimming-massage/" },
+  { from: "/news/:slug/", to: "/guide/:slug/" },
+  { from: "/blog/:slug/", to: "/guide/:slug/" },
 ];
 
 /**

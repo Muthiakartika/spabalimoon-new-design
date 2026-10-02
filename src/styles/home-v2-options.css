@@ -1,0 +1,501 @@
+/**
+ * HOMEPAGE V2 OPTIONS — sections the owner chose between, shown side by side
+ * on /home-v2/options/ and in place on the homepage (options 1 and A, the
+ * former /home-v3/) and /home-v4/. Loaded after home-v2.css; every rule hangs
+ * off `.home-v2`. Type is copied from existing site styles only (named in
+ * each block). Once the drafts go, the homepage's blocks move to home-v2.css
+ * and the rest is deleted.
+ */
+
+/* ------------------------------------------------------------------------
+   The options page itself: a label strip above each option.
+   ------------------------------------------------------------------------ */
+.home-v2 .v2-opt-label {
+  padding: 22px 0;
+  border-top: 1px dashed rgba(var(--theme-color1-rgb), 0.5);
+  border-bottom: 1px dashed rgba(var(--theme-color1-rgb), 0.5);
+  background-color: #fff;
+}
+.home-v2 .v2-opt-label .container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 14px;
+}
+/* The fee line's type: Literata 18px 700 / 400. */
+.home-v2 .v2-opt-label strong {
+  color: var(--theme-color1);
+  font-family: var(--title-font);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 28px;
+}
+.home-v2 .v2-opt-label span {
+  color: #707070;
+  font-family: var(--title-font);
+  font-size: 18px;
+  line-height: 28px;
+}
+/* The treatment options sit between white bands here; on the homepage the
+   section rhythm rules space them like the popular section. */
+.home-v2.v2-options .v2-alltreat,
+.home-v2.v2-options .v2-alltiles {
+  padding: 100px 0;
+}
+@media (max-width: 767px) {
+  .home-v2.v2-options .v2-alltreat,
+  .home-v2.v2-options .v2-alltiles {
+    padding: 60px 0;
+  }
+}
+
+/* Visually hidden text for screen readers. */
+.home-v2 .v2-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------------------
+   Treatments option 1 — all 23 cards in one sideways row at every width:
+   the row runs to the right edge of the screen (the left one too on phones),
+   with four cards and a peek of the fifth in view on desktop.
+   ------------------------------------------------------------------------ */
+.home-v2 .v2-alltreat .container {
+  container-type: inline-size;
+}
+.home-v2 .v2-alltreat__row {
+  display: flex;
+  gap: 24px;
+  margin-right: calc(50% - 50vw);
+  padding: 6px calc(50vw - 50%) 16px 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-padding-inline: 0;
+  scrollbar-width: none;
+}
+.home-v2 .v2-alltreat__row::-webkit-scrollbar {
+  display: none;
+}
+.home-v2 .v2-alltreat__row > .v2-treat {
+  flex: 0 0 calc((100cqw - 3 * 24px) / 4.25);
+  scroll-snap-align: start;
+}
+@media (max-width: 1199px) {
+  .home-v2 .v2-alltreat__row > .v2-treat {
+    flex-basis: calc((100cqw - 2 * 24px) / 3.25);
+  }
+}
+@media (max-width: 991px) {
+  .home-v2 .v2-alltreat__row {
+    gap: 20px;
+  }
+  .home-v2 .v2-alltreat__row > .v2-treat {
+    flex-basis: calc((100cqw - 20px) / 2.2);
+  }
+}
+@media (max-width: 767px) {
+  .home-v2 .v2-alltreat__row {
+    margin-left: calc(50% - 50vw);
+    padding-left: calc(50vw - 50%);
+    scroll-padding-inline: calc(50vw - 50cqw);
+  }
+  .home-v2 .v2-alltreat__row > .v2-treat {
+    flex-basis: 78%;
+  }
+}
+.home-v2 .v2-alltreat .v2-scroll-nav {
+  margin-top: 30px;
+}
+
+/* ------------------------------------------------------------------------
+   Treatments option 2 — every treatment as a compact tile, the spa menu's
+   pill tabs to filter them. Tile name = the "Different" card titles
+   (Literata 22px 500, 18px on phones); price = the card price (h6).
+   ------------------------------------------------------------------------ */
+.home-v2 .v2-alltiles .treatment-catalog__categories {
+  margin: 34px 0 50px;
+}
+.home-v2 .v2-tiles {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.home-v2 .v2-tile__link {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid #ebe4d6;
+  border-radius: 18px;
+  background-color: #fff;
+  transition: box-shadow 0.4s, transform 0.4s;
+}
+.home-v2 .v2-tile__link:hover {
+  box-shadow: 0 24px 50px rgba(74, 66, 58, 0.12);
+  transform: translateY(-4px);
+}
+.home-v2 .v2-tile__media {
+  display: block;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+.home-v2 .v2-tile__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s;
+}
+.home-v2 .v2-tile__link:hover .v2-tile__media img {
+  transform: scale(1.05);
+}
+.home-v2 .v2-tile__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 0 18px 20px;
+}
+.home-v2 .v2-tile__icon {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  margin: -26px 0 12px;
+  border: 4px solid #fff;
+  border-radius: 50%;
+  background-color: var(--theme-color1);
+}
+.home-v2 .v2-tile__icon img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+.home-v2 .v2-tile__name {
+  color: var(--headings-color);
+  font-family: var(--title-font);
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 32px;
+  transition: color 0.3s;
+}
+.home-v2 .v2-tile__link:hover .v2-tile__name {
+  color: var(--theme-color1);
+}
+.home-v2 .v2-tile__price {
+  margin-top: 4px;
+  color: var(--theme-color1);
+  font-family: var(--title-font);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 28px;
+}
+.home-v2 .v2-tiles__more {
+  display: none;
+  margin-top: 34px;
+  text-align: center;
+}
+.home-v2 .v2-alltiles .v2-popular__more {
+  margin-top: 40px;
+}
+@media (max-width: 1399px) {
+  .home-v2 .v2-tiles {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+@media (max-width: 1199px) {
+  .home-v2 .v2-tiles {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+/* Below 992px: the first six, then "Show all". */
+@media (max-width: 991px) {
+  .home-v2 .v2-tiles {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .home-v2 .v2-tiles:not(.is-expanded) .is-extra {
+    display: none;
+  }
+  .home-v2 .v2-tiles__more {
+    display: block;
+  }
+}
+@media (max-width: 767px) {
+  .home-v2 .v2-alltiles .treatment-catalog__categories {
+    margin: 28px 0 36px;
+  }
+  .home-v2 .v2-tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .home-v2 .v2-tile__body {
+    padding: 0 14px 16px;
+  }
+  .home-v2 .v2-tile__icon {
+    width: 44px;
+    height: 44px;
+    margin: -22px 0 10px;
+    border-width: 3px;
+  }
+  .home-v2 .v2-tile__icon img {
+    width: 22px;
+    height: 22px;
+  }
+  .home-v2 .v2-tile__name {
+    font-size: 18px;
+    line-height: 26px;
+  }
+}
+
+/* Price list option A ("pick a duration") moved to spa-menu.css (1 Oct): it is
+   the homepage price list, and the price lists on /seminyak/ and the outcall
+   page now use it too. */
+
+/* ------------------------------------------------------------------------
+   Price list option B — "price table". Headers = the panel's "Benefits:"
+   title (Mulish 15px 700); names = the menu titles at their phone size
+   (Literata 20px 500); prices = the panel prices (Mulish 16px 700, gold).
+   ------------------------------------------------------------------------ */
+.home-v2 .v2-ptable__note {
+  margin: -30px 0 30px;
+  color: #5f5a54;
+  font-size: 15px;
+  line-height: 1.65;
+  text-align: center;
+}
+.home-v2 .v2-ptable__pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 48px;
+  align-items: start;
+}
+.home-v2 .v2-ptable__wrap {
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-radius: 18px;
+  background-color: #fff;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+}
+.home-v2 .v2-ptable__wrap--single {
+  max-width: 980px;
+  margin: 0 auto;
+}
+.home-v2 .v2-ptable {
+  width: 100%;
+  border-collapse: collapse;
+}
+.home-v2 .v2-ptable th,
+.home-v2 .v2-ptable td {
+  padding: 14px 10px;
+  border-bottom: 1px solid rgba(95, 90, 84, 0.14);
+  vertical-align: middle;
+}
+.home-v2 .v2-ptable tbody tr:last-child > * {
+  border-bottom: 0;
+}
+.home-v2 .v2-ptable thead th {
+  padding-top: 18px;
+  padding-bottom: 12px;
+  border-bottom-color: rgba(95, 90, 84, 0.18);
+  color: #707070;
+  font-family: var(--text-font);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 24px;
+  text-align: center;
+  white-space: nowrap;
+}
+.home-v2 .v2-ptable thead th:first-child,
+.home-v2 .v2-ptable tbody th {
+  padding-left: 22px;
+  text-align: left;
+}
+.home-v2 .v2-ptable thead th:last-child,
+.home-v2 .v2-ptable td:last-child {
+  padding-right: 22px;
+}
+.home-v2 .v2-ptable tbody tr {
+  transition: background-color 0.2s;
+}
+.home-v2 .v2-ptable tbody tr:hover {
+  background-color: rgba(var(--theme-color1-rgb), 0.05);
+}
+.home-v2 .v2-ptable__name {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.home-v2 .v2-ptable__name img {
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+.home-v2 .v2-ptable__name > span {
+  display: flex;
+  flex-direction: column;
+  color: var(--headings-color);
+  font-family: var(--title-font);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 25px;
+}
+.home-v2 .v2-ptable__name a:hover {
+  color: var(--theme-color1);
+}
+/* Extras such as "1 Hour with Aloe Vera · 195K": the dotted detail type. */
+.home-v2 .v2-ptable__name small {
+  margin-top: 4px;
+  color: #6a6f73;
+  font-family: var(--text-font);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+.home-v2 .v2-ptable td {
+  color: var(--theme-color1);
+  font-family: var(--text-font);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 28px;
+  text-align: center;
+  white-space: nowrap;
+}
+.home-v2 .v2-ptable td.is-empty {
+  color: var(--text-color2);
+}
+.home-v2 .v2-ptable--packages td.v2-ptable__includes {
+  color: #5f5a54;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.65;
+  text-align: left;
+  white-space: normal;
+}
+/* Beauty: each treatment's variants as a small always-open price card. */
+.home-v2 .v2-pcards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px 48px;
+  align-items: start;
+}
+.home-v2 .v2-pcard {
+  padding: 22px 24px 10px;
+  border-radius: 18px;
+  background-color: #fff;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+}
+.home-v2 .v2-pcard__head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.home-v2 .v2-pcard__head img {
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+.home-v2 .v2-pcard__head .title {
+  margin: 0;
+  font-size: 20px;
+  line-height: 25px;
+}
+.home-v2 .v2-pcard__head .title a:hover {
+  color: var(--theme-color1);
+}
+.home-v2 .v2-pcard .treatment-catalog__prices {
+  margin-top: 14px;
+}
+.home-v2 .v2-pcard .treatment-catalog__option {
+  padding: 9px 0;
+}
+.home-v2 .v2-pcard .treatment-catalog__option:last-child {
+  border-bottom: 0;
+}
+/* Narrower tables: headers such as "30 Mins" may take two lines and long
+   names may hyphenate, so the four prices always fit. */
+@media (max-width: 1199px) {
+  .home-v2 .v2-ptable__pair,
+  .home-v2 .v2-pcards {
+    gap: 24px;
+  }
+  .home-v2 .v2-ptable th,
+  .home-v2 .v2-ptable td {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+  .home-v2 .v2-ptable thead th {
+    white-space: normal;
+  }
+  .home-v2 .v2-ptable__name > span {
+    hyphens: auto;
+  }
+}
+@media (max-width: 991px) {
+  .home-v2 .v2-ptable__pair,
+  .home-v2 .v2-pcards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 767px) {
+  .home-v2 .v2-ptable__note {
+    margin-top: -20px;
+  }
+  .home-v2 .v2-ptable__name img,
+  .home-v2 .v2-pcard__head img {
+    display: none;
+  }
+  .home-v2 .v2-ptable thead th:first-child,
+  .home-v2 .v2-ptable tbody th {
+    padding-left: 14px;
+  }
+  .home-v2 .v2-ptable thead th:last-child,
+  .home-v2 .v2-ptable td:last-child {
+    padding-right: 14px;
+  }
+  /* The "Different" card titles at their phone size. */
+  .home-v2 .v2-ptable__name > span {
+    font-size: 18px;
+    line-height: 26px;
+  }
+  /* The "Benefits:" title size (15px 700) for a narrower price column. */
+  .home-v2 .v2-ptable td {
+    font-size: 15px;
+  }
+  .home-v2 .v2-pcard {
+    padding: 18px 18px 6px;
+  }
+}
+/* The narrowest phones: less side padding and the card-price size (Literata
+   16px 500) for names, so "Aromatherapy" still fits beside four prices. */
+@media (max-width: 359px) {
+  .home-v2 .v2-ptable thead th:first-child,
+  .home-v2 .v2-ptable tbody th {
+    padding-left: 6px;
+  }
+  .home-v2 .v2-ptable thead th:last-child,
+  .home-v2 .v2-ptable td:last-child {
+    padding-right: 8px;
+  }
+  .home-v2 .v2-ptable td {
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+  .home-v2 .v2-ptable__name > span {
+    font-size: 16px;
+    line-height: 24px;
+  }
+}

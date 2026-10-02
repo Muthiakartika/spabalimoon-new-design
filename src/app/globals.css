@@ -7,7 +7,9 @@
 @layer theme, base, components, utilities;
 @import "tailwindcss/theme.css" layer(theme);
 @import "../styles/preflight-scoped.css" layer(base);
-@import "tailwindcss/utilities.css" layer(utilities);
+/* Scan src/ only. Without source(), Tailwind also read PROGRESS.md and
+   tools/live-port, where words like "collapse" appear. */
+@import "tailwindcss/utilities.css" layer(utilities) source("../");
 
 /*
  * The ported live components use the live class names (Bootstrap's
@@ -20,6 +22,23 @@
 @source not "../components/sections";
 @source not "../components/pricelist";
 @source not "../content";
+/* The blog admin and its server code use no Tailwind (src/styles/admin.css),
+   and article HTML (seed-posts.json) is full of ordinary words. */
+@source not "../components/admin";
+@source not "../app/admin";
+@source not "../lib/blog";
+@source not "../data/guide/seed-posts.json";
+
+/*
+ * Excluding folders is not enough: a live class name that shows up as a word
+ * anywhere Tailwind does scan (page files, data, comments) still becomes a
+ * utility, and a utility setting a property live.css never sets wins. That is
+ * how `collapse` (visibility: collapse) blanked every open FAQ answer. These
+ * are all the live class names — from the ported markup and live.css — that
+ * Tailwind would turn into utilities; none of them may be generated.
+ * (`text-white` is left out: the skip link uses it, with Bootstrap's value.)
+ */
+@source not inline("absolute block border col-12 col-3 col-6 collapse container ease-in-out fixed flex grid grow hidden inline inline-flex list-item mb-0 mb-130 mb-2 mb-20 mb-30 mb-40 mb-50 mb-60 ms-1 mt-15 mt-25 mt-30 mt-35 mt-40 mt-50 mt-60 order-1 order-2 overflow-hidden p-404 pb-100 pb-120 pb-130 pb-170 pb-2 pb-40 pb-70 pb-90 pt-100 pt-120 pt-130 pt-170 pt-30 pt-40 py-2 relative resize static sticky table text-center transform transition visible w-100");
 
 /**
  * DESIGN TOKENS

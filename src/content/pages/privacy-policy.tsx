@@ -5,7 +5,7 @@ import PageTitle from "@/components/sections/PageTitle";
 export default function PrivacyPolicyPage() {
   return (
     <div className="page-wrapper lh p-privacy-policy">
-      <PageTitle pageName="Privacy Policy" />
+      <PageTitle pageName="Privacy Policy" backgroundImage="/images/legal/privacy-terms.webp" />
       <section
         className="privacy-policy-section pt-120 pb-120"
         style={{ backgroundColor: "#fcfaf6", position: "relative", overflow: "hidden", zIndex: 1 }}
@@ -41,7 +41,7 @@ export default function PrivacyPolicyPage() {
                     lineHeight: "1.8",
                     color: "#5f5a54",
                     marginBottom: "40px",
-                    borderLeft: "3px solid #A78627",
+                    borderLeft: "3px solid var(--theme-color1)",
                     paddingLeft: "20px",
                   }}
                 >
@@ -64,7 +64,7 @@ export default function PrivacyPolicyPage() {
                   >
                     <i
                       className="fa-light fa-clipboard-list"
-                      style={{ color: "#A78627", fontSize: "28px", width: "32px", textAlign: "center" }}
+                      style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     Information We Collect
                   </h3>
@@ -149,7 +149,7 @@ export default function PrivacyPolicyPage() {
                   >
                     <i
                       className="fa-solid fa-bullseye"
-                      style={{ color: "#A78627", fontSize: "28px", width: "32px", textAlign: "center" }}
+                      style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     How We Use Your Information
                   </h3>
@@ -254,7 +254,7 @@ export default function PrivacyPolicyPage() {
                   >
                     <i
                       className="fa-solid fa-shield-alt"
-                      style={{ color: "#A78627", fontSize: "28px", width: "32px", textAlign: "center" }}
+                      style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     Data Protection
                   </h3>
@@ -279,7 +279,7 @@ export default function PrivacyPolicyPage() {
                   >
                     <i
                       className="fa-solid fa-share-nodes"
-                      style={{ color: "#A78627", fontSize: "28px", width: "32px", textAlign: "center" }}
+                      style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     Sharing of Information
                   </h3>
@@ -348,7 +348,7 @@ export default function PrivacyPolicyPage() {
                   >
                     <i
                       className="fa-solid fa-lock"
-                      style={{ color: "#A78627", fontSize: "28px", width: "32px", textAlign: "center" }}
+                      style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     Home Service Privacy
                   </h3>
@@ -416,7 +416,7 @@ export default function PrivacyPolicyPage() {
                   >
                     <i
                       className="fa-solid fa-user-check"
-                      style={{ color: "#A78627", fontSize: "28px", width: "32px", textAlign: "center" }}
+                      style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     Your Rights
                   </h3>
@@ -502,7 +502,7 @@ export default function PrivacyPolicyPage() {
                   >
                     <i
                       className="fa-light fa-clock"
-                      style={{ color: "#A78627", marginRight: "10px", fontSize: "22px" }}
+                      style={{ color: "var(--theme-color1)", marginRight: "10px", fontSize: "22px" }}
                     />
                     Hours of Operation
                   </h4>
@@ -526,7 +526,7 @@ export default function PrivacyPolicyPage() {
                   >
                     <i
                       className="fa-solid fa-address-book"
-                      style={{ color: "#A78627", fontSize: "28px", width: "32px", textAlign: "center" }}
+                      style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     Contact Us
                   </h3>
@@ -544,11 +544,11 @@ export default function PrivacyPolicyPage() {
                             width: "45px",
                             height: "45px",
                             borderRadius: "50%",
-                            backgroundColor: "rgba(167, 134, 39, 0.08)",
+                            backgroundColor: "rgba(var(--theme-color1-rgb), 0.08)",
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
-                            color: "#A78627",
+                            color: "var(--theme-color1)",
                             fontSize: "18px",
                           }}
                         >
@@ -576,11 +576,11 @@ export default function PrivacyPolicyPage() {
                             width: "45px",
                             height: "45px",
                             borderRadius: "50%",
-                            backgroundColor: "rgba(167, 134, 39, 0.08)",
+                            backgroundColor: "rgba(var(--theme-color1-rgb), 0.08)",
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
-                            color: "#A78627",
+                            color: "var(--theme-color1)",
                             fontSize: "18px",
                           }}
                         >
@@ -610,11 +610,11 @@ export default function PrivacyPolicyPage() {
                             width: "45px",
                             height: "45px",
                             borderRadius: "50%",
-                            backgroundColor: "rgba(167, 134, 39, 0.08)",
+                            backgroundColor: "rgba(var(--theme-color1-rgb), 0.08)",
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
-                            color: "#A78627",
+                            color: "var(--theme-color1)",
                             fontSize: "18px",
                           }}
                         >

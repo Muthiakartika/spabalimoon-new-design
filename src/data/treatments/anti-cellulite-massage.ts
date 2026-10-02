@@ -13,7 +13,7 @@ const antiCelluliteMassage: Treatment = {
   shortDescription: "A targeted full-body massage designed to stimulate circulation and improve skin tone.",
   cardImage: { src: "/images/treatments/cards/cellulitemassage.webp", alt: "Cellulite Massage", width: 630, height: 580 },
   seo: {
-    title: "Anti-Cellulite Massage in Seminyak – Smooth & Tone",
+    title: "Anti-Cellulite Massage in Seminyak",
     description: "Target stubborn cellulite with our firming massage in Bali. Boost circulation, smooth skin texture, and feel more confident naturally and effectively.",
   },
   hero: {

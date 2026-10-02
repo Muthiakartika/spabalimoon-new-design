@@ -42,7 +42,7 @@ export default function WellnessInBaliPage() {
                     lineHeight: "1.9",
                     color: "#5f5a54",
                     marginBottom: "40px",
-                    borderLeft: "3px solid #A78627",
+                    borderLeft: "3px solid var(--theme-color1)",
                     paddingLeft: "20px",
                   }}
                 >

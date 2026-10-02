@@ -1,5 +1,6 @@
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
+import { mobileMenuData } from "@/components/layout/mobileMenuData";
 
 /** Every page except the 404: header, the page inside <main>, footer. */
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
@@ -12,7 +13,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       >
         Skip to content
       </a>
-      <Header />
+      <Header menu={mobileMenuData()} />
       <main id="main-content">{children}</main>
       <Footer />
     </>

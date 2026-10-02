@@ -1,0 +1,105 @@
+/**
+ * HOMEPAGE (design "v3") — /home-v2/ with the owner's picks (the 23-treatment
+ * slider, prices by duration) plus changes the owner asked for on v3 (30 Sep).
+ * Drafted at /home-v3/, the homepage since 1 October (src/app/(site)/page.tsx;
+ * the page wrapper keeps the class `home-v3`). Loaded after home-v2.css and
+ * home-v2-options.css; rules hang off `.home-v3`, and `.home-v2.home-v3`
+ * where they override a v2 rule.
+ */
+
+/* The owner's gold #B88C35, first chosen for this page (30 Sep), is site-wide
+   since 1 October: src/styles/gold.css, which keeps it on the homepage even
+   when the site-wide switch is turned off. */
+
+/* ------------------------------------------------------------------------
+   FAQ: a plain thin chevron instead of the gold circle ("a clean simple
+   arrow … with no circle"). It is the site's text grey, not gold ("maybe
+   these can be grey", 30 Sep), and stays grey when its question turns gold
+   on hover or open; it only turns over when the answer opens.
+   ------------------------------------------------------------------------ */
+.home-v2.home-v3 .v2-faq .v2-faq__arrow {
+  display: inline-flex;
+  flex: 0 0 24px;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  color: var(--text-color);
+  transition: transform 0.25s ease;
+}
+.home-v2.home-v3 .v2-faq .v2-faq__arrow svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+.home-v2.home-v3 .v2-faq .is-open .v2-faq__arrow {
+  transform: rotate(180deg);
+}
+.home-v2.home-v3 .v2-faq .v2-faq__num,
+.home-v2.home-v3 .v2-faq .v2-faq__question button:hover .v2-faq__text {
+  color: var(--theme-color1);
+}
+/* The answer keeps clear of the arrow's column, now 24px + the 14px gap. */
+.home-v2.home-v3 .v2-faq .v2-faq__answer p {
+  margin-right: 38px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-v2.home-v3 .v2-faq .v2-faq__arrow {
+    transition: none;
+  }
+}
+@media (max-width: 767px) {
+  .home-v2.home-v3 .v2-faq .v2-faq__arrow {
+    height: 26px;
+  }
+  /* 24px + the 12px phone gap. */
+  .home-v2.home-v3 .v2-faq .v2-faq__answer p {
+    margin-right: 36px;
+  }
+}
+
+/* Spacing between sections (the owner's earlier tweaks here — FAQ to closing
+   banner on phones, packages to "Why it matters") is now one site-wide rule:
+   src/styles/spacing.css (1 Oct). */
+
+/* Price list on phones: the prices come in from the screen edge a little —
+   now in spa-menu.css, shared with the other price lists. */
+
+/* ------------------------------------------------------------------------
+   Packages → "What makes us different": the closing note under the cards.
+   It was a small white card with a fine gold line (owner, 30 Sep: "center
+   texts … maybe a line"), which read as a stray fifth card ("looks very
+   strange", 1 Oct). Now plain centred text under the lotus, the lotus
+   between two fine gold lines — the closing banner's divider — centred
+   between the packages and "Why it matters" (owner: the space above and
+   below it looked "weird"): half the site's section gap above it and half
+   below (spacing.css), 100 / 80 / 70px.
+   ------------------------------------------------------------------------ */
+.home-v2.home-v3 .v2-packages .v2-packages__note {
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  max-width: 640px;
+  margin-top: var(--sp-half);
+  text-align: center;
+}
+.home-v2.home-v3 .v2-packages .v2-packages__mark {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.home-v2.home-v3 .v2-packages .v2-packages__mark::before,
+.home-v2.home-v3 .v2-packages .v2-packages__mark::after {
+  content: "";
+  width: 60px;
+  height: 1px;
+  background-color: rgba(var(--theme-color1-rgb), 0.45);
+}
+.home-v2.home-v3 .v2-packages .v2-packages__note svg {
+  margin-top: 0;
+}
+@media (max-width: 767px) {
+  .home-v2.home-v3 .v2-packages .v2-packages__note {
+    margin-top: var(--sp-half);
+    text-align: center;
+  }
+}

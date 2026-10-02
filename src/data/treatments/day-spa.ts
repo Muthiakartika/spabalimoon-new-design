@@ -11,7 +11,7 @@ const daySpa: Treatment = {
   category: "day-spa",
   cardImage: { src: "/images/treatments/day-spa/dayspa-3.webp", alt: "Day Spa", width: 630, height: 580 },
   seo: {
-    title: "Day Spa Treatments in Seminyak – Relax & Rejuvenate",
+    title: "Day Spa in Seminyak – Relax & Rejuvenate",
     description: "Discover day spa treatments in Seminyak, Bali. From massages to facials, our therapies are designed to relax, refresh, and restore your natural glow.",
   },
   hero: {

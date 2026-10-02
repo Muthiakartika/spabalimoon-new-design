@@ -8,7 +8,7 @@
 export const reservationPage = {
   path: "/reservation/",
   seo: {
-    title: "Reserve your massage treatments at Spa Bali Moon in Seminyak",
+    title: "Reserve your massage treatment at Spa Bali Moon",
     description: "If you want to have quality massage treatments around Seminyak, our therapists are always available and ready to give you the best services.",
   },
   eyebrow: "Your Spa Experience is One Click Away",

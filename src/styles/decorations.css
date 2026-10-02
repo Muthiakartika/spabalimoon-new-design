@@ -1,0 +1,146 @@
+/**
+ * DECORATIONS NEVER ON TEXT (owner, 2 Oct: "pilihan B").
+ *
+ * Live hangs leaves, flowers, trays and frangipani in the corners of its
+ * sections, in the room its paddings left. Many sat on text on live already,
+ * mostly between 600 and 1440px; the one-gap spacing (spacing.css) brought
+ * some closer. The rule now: a decoration never covers text. Where one would,
+ * at a given width, it is smaller or left out there; it is never moved onto
+ * other content.
+ *
+ * Found with a pixel check on every page (43) at 13 widths, 1920 to 320px:
+ * each decoration that overlaps a line of text, or comes within 10px of one
+ * (its bobbing range), is screenshotted with and without it. A spot only
+ * counts when the decoration actually shows there (not under a card, not in
+ * a transparent corner of its PNG). None sat on text at 1920px; under 576px
+ * live already leaves most of them out. Each rule below names the widths
+ * where that decoration was on text, and how many pages.
+ */
+
+/* Treatment slider ("Continue Your …", 23 pages), top-right leaf (230px,
+   bobbing 10px): its section starts 43–63px above the centred heading, which
+   reaches the leaf below 1200px (live: on phones too). */
+@media (max-width: 1199px) {
+  .service-section-two > .shape2 {
+    display: none;
+  }
+}
+
+/* /reservation/: the spa tray in the bottom-left corner is 327px wide on live
+   (same there) and covers the last list items at every width that shows it
+   (576px up). It gets the 170px the treatment pages give the same image,
+   which fits the empty corner below the lists. */
+.p-reservation .book-treatment-section > .shape1 img {
+  width: 170px;
+  height: auto;
+}
+/* … and its top-right leaf reaches the kicker on tablets (768–900px). */
+@media (max-width: 991px) {
+  .p-reservation .book-treatment-section > .shape2 {
+    display: none;
+  }
+}
+
+/* Reviews: the frangipani on the left (27 pages, 768–900px) and the spa tray
+   on the right (5 pages, 768–1100px) run into the centred quote. */
+@media (min-width: 768px) and (max-width: 991px) {
+  .testimonial-section-two > .shape1 {
+    display: none;
+  }
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  .testimonial-section-two > .shape2 {
+    display: none;
+  }
+}
+
+/* Treatment intros (about-section-two, 24 pages): the shape or leaf on the
+   right sits on the right column's text from 600 to 1440px, and from 1500 to
+   1840px too: this section's content is wider (about 1434px), so its sides
+   are narrower than the others'. Clear at 1920px. */
+@media (max-width: 1919px) {
+  .about-section-two > .shape2 {
+    display: none;
+  }
+}
+
+/* Treatment "Duration & Pricing" (pricing-section-three, 22 pages): the spa
+   tray at the top left sits on the heading from 1024 to 1440px (live leaves it
+   out below 992px). */
+@media (max-width: 1499px) {
+  .pricing-section-three .shape1 {
+    display: none;
+  }
+}
+
+/* About sections (about-section): the decoration in the bottom-left corner
+   (the step shape, 22 pages at 600–900px; the leaves, 1024–1440px) sits on
+   the list and its button, and the one in the top-right corner on the
+   heading or text: the flowers (22 pages, 1440px) and leaves (1024–1440px)
+   up to 1499px, the about shapes (768–900px) on tablets. Live leaves the
+   bottom-left one out below 576px and the top-right one below 768px. */
+@media (max-width: 1499px) {
+  .about-section > .shape1 {
+    display: none;
+  }
+  .about-section > .shape2:not(:has(img[src$="about-right-shape.png"], img[src$="banner-three-shape2.png"])) {
+    display: none;
+  }
+}
+@media (max-width: 991px) {
+  .about-section > .shape2 {
+    display: none;
+  }
+}
+
+/* Homepage steps and the outcall packages: the tray / shape in the
+   bottom-left corner sits on the first column (1024–1440px). */
+@media (max-width: 1499px) {
+  .step-section .shape1,
+  .package-section .shape1 {
+    display: none;
+  }
+}
+
+/* Homepage About: the shape behind the photos reaches the card's text at
+   1024–1100px and on phones. */
+@media (max-width: 1199px) {
+  .about-section-three .shape {
+    display: none;
+  }
+}
+
+/* From 1500px: smaller, not left out. The content is 1320px wide from
+   1400px and the corner decorations hang against the screen edge, so the
+   empty side, (100vw − 1320px) / 2, is their room: they are capped at 80%
+   of it (the leaves' 1.2 zoom on some pages), less 12px for their bobbing,
+   and can no longer reach the text. At 1500px that is 60px, at 1920px 228px
+   (most live sizes are 170–310px). The flowers (FloralDecoration, live
+   230×245px, two images placed inside) scale as a whole. */
+@media (min-width: 1500px) {
+  :root {
+    --deco-cap: calc((100vw - 1320px) / 2 * 0.8 - 12px);
+  }
+  main section > :is(.shape1, .shape2) img {
+    max-width: var(--deco-cap);
+    height: auto;
+  }
+  main section > :is(.shape1, .shape2) .floral-decoration__flowers {
+    --floral: min(230px, var(--deco-cap));
+    width: var(--floral);
+    height: calc(var(--floral) * 245 / 230);
+  }
+  main section > :is(.shape1, .shape2) .floral-decoration__clustered {
+    height: calc(var(--floral) * 210 / 230);
+  }
+  main section > :is(.shape1, .shape2) .floral-decoration__petals {
+    width: calc(var(--floral) * 170 / 230);
+    max-width: none;
+    height: calc(var(--floral) * 100 / 230);
+  }
+  main section > :is(.shape1, .shape2) .floral-decoration__blossoms {
+    width: var(--floral);
+    max-width: none;
+    height: calc(var(--floral) * 150 / 230);
+  }
+}

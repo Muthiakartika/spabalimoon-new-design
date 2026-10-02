@@ -65,7 +65,7 @@ async function snapshot(url, width) {
       if (skip.has(el.tagName)) return;
       const r = el.getBoundingClientRect();
       const cs = getComputedStyle(el);
-      const visible = r.width > 0 && r.height > 0 && cs.visibility !== "hidden" && cs.display !== "none";
+      const visible = r.width > 0 && r.height > 0 && cs.visibility === "visible" && cs.display !== "none";
       out.push({
         path,
         tag: el.tagName,
@@ -77,7 +77,7 @@ async function snapshot(url, width) {
         vis: visible,
         x: Math.round(r.left), y: Math.round(r.top + scrollY), w: Math.round(r.width), h: Math.round(r.height),
         fx: r.left, fy: r.top + scrollY, fw: r.width, fh: r.height,
-        f: [cs.fontFamily.split(",")[0].replace(/"/g, ""), cs.fontSize, cs.fontWeight, cs.lineHeight, cs.color, cs.backgroundColor, cs.letterSpacing, cs.textTransform, cs.borderRadius, cs.opacity].join("|"),
+        f: [cs.fontFamily.split(",")[0].replace(/"/g, ""), cs.fontSize, cs.fontWeight, cs.lineHeight, cs.color, cs.backgroundColor, cs.letterSpacing, cs.textTransform, cs.borderRadius, cs.opacity, cs.visibility].join("|"),
       });
       [...el.children].forEach((c, i) => walk(c, path + "/" + i));
     };

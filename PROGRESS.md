@@ -1,6 +1,15 @@
 # Progres rebuild
 
-Diperbarui 29 September 2026.
+Diperbarui 1 Oktober 2026.
+
+> **1 Oktober:** beranda `/` kini desain baru pilihan pemilik (draf "v3"),
+> bukan lagi salinan 1:1 live — lihat "Beranda baru" di bawah. Price list
+> `/seminyak/` dan outcall kini memakai desain price list beranda yang sama
+> (lihat "Price list baru"), dan emas baru pemilik #B88C35 kini dipakai di
+> seluruh situs (lihat "Emas baru di seluruh situs"; bisa dikembalikan dengan
+> satu baris). Putaran klien berikutnya (rollover putih, jarak antar-section
+> seragam, banner penutup seukuran, About & catatan paket beranda) ada di
+> "Permintaan klien, putaran 2". Isi dan susunan halaman lain tetap dari live.
 
 ## Semua 42 halaman sudah jadi — dan identik dengan live
 
@@ -19,7 +28,8 @@ mengulang pemeriksaan status/judul; perbandingan tampilan ada di
 
 ### Rute
 
-- `/` beranda, 11 seksi
+- `/` beranda, desain baru (10 seksi; sampai 30 September salinan live, 11
+  seksi)
 - `/seminyak/` daftar harga bertab
 - `/seminyak/[slug]/` **24 halaman treatment**
 - `/guide/` + `/guide/[slug]/` **7 artikel**
@@ -514,6 +524,864 @@ beranda dari sesi 3.
   0 warning, typecheck bersih.
 - `tools/live-port/` diperbarui untuk 42 halaman (lihat README-nya).
 
+## Cek responsif + perubahan atas permintaan pemilik (29 September, sesi 5)
+
+### Cek responsif
+
+Build produksi dibandingkan dengan live, 43 halaman × 7 lebar
+(1440, 1280, 1024, 768, 600, 540, 360), satu lebar di tiap rentang breakpoint
+live.css (1400/1200/992/768/576/500/376). Bersama sweep 1920 & 390 di sesi 4,
+semua rentang sudah tercakup. Hasil 301 perbandingan: **tinggi dokumen sama,
+0 selisih gaya/isi/subpiksel**. Satu-satunya selisih geometri adalah dekorasi
+Balinese Massage 1440px yang sudah dikenal (ikut posisi scroll).
+Overflow horizontal diperiksa di 320/360/375/414: tidak ada halaman yang bisa
+digeser ke samping.
+
+Koreksi catatan sesi 4: sisa "struct" di banner semua halaman bukan soal urutan
+kelas. Kelas `swiper-backface-hidden` di `.banner-two__slider` memang hilang:
+Swiper menambahkannya langsung ke DOM, lalu render ulang React menimpanya.
+Di live hal yang sama terjadi, tapi kelas itu kembali setiap kali handler
+resize Swiper berjalan (sering beberapa detik setelah load, pasti setelah
+jendela diubah ukurannya), selalu di akhir daftar kelas. `PageBanner`
+kini menjalankan `swiper.updateSlides()` sekali setelah render ulang itu,
+sehingga hasil akhirnya sama dengan live secara konsisten (di dev, StrictMode
+membuat urutannya lain; build produksi sama persis).
+
+### Bug: jawaban FAQ kosong (ditemukan pemilik)
+
+Semua jawaban FAQ yang dibuka tampil kosong: ruangnya ada, teksnya tidak.
+Penyebab: `.collapse.show` kena `visibility: collapse` dari utility Tailwind
+`collapse`. Tailwind v4 memindai seluruh proyek, termasuk PROGRESS.md dan
+`tools/live-port`, dan kata "collapse" di sana membuatnya menghasilkan utility
+itu. live.css tidak pernah mengatur `visibility`, jadi utility tersebut menang.
+Bug ini sudah ada sejak commit awal. `compare.mjs` tidak menangkapnya karena
+tidak membandingkan `visibility`, dan jawaban FAQ tertutup saat diukur.
+
+Perbaikan di `src/app/globals.css`:
+- Tailwind hanya memindai `src/` (`source("../")`).
+- `@source not inline(...)` memblokir ke-58 nama kelas live yang akan menjadi
+  utility Tailwind (`collapse`, `visible`, `hidden`, `fixed`, `container`,
+  `mt-30`, `pt-120`, …). Kini Tailwind hanya menghasilkan 8 utility, semuanya
+  untuk skip link.
+
+`compare.mjs` kini ikut membandingkan `visibility`. Alat baru
+`tools/live-port/dropdowns.mjs` membuka setiap dropdown di semua halaman,
+live dan lokal, lalu menghitung teks yang benar-benar terlihat. Dropdown yang
+diperiksa: FAQ, baris harga per tab, katalog beranda, "Read more" testimoni,
+menu desktop (hover), submenu mobile, dan pencarian guide.
+
+Hasil setelah perbaikan: 319 dropdown, 0 teks tersembunyi, jumlah karakter
+sama dengan live. Satu-satunya perbedaan adalah paket couple /seminyak/ yang
+sengaja dipindah ke tabnya sendiri.
+
+Sweep `compare.mjs` ulang (43 halaman × 1920/390, kini termasuk
+`visibility`), 30 September. Hasil: 0 selisih gaya/visibility di semua
+halaman. Yang berbeda hanya perubahan yang disengaja:
+- logo menu mobile, di semua halaman kecuali 404;
+- price list /seminyak/ (tab ke-4; di 390px tab 2 × 2 menambah tinggi 59px);
+- price list outcall (ruang 105px untuk dekorasi di ≥992px, foto paket).
+
+Selain itu hanya dekorasi Balinese Massage yang sudah dikenal (ikut posisi
+scroll).
+
+### Sengaja berbeda dari live (permintaan pemilik)
+
+Semua aturan ada di `src/styles/custom.css` (dimuat setelah live.css, jadi
+tidak hilang saat live.css dibuat ulang):
+- **/seminyak/ price list:** "Couple Massage Packages" dipindah dari tab For
+  Couples menjadi tab keempat **Couple Packages** (data di
+  `src/data/pages/pricelist.ts`; tiap paket satu baris dengan thumbnail
+  sendiri). Di bawah 768px tab tersusun 2 × 2.
+- **Price list /seminyak/ dan /outcall-home-service-massage/:** thumbnail
+  sejajar judul (tidak turun ke tengah saat baris dibuka), dan kolom kanan
+  diberi ruang di ≥992px agar dekorasi pojok kanan bawah tidak menimpa
+  teks/harga (145px di /seminyak/, 105px di outcall karena dekorasinya 40px
+  lebih rendah).
+- **Outcall, tab Couple Packages:** tiap paket punya foto sendiri, sama dengan
+  /seminyak/ (live memakai foto yang sama untuk A=B dan C=D). Tab outcall
+  (5 tab) di HP tetap 3 + 2 seperti live.
+- **Menu mobile:** logo di kepala menu kini `SMBtitle.svg`, sama dengan header
+  (210px di HP), menggantikan ikon kecil + teks tebal milik live.
+- **/privacy-policy/ dan /terms-and-conditions/ (30 September):** banner judul
+  kini memakai foto dari pemilik (bunga kamboja di atas handuk),
+  `public/images/legal/privacy-terms.webp` (1920×850) dan `-sm.webp` untuk HP
+  (828×640, dipotong di sisi bunga). Live memakai latar polos
+  `page-title-bg.jpg`. Foto dipasang lewat prop `backgroundImage` di
+  `src/content/pages/privacy-policy.tsx` dan `terms-and-conditions.tsx`. Atas
+  permintaan pemilik, overlay gelapnya diturunkan dari 70% (live) ke 45% di
+  `src/styles/custom.css`, hanya untuk dua halaman ini.
+- **Beranda, kartu About (30 September):** label "Seminyak · Since 2009"
+  dibesarkan dari 12px (11px di bawah 992px) ke 14px (13px di bawah 992px),
+  tetap satu baris. Aturannya di `src/styles/custom.css`, jadi berlaku juga
+  di draf `/home-v2/`, `/home-v3/`, `/home-v4/`. `compare.mjs` di `/`: 1440px
+  hanya kartu itu yang beda (+3px tinggi); 390px kartu +3px, dan isi di
+  bawahnya turun 3px.
+- **Beranda `/` (1 Oktober):** seluruhnya desain baru pilihan pemilik (draf
+  v3), bukan salinan live — lihat "Beranda baru".
+- **Price list /seminyak/ dan /outcall-home-service-massage/ (1 Oktober):**
+  section price list memakai desain beranda (pilih durasi), menggantikan tab
+  bergaya live dan baris buka-tutup — lihat "Price list baru". Tiga aturan
+  price list lama di `custom.css` (tab 2 × 2, thumbnail sejajar judul, ruang
+  dekorasi kanan bawah) kini tidak mengenai apa pun; dibiarkan untuk
+  `PackageTabs` bila dikembalikan. Tab desain baru di /seminyak/ kembali
+  2 × 2 di HP (pemilik, 1 Oktober); beranda dan outcall tetap 3 + 1 / 3 + 2.
+- **Emas #B88C35 di seluruh situs (1 Oktober):** menggantikan #A78627 milik
+  live di semua halaman — lihat "Emas baru di seluruh situs".
+- **Bar WhatsApp di bawah layar HP (1 Oktober):** di bawah 768px tombol hijau
+  bulat melayang diganti bar putih menempel di bawah layar. Riwayat: satu
+  tombol emas selebar layar (52px) terasa terlalu besar → dua opsi
+  dibandingkan (WhatsApp saja; WhatsApp + Contact Us) → **pilihan pemilik:
+  opsi bawah tapi satu tombol saja, outline**. Jadi kini satu tombol
+  "WhatsApp" (ikon + teks) `.btn-two` situs apa adanya (garis emas, teks
+  emas; saat diketuk emas penuh berteks putih), 44px, setengah lebar bar,
+  di tengah. Huruf dipatok ke huruf pill HP situs (Literata 15px 600, seperti
+  tab dan switch price list), karena `.btn-two` mengikuti huruf halaman
+  (Mulish di beranda, Literata di tempat lain). Bayangan bar = bayangan
+  header lengket dibalik. Rencana pemilik berikutnya: teks pendek di
+  sebelah tombol, mis. jam buka "9am–11pm" (saat itu tombol pindah ke sisi,
+  teks di sisi lain). Komponen `src/components/layout/MobileActionBar.tsx`
+  (dipasang di `src/app/layout.tsx`), gaya di `custom.css`. Bar 60px (HP
+  miring 52px) + area aman iPhone; halaman diberi ruang bawah sebesar itu.
+  Menu HP, dialog WhatsApp dan preloader tetap di atas bar; tablet/desktop
+  tetap tombol melayang. Dicek 320/360/390 dan 740×360: teks utuh, tidak
+  ada scroll ke samping. Mengembalikan tombol melayang: hapus
+  `<MobileActionBar />` dari `layout.tsx`.
+- **Banner 7 artikel guide di HP (1 Oktober):** `PageTitle` memberi HP versi
+  `-sm` dari foto banner, tetapi file itu tidak pernah ada (live juga 404),
+  jadi di bawah 768px banner tampil tanpa foto. Kini ada
+  `public/images/guide/*-sm.webp`: potongan 828×1000 (bentuk banner di HP)
+  dari tinggi penuh foto, dipusatkan pada subjeknya (mis. wajah di foto jet
+  lag, kantong infus di IV drip), 24–38 KB (slimming 100 KB, IV drip 477×576
+  tanpa diperbesar). Dicek 320/390/767: ketujuhnya termuat; desktop tetap
+  foto besar. Artikel baru dengan foto banner perlu file `-sm`-nya juga
+  (`var(--pt-bg-sm, …)` di live.css tidak jatuh ke foto besar bila file
+  hilang).
+
+`compare.mjs` akan melaporkan bagian-bagian ini sebagai selisih.
+
+## Beranda baru: draf v3 menjadi `/` (1 Oktober)
+
+Atas permintaan pemilik, desain `/home-v3/` kini menjadi beranda.
+- `src/app/(site)/page.tsx` merender susunan v3 (`HomeV2Layout` + slider 23
+  treatment + price list per durasi + semua perubahan pemilik, lihat bagian
+  draf di bawah). Yang sama dengan beranda lama: `<title>`, deskripsi,
+  canonical `https://spabalimoon.com/`, `index, follow`, JSON-LD DaySpa, satu
+  `<h1>`. Wrapper tetap ber-kelas `home-v3`, jadi `home-v3.css` berlaku apa
+  adanya.
+- `/home-v3/` → **307** ke `/` (`redirect()` di halamannya; `next.config.ts`
+  tidak diubah, jadi dev server tidak perlu restart). Tautan lama yang sudah
+  dibagikan tetap jalan. Draf `/home-v2/`, `/home-v4/`, `/home-v2/options/`
+  tetap ada (noindex).
+- **Emas #B88C35** awalnya hanya di beranda; sejak 1 Oktober di seluruh
+  situs (lihat "Emas baru di seluruh situs").
+- `/` tidak lagi 1:1 dengan live: `compare.mjs`, `survey.mjs` dan
+  `dropdowns.mjs` akan melaporkan selisih besar di `/` — itu disengaja.
+- Beranda lama bisa dikembalikan dengan
+  `git checkout HEAD -- "src/app/(site)/page.tsx"` (file itu belum diubah
+  sejak commit awal). Bila v3 masih ingin disimpan sebagai draf, isi
+  `page.tsx` yang sekarang dipindah ke `home-v3/page.tsx` dengan
+  `path: "/home-v3/"` dan `index: false` (folder draf belum pernah di-commit).
+  Komponen beranda lama (`home/Hero`, `FeaturedTreatments`,
+  `TreatmentCatalog`, `sections/PackageIntro`, `home/Faq`) dibiarkan dulu
+  walau kini tidak dipakai.
+- Dicek: `/` 200 + `/home-v3/` 307; emas baru di `/` (logo 528 px emas B, 0
+  emas lama) dan emas lama di `/seminyak/`, `/contact/`, `/home-v2/`; 0 error
+  console; perbaikan review desain (lihat putaran v3) lolos di 1440, 390, dan
+  HP miring 844×390 / 740×360 / 667×375.
+
+## Price list baru di `/seminyak/` dan outcall (1 Oktober)
+
+Atas permintaan pemilik, price list beranda (opsi A, "pilih durasi") kini
+juga menjadi price list di `/seminyak/` dan `/outcall-home-service-massage/`.
+- **Desain sama dengan beranda:** biaya home service, tab pill, switch
+  durasi yang menempel di bawah header selama daftar di-scroll, harga di
+  baris tiap treatment, baris tanpa durasi itu memudar ("Not available"),
+  varian dan add-on sebagai catatan kecil. Emas mengikuti halaman (#A78627;
+  emas B tetap hanya di `/`). Hiasan nampan spa kanan bawah tidak ada lagi,
+  sama seperti di beranda.
+- **Isi tetap milik halaman masing-masing** (teks dan harga live): judul
+  ("Best Price / Our Massages Price List", "Prices / Professional Care …"),
+  tab (/seminyak/ 4 tab termasuk Couple Packages; outcall 5 tab termasuk
+  Most Popular), nama, deskripsi, foto dan harga. Data dipetakan oleh
+  `src/components/pricelist/menuTabs.ts`: label seperti "1 Hour · Balinese
+  Massage · 2 Pax" dibaca sebagai durasi; "1 Hour Aloe Vera" tetap varian;
+  isi paket couple ("1.5 Hours – Balinese Massage + Ear Candle") jadi catatan
+  di bawah deskripsi; manfaat facial ("Benefits:") jadi daftar catatan.
+  Treatment di bawah treatment lain (Four Hand Warm Candle di bawah Organic
+  Warm Candle; lima couple massage di bawah "Couple Massage" di tab Massage
+  outcall) tampil sebagai catatan dengan harga untuk durasi yang dipilih;
+  "Couple Massage" sendiri menunjukkan "from" harga terendahnya. Di tab Most
+  Popular, Cream Bath dan Manicure Pedicure (tanpa durasi) tampil seperti
+  baris Beauty. Tab For Couples outcall punya tombol "2.5 Hrs" karena Warm
+  Candle couple di halaman itu 2,5 jam (live); di /seminyak/ 2 jam.
+- **SEO tetap:** semua tab dan harga setiap durasi ada di HTML server (yang
+  tidak tampil diberi `hidden`), sama seperti tab dan baris tertutup di
+  versi live. Tiap harga berdurasi diawali label tersembunyi ("1.5 Hrs:")
+  untuk pembaca layar dan mesin pencari. Beranda ikut cara ini; tampilannya
+  tidak berubah.
+- **Kode:** `MenuDurations` menerima `tabs`, `spacing` (kedua halaman
+  tetap `pt-130 pb-130` seperti section lamanya) dan `sticky`;
+  `MenuIntro` menerima `tabs`. CSS menu harga dipindah dari
+  `home-v2.css`/`home-v2-options.css`/`home-v3.css` ke
+  `src/styles/spa-menu.css` (diawali `.lh`, spesifisitas sama), dimuat
+  oleh `MenuIntro`. `PackageTabs` kini tidak dipakai halaman mana pun,
+  dibiarkan dulu.
+- **Dicek:** beranda + draf (46 state: tiap tab × durasi, 1440 & 390) —
+  teks identik dan tata letak sama; selisih piksel hanya header/tombol
+  WhatsApp yang fixed saat screenshot, dan opsi A di `/home-v2/options/`
+  versi HP kini ikut padding kanan 16px milik beranda. /seminyak/ dan
+  outcall: semua tab × durasi di 1440 & 390, tanpa scroll horizontal dan
+  tanpa harga yang menimpa judul di 320–1280px, switch menempel di HP
+  (bawah header 68px) dan desktop (106px), 0 error console. Typecheck dan
+  lint bersih. `compare.mjs` akan melaporkan section ini sebagai selisih.
+- **Durasi terpilih = garis emas (1 Oktober):** atas permintaan pemilik ("gold
+  outline only"), tombol durasi yang dipilih di switch "Prices for" tidak lagi
+  emas penuh berteks putih, tetapi teks emas dengan garis emas 1px (seperti
+  garis pill kategori), digambar di dalam tombol sehingga ukurannya tetap.
+  Satu aturan di `spa-menu.css`, jadi berlaku di semua price list durasi:
+  beranda, /seminyak/, outcall (dan draf opsi). Dicek: hanya tombol terpilih
+  yang bergaris, ukuran tombol tidak berubah (40px HP, 42px desktop).
+- **Tab 2 × 2 di HP (/seminyak/ saja, 1 Oktober):** atas permintaan pemilik,
+  keempat tab tersusun dua baris rata (sebelumnya 3 + 1, seperti beranda),
+  aturan di `custom.css`. Di bawah 360px padding pill 8px agar "Couple
+  Packages" (123px) tetap satu baris; dicek rata di 320–767px.
+
+## Emas baru di seluruh situs (1 Oktober)
+
+Atas permintaan pemilik, emas B **#B88C35** (sebelumnya hanya di beranda)
+kini dipakai di semua halaman, termasuk 404, header, menu HP, footer, tombol
+WhatsApp dan preloader. Hover yang di live lebih gelap (#8A6F1C, #8F7223)
+menjadi #987426; emas lain live (#B39242 di newsletter, #B8952E di navigasi
+artikel) menjadi B.
+
+**Emas lama tidak dihapus.** #A78627 tetap terdefinisi di `live.css` (tidak
+diubah); emas B hanya lapisan di atasnya:
+- **Saklar:** kelas `gold-b` pada `<html>` di `src/app/layout.tsx`.
+  Hapus `className="gold-b"` → seluruh situs kembali ke #A78627 dan hanya
+  beranda tetap emas B (keadaan sebelum 1 Oktober). Untuk #A78627 di
+  beranda juga, hapus pula `:has(.home-v3)` dari cakupan di `gold.css`.
+- **`src/styles/gold.css`** (dimuat setelah `custom.css`), semua aturan
+  di bawah `:root:is(.gold-b, :has(.home-v3))`:
+  1. variabel `--theme-color1`/`-rgb` pada setiap `.lh` (+ `--color-gold`
+     Tailwind) — semua yang memakai variabel ikut;
+  2. ikon SVG inline ber-atribut `fill`/`stroke="#A78627"`;
+  3. gambar emas satu warna diwarnai ulang dengan filter SVG `#gold-b`
+     (didefinisikan di `layout.tsx`, menggantikan `#v3-gold` di beranda):
+     logo header/menu HP/footer/kartu sesi, lotus `sbm.webp`/`lotus.svg`
+     (preloader, kartu brand, watermark ulasan, kontak, ikon kicker dan
+     bullet artikel), 23 ikon treatment `/images/spa/`, ikon PNG paket
+     `/images/icon/icon-spa/`. Spesifisitas dibuat serendah mungkin agar
+     ikon putih di badge beranda dan ikon putih saat hover di slider
+     treatment tetap putih;
+  4. nilai emas tetap di `live.css` (pencarian header, hover telepon/menu
+     HP, fokus input, garis frangipani, toggle harga, tombol dialog
+     WhatsApp, newsletter, navigasi artikel, tab lama) dan di CSS kita
+     (hover panah `spa-menu.css`/`home-v2.css`), selektor sama.
+- Gaya inline emas di komponen (ikon kontak menu HP, HomeServiceInfo,
+  PackageIntro, PackageTabs, privacy/terms/reservation/wellness, hero lama)
+  kini `var(--theme-color1)` / `rgba(var(--theme-color1-rgb), …)` — saat
+  saklar mati nilainya tetap #A78627 persis.
+- Blok emas khusus beranda di `home-v3.css` dan filter `#v3-gold` di
+  `(site)/page.tsx` dipindah ke `gold.css` / `layout.tsx`.
+- Sengaja tidak diubah: bunga frangipani (dan bayangan cokelatnya), logo
+  kartu pembayaran, kuning bintang ulasan.
+
+Dicek:
+- Sapuan gaya terhitung, 43 halaman × 1440 & 390, semua elemen dan
+  pseudo-elemen termasuk yang tersembunyi (menu, dropdown): **0** nilai emas
+  lama (sebelumnya ribuan per halaman; beranda sudah 0).
+- 59 penempatan gambar emas: semuanya berfilter `#gold-b`, ikon putih di
+  beranda tetap putih, bullet lotus artikel ikut.
+- Uji diferensial keadaan interaktif: pada setiap elemen yang disasar
+  aturan `:hover`/`:focus*`/`:active` (±500–2.600 per halaman), empat
+  set keadaan dipaksa lewat DevTools Protocol, lalu warna dibandingkan
+  dengan saklar hidup vs mati. Hasil di 43 halaman × 1440 & 390: setiap
+  perbedaan adalah emas lama → emas B (atau filter gambar), **0** perubahan
+  lain — jadi hover putih, teks putih di tombol emas, dsb. tetap seperti
+  live. Beranda diuji dengan mencabut aturan `gold.css`.
+- Menu harga beranda tidak berubah (selisih piksel hanya header fixed saat
+  screenshot). Typecheck dan lint bersih.
+- `compare.mjs` kini melaporkan selisih warna emas di semua halaman — itu
+  disengaja; nyalakan ulang perbandingan 1:1 dengan mematikan saklar.
+
+## Permintaan klien, putaran 2 (1 Oktober)
+
+Lima permintaan dari pemilik (Uriah), dianalisis di semua 43 halaman pada
+1920/1440/1024/390 lalu dikerjakan:
+
+1. **Rollover putih, bukan emas penuh** ("the pure gold is too intense for
+   the roll over"). `src/styles/rollover.css` (dimuat di `layout.tsx` setelah
+   `gold.css`): semua tombol yang di live jadi emas penuh berteks putih saat
+   hover (27 jenis: `.btn-one/.btn-two/.btn-two-light`, "Book an
+   Appointment", "Reserve", tab price list, tombol kontak/peta/dialog
+   WhatsApp, panah slider, lingkaran ikon slider treatment, ikon kontak) kini
+   jadi putih; teks, garis, panah dan ikon tetap emas, plus bayangan emas
+   lembut agar tetap terlihat di section/kartu putih. Tab price list yang aktif:
+   putih bergaris emas (sebelumnya emas penuh). Fokus keyboard tab: cincin
+   emas. Hapus import-nya untuk kembali ke rollover emas live. Dicek: 0 elemen
+   yang jadi emas penuh saat hover di 43 halaman (sebelumnya 27 jenis); sisa
+   emas penuh hanya dekorasi (titik slider, nomor langkah, badge ikon).
+2. **Kotak "Spa Bali Moon · Since 2009" (About beranda) dirapikan.** Live
+   menggantungnya di pojok, menutupi foto kiri 59px dan hanya 5px di atas
+   foto batu. Kini grid (`custom.css`, ≥577px): foto tinggi di kiri; di kanan
+   kotak selebar foto batu (min. 237px agar "Seminyak · Since 2009" tetap
+   satu baris), jarak 24px, lalu foto batu mengisi sisanya; semua tepi
+   sejajar, semua jarak 24px. Potongan (mask) di pojok foto kiri yang dibuat
+   untuk kotak lama dihilangkan. HP (≤576px) tetap seperti live (sudah rapi).
+3. **Catatan di bawah paket ("looks very strange")**: bukan lagi kotak putih
+   bergaris (terlihat seperti kartu kelima), tetapi teks biasa di tengah di
+   bawah lotus yang diapit dua garis emas tipis (pemisah banner penutup)
+   (`home-v3.css`, `home-v2/Packages.tsx` membungkus lotus). Setelah dilihat
+   pemilik ("jarak atas bawah aneh": 40px di atas, jauh lebih besar di bawah),
+   catatan diletakkan di tengah: setengah jarak section di atasnya dan
+   setengah di bawahnya, 100 / 80 / 70px (`--sp-half`; section paket berakhir
+   di catatan, aturan 7 di `spacing.css`). Di HP jarak atas dihitung dari
+   tombol geser kartu.
+4. **Jarak antar-section sama secara visual** ("regardless of code padding").
+   `src/styles/spacing.css`: dari konten terakhir satu section ke konten
+   pertama section berikutnya selalu `--sp-gap` = **200px** (≥992px), **160px**
+   (768–991), **140px** (HP), apa pun padding live-nya (dulu 39–420px). Tepi
+   sobek (76/74px) diletakkan di tengah jarak; setelah banner foto atas, jarak
+   dihitung dari tengah tepi sobeknya; setelah judul halaman, jarak penuh.
+   Padding pembungkus dinolkan; tipe section yang menyimpan ruang kosong di
+   dalamnya diberi `--sp-in-top/--sp-in-bottom` (slider treatment: ruang
+   panah hover; kotak FAQ yang warnanya sama dengan kertas; titik slider
+   testimoni; rail kontak; dll., semua dengan alasan di komentar). Aturan
+   jarak lama khusus beranda di `home-v3.css` dihapus. Ubah satu variabel
+   `--sp-gap` untuk mengubah semua jarak. Alat ukur:
+   `node tools/spacing/measure-gaps.mjs` (lihat komentar di file). Hasil di
+   10 lebar (1920–320px): **semua 351 jarak dalam ±8px** dari aturan, kecuali
+   satu: Body Scrub di HP, dua section kertas bersebelahan sehingga dua tepi
+   sobek (150px) tidak muat di 140px (+16px). Panah hover kartu slider
+   treatment tetap utuh (section slider di atas section berikutnya). Tidak ada
+   scroll horizontal (320/390/768/1440; 404 diperbaiki 2 Oktober, lihat di
+   bawah).
+5. **Banner penutup seukuran banner lymphatic** (termasuk beranda). Lebar dan
+   padding ke-29 banner sudah sama; tingginya mengikuti teks (413–512px).
+   Kini minimal setinggi lymphatic di setiap lebar (483px ≥992, 512px tablet,
+   444px 576–767, di HP garis yang mengikuti tinggi lymphatic 679→534px),
+   isi di tengah (`custom.css`). Beranda 442 → 483px. Lebih tinggi hanya bila
+   teksnya lebih panjang dari lymphatic (Shiatsu 512px di desktop).
+
+### Pemeriksaan menyeluruh (2 Oktober)
+
+43 halaman × 14 ukuran (desktop 1920/1440, laptop 1366/1280, tablet
+1024×768 miring dan 820/768 tegak, HP 430/390/375/360/320, HP miring 844×390
+dan 740×360): 0 error konsol, 0 request
+gagal, 0 gambar rusak, 0 teks tumpang-tindih atau terpotong; bar WhatsApp HP
+tampil di <768px dan tombol mengambang di ≥768px. Price list (semua tab ×
+durasi), switch menempel (27 kombinasi), emas lama (0), rollover (0 emas
+penuh), dan jarak section (12 lebar) dicek ulang. Diperbaiki saat
+pemeriksaan:
+
+- **404 bisa digeser ke samping** (sama di live): pembungkusnya tanpa gutter
+  sehingga margin −12px baris grid keluar layar (12px di desktop), dan gambar
+  700px melebihi layar HP (sampai 380px). Pembungkus diberi gutter 12px,
+  gambar dibatasi lebar layar (`custom.css`).
+- **Jarak di HP sangat kecil (≤324px):** kartu slider treatment dan rail
+  kontak terbungkus lebih tinggi, jadi kompensasinya punya breakpoint sendiri
+  (`spacing.css`: slider ≤324px, kontak ≤322px; sebelumnya ≤374px dan
+  meleset di 360px).
+- **Nampan spa di /reservation/ menutupi teks** (sama di live): gambar 327px
+  di pojok kiri bawah menimpa butir daftar terakhir ("Quick Booking" di
+  desktop, "Easy Reservations" di tablet) di semua lebar ≥576px. Kini 170px,
+  ukuran yang dipakai halaman treatment untuk gambar yang sama, dan pas di
+  pojok kosong di bawah daftar (`custom.css`).
+- **Daun yang kini jatuh di judul karena jarak baru** (live bersih di lebar
+  itu): daun kanan atas slider treatment ("Continue Your…", 23 halaman)
+  menyentuh judul di bawah ~1150px → disembunyikan di bawah 1200px
+  (`spacing.css` bagian 9; di HP live pun menimpa judul). Daun "What Makes
+  Spa Bali Moon Different" di beranda 992–1199px menimpa judul 65px → 160px
+  (`home-v2.css`; ≥1200px tetap 220px).
+
+**Dekorasi tidak pernah di atas teks (pilihan B, 2 Oktober).** Daun, bunga,
+nampan, dan kamboja di sudut section menimpa teks di banyak halaman, sebagian
+besar sudah begitu di live, terutama 600–1440px; jarak baru membawa sebagian
+lebih dekat (section putih kehilangan ±80px padding). Pemilik memilih aturan
+"dekorasi tidak pernah di atas teks": dikecilkan atau disembunyikan per lebar
+layar, tidak pernah dipindah ke atas konten. Semua di
+`src/styles/decorations.css` (aturan daun slider treatment dan nampan
+/reservation/ dipindah ke sana):
+- **Cara mengukur:** setiap dekorasi yang kotaknya menyentuh baris teks (atau
+  dalam 10px, jangkauan goyangnya) difoto dengan dan tanpa dekorasi itu;
+  hanya dihitung bila pikselnya benar-benar berubah, jadi dekorasi di belakang
+  kartu atau sudut PNG yang transparan tidak ikut.
+- **Sebelum:** 43 halaman × 13 lebar, di 1920 bersih, di bawah 576px hampir
+  bersih (live sudah menyembunyikannya); tabrakan di sekitar 10 jenis
+  dekorasi pada 600–1440px dan, setelah dicek lebih rapat, juga 1500–1840px.
+- **Aturan:**
+  - di bawah 1500px dekorasi sudut yang bertabrakan disembunyikan pada
+    rentang tempat ia bertabrakan (testimoni dan daun /reservation/ hanya di
+    tablet; intro treatment sampai 1919px karena kontainernya lebih lebar);
+  - mulai 1500px dekorasi **dikecilkan**: lebarnya dibatasi 80% ruang kosong
+    di samping kontainer 1320px dikurangi 12px (60px di 1500, 228px di 1920),
+    bunga FloralDecoration diskalakan utuh, sehingga tidak bisa mencapai
+    teks.
+- **Sesudah:** 0 dekorasi di atas teks di 42 halaman × 27 lebar (1920–320px).
+  Satu temuan 48px di /privacy-policy/ 960px tidak terulang dalam 4 uji ulang
+  (waktu muat).
+
+## Permintaan klien, putaran 3 (2 Oktober)
+
+1. **Badge foto "keluar" ke bingkai foto** ("these need to come out into
+   the larger image framing"; badge "17 + Years Experience", "Where Tension
+   Lives", "The Art of Focus", dst. di sudut foto section about). Live
+   meletakkannya 1,4cqw (8px pada ukuran penuh) di dalam lekukan sudut foto
+   di semua sisi. Kini badge mengisi lekukan sampai tepi kiri dan bawah
+   bingkai foto (rata dengan foto), celah 8px ke arah foto tetap
+   (`custom.css`; lekukan 216×146 dari mask 570×496). Berlaku di semua lebar.
+2. **Ruang kosong di bawah footer di HP** ("delete some space here"): live
+   menyisakan 96px di bawah baris copyright untuk tombol WhatsApp bulat, plus
+   60px padding footer: 156px putih di atas bar WhatsApp. Kini 28px
+   (`custom.css`, di blok bar HP, karena hanya berlaku selama bar ada).
+3. **Header HP** (<992px): logo "Spa Bali Moon" di tengah ("center the spa
+   bali moon text"), ikon telepon (WhatsApp) di kiri, tombol menu di kanan.
+   Tombol menu kini **teratai dari logo** (`LotusPaths`), bukan empat kotak
+   (klien: "could this be a flower or hot stone"; sempat kamboja, lalu
+   pemilik minta "bunga kyk logo bunga spa balimoon"), emas seperti ikon
+   telepon. Desktop tidak berubah.
+4. **Menu HP didesain ulang** ("modernize the menu"). Dua versi pertama
+   (daftar teks biasa, lalu dengan daftar treatment dua kolom) dinilai kurang
+   oke / terlalu polos; dari tiga opsi (foto + ubin, ikon + keterangan,
+   editorial + populer) pemilik memilih **opsi 2**. Berkas: `Header.tsx`,
+   `MobileMenu.tsx`, `MenuIcons.tsx`, `mobileMenuData.ts`,
+   `src/styles/mobile-nav.css`.
+   - Selebar layar di HP, panel 420px di tablet. Baris atasnya mengulang
+     header: logo di tengah, tombol tutup di tempat teratai.
+   - Panel pertama berlatar kertas: tiap item kartu putih berisi ikon garis
+     emas dalam lingkaran (teratai, label harga, batu panas, rumah, kalender,
+     buku, obrolan; set ikon sendiri, `MenuIcons.tsx`), nama (Literata 18/26)
+     dan satu kalimat keterangan (Mulish 13/18; teks usulan, bisa diganti
+     pemilik: "Our day spa in Seminyak", "Every treatment and price",
+     "23 massages and beauty treatments", "Massage at your villa or hotel",
+     "Book your visit", "Guides to our treatments", "Find us and get in
+     touch"). Halaman aktif: nama emas dan garis tepi emas. Di bawahnya
+     kartu putih berisi jam buka, alamat (ke Google Maps), telepon, dan
+     tombol pill "Book on WhatsApp".
+   - "Treatments" dan "Blog" membuka **panel sendiri** yang bergeser masuk,
+     dengan tombol kembali. Treatments dikelompokkan Massage (15) dan
+     Beauty & Body (8), tiap baris berisi foto, nama, dan harga awal ("From
+     IDR 159K", dari data menu beranda), lalu tombol "See the full price
+     list". Blog: artikel di menu dengan foto sampul, lalu "All articles".
+   - Datanya disusun di server (`mobileMenuData()` di
+     `src/app/(site)/layout.tsx`) dan dikirim ke header sebagai props,
+     sehingga data treatment dan artikel tidak ikut di JavaScript setiap
+     halaman. Foto kecilnya (next/image, 72px) baru dimuat setelah menu
+     dibuka pertama kali (29 foto kecil).
+   - Perilaku: tautan apa pun, tombol Back, Escape, atau klik di luar menutup
+     menu dan mengembalikannya ke panel pertama. Halaman di belakang tidak
+     ikut bergulir. Fokus pindah ke tombol tutup atau tombol kembali, lalu
+     kembali ke baris yang membukanya atau ke teratai. Item masuk berurutan
+     saat menu dibuka (tanpa animasi bila pengguna memilih reduced motion).
+     Diuji dengan sentuhan jari di 390px: 0 error, 0 foto rusak.
+5. **Ikon fakta hero beranda di tengah** ("center these icons"): di HP
+   (390–575px) ketiga fakta (Since 2009, Home Service, Experienced) dulu rata
+   kiri. Kini ikon di tengah di atas teksnya, sama seperti 576–767px
+   (`home-v2.css`). Di bawah 390px ketiganya tidak muat berdampingan: tetap
+   satu per baris, tetapi daftarnya di tengah dengan ikon sejajar.
+6. **"IV Drip Therapy in Bali" keluar dari menu Blog** ("we can take that one
+   out of the menu"): dropdown desktop dan menu HP kini 6 artikel
+   (`blogMenu` di `src/data/navigation.ts`). Artikelnya tetap ada di
+   /guide/, di pencarian header, dan di sitemap.
+7. **"Seminyak · Since 2009" tanpa huruf kapital** ("i think this one no
+   capital"; kartu About beranda): live menulisnya kapital berjarak
+   (`text-transform: uppercase`, spasi huruf 0,11em); kini sebagaimana
+   ditulis, tanpa spasi huruf tambahan (`custom.css`).
+8. **Jarak grup paket di /seminyak/** ("check mobile gaps on price page"):
+   kedelapan grup paket (Balinese … Thai Massage Packages) satu pita kertas,
+   tetapi aturan satu jarak memberi tiap grup jarak section penuh: di HP
+   140px di atas tiap judul, hanya 30px dari paragraf ke kartunya. Kini
+   antar-grup setengah jarak (100 / 80 / 70px) dan paragraf → kartu 40px di
+   HP (60px di atasnya, seperti live) (`spacing.css` 7b;
+   `tools/spacing/measure-gaps.mjs` mengenal jarak ini).
+9. **Footer baru** ("can we also modernize the footer"; `Footer.tsx`,
+   `src/styles/footer.css`). Dari tiga opsi (panel kertas + kartu, tengah +
+   kolom dengan kamboja, panel gelap) pemilik memilih **opsi 1**, senada
+   dengan menu HP:
+   - **Isi:** sama dengan lima kolom live. Panel kertas bersudut bulat
+     berisi logo, teks tentang spa, tombol pill "Book on WhatsApp",
+     Instagram dan Facebook (dari `business.social`), dan metode
+     pembayaran.
+   - **Kartu:** empat kartu putih, masing-masing dengan ikon emas dalam
+     lingkaran:
+     - Our Day Spa: jam buka, alamat ke Google Maps;
+     - Contact Us: telepon ke WhatsApp;
+     - Home Services: tiga halaman dan biaya 75k;
+     - Join Our Newsletter: form yang sama, tetap ke /api/subscribe/.
+   - **Bawah panel:** baris copyright dengan Privacy Policy dan Terms.
+   - **Tata letak:** ≥1200px kolom logo di kiri dan kartu 2×2 di kanan;
+     di bawah 1200px logo di atas kartu 2×2; HP satu kolom rata tengah,
+     newsletter disembunyikan seperti live.
+   - **Seni mawar** (pemilik: "agak sepi … kasih art bunga sebelumnya";
+     di bawah 1500px, tempat sisi tidak ada ruang, mawar yang sama naik dari
+     sudut bawah panel ke pita 96px, 76px di HP, setelah klien menilai pita
+     120px "a large space"):
+     gambar garis mawar footer lama (`footer-shape-left.png`), diwarnai
+     emas lewat filter `#gold-b` (55%), di kiri dan kanan panel. Hanya
+     mulai 1500px, menempel ke tepi layar (gambar aslinya terpotong lurus
+     di satu sisi) selebar ruang kosong + 80px di belakang panel, tidak
+     pernah di atas teks. Sempat dicoba diganti daun tropis + kamboja (foto)
+     dan ilustrasi garis emas (palem, monstera, kamboja); pemilik tetap
+     memilih mawar.
+   - **Diperiksa:** jarak dari isi halaman ke footer tetap aturan satu
+     jarak (26/26 di 1440–320px), tanpa luberan ke samping di 320–1440px,
+     form newsletter berfungsi.
+10. **Tombol hero beranda bergaya baris menu** ("text buttons on a page to
+    be more like these … maybe just on home"). `RowButton`
+    (`src/components/ui/RowButton.tsx`, `src/styles/row-button.css`) berupa
+    kotak putih bersudut bulat berisi ikon emas dalam lingkaran kertas,
+    label (Literata 18/26), satu baris keterangan (Mulish 13/18), dan panah
+    emas. Saat hover: garis tepi emas + bayangan emas (gaya rollover situs).
+    Sempat dipasang di 11 tombol beranda; pemilik lalu memilih: "keep these
+    in the home page banner … the rest of the site can stay the original
+    shape buttons for now". Kini hanya dua tombol di hero ("Book on WhatsApp
+    · +62 878-6317-5144", "View Price List · Every treatment and price");
+    About, slider treatment, paket (termasuk "Reserve" di kartu), "Why It
+    Matters", dan banner penutup kembali ke tombol pill live.
+
+### Pemeriksaan akhir putaran 3 (2 Oktober)
+
+Diulang setelah tombol hero, footer HP, dan pilihan B selesai, hasilnya
+sama:
+- 602 kombinasi bersih;
+- dekorasi 0 di 42 halaman × 8 lebar;
+- 2.100 dari 2.106 jarak dalam ±8px; sisanya Body Scrub di HP, dan slider
+  yang bergeser sendiri selama pengukuran (−29 sampai −35px, halamannya
+  berganti tiap kali diukur);
+- menu, typecheck, lint `src`, dan build lolos.
+
+
+- **Pengecekan menyeluruh:** 43 halaman × 14 ukuran (1920 → 320px, tablet,
+  HP miring). Hasil: 0 error konsol, 0 request gagal, 0 gambar rusak, 0
+  luberan ke samping, 0 teks bertumpuk atau terpotong (main dan footer), bar
+  WhatsApp HP benar di semua ukuran.
+- **Jarak section:** semua halaman di 1920/1440/1024/768/390/320px dalam
+  ±8px dari aturan, kecuali dua kasus lama:
+  - Body Scrub di HP: dua tepi sobek, +16px;
+  - variasi slider treatment di satu halaman: tinggi kartu yang tampil
+    berbeda-beda.
+
+  Alat ukur kini menghitung tombol-baris dari kotaknya (garis tepinya
+  sengaja tipis).
+- **Dekorasi:** 0 di atas teks (lihat pilihan B).
+- **Menu HP:** buka/tutup, panel Treatments/Blog, kembali, Escape, tautan,
+  dan Back lolos; halaman di belakang terkunci; 29 foto kecil termuat.
+- **Kode:** typecheck bersih; lint `src` bersih (sisa 1 error + 7 warning di
+  `tools/live-port`, sudah ada sejak commit pertama); build produksi sukses.
+
+## Admin blog di `/admin/` (2 Oktober)
+
+Duplikat admin blog dari project lama (`D:Next.js Dataspabalimoon`):
+login dengan satu password, dashboard (statistik, tabel, hapus dengan
+dialog), editor artikel (TipTap 3: judul, slug otomatis, isi, ringkasan,
+status, cover, kategori, tag, penulis, SEO, autosave di browser), dan upload
+gambar. Tampilannya sama dengan "Content Studio" lama.
+
+**Backend: Neon (Postgres) untuk artikel + Cloudflare R2 untuk gambar**
+(pilihan pemilik; awalnya dibuat untuk Supabase, lalu diganti — terpisah
+dari database live). **Tersambung 2 Oktober** di `.env.local`: bucket R2
+`spabalimoon-blog` (APAC) dengan domain `https://images.spabalimoon.com`,
+token R2 "Object Read & Write"; `npm run blog:setup` sudah dijalankan (tabel +
+7 artikel). Diuji langsung: upload ke R2 tampil publik (cache 1 tahun),
+draft dibuat/dibaca/dihapus di Neon, dan 8 halaman blog dari Neon identik
+dengan sebelumnya.
+
+Masih perlu: isi env yang sama di Vercel (Project Settings → Environment
+Variables) — `DATABASE_URL`, `R2_*`, `ADMIN_PASSWORD`, `SESSION_SECRET`
+(acak, ≥32 karakter), opsional `CLOUDFLARE_*`. Nilai asli hanya di
+`.env.local`; `.env.example` (ikut git) hanya berisi contoh.
+
+Langkah untuk memasang di mesin/akun lain:
+1. Neon: buat project, salin connection string ke `DATABASE_URL`.
+2. `npm run blog:setup` — membuat tabel (`db/schema.sql`) dan memasukkan 7
+   artikel yang ada (id & tanggal asli). Aman dijalankan ulang.
+3. R2: buat bucket, sambungkan custom domain, buat API token "Object Read &
+   Write" untuk bucket itu; isi `R2_*` (lihat `.env.example`).
+4. Login di `/admin/login/` dengan `ADMIN_PASSWORD` dari `.env.local`.
+
+Selama `DATABASE_URL` kosong, `/guide/` dan artikel tampil dari
+`src/data/guide/seed-posts.json` (7 artikel yang sama), dan admin hanya
+menampilkan petunjuk setup. Tanpa `R2_*`, menulis artikel tetap bisa, hanya
+upload gambar yang nonaktif.
+
+**Yang berubah di situs publik (HTML tetap identik):**
+- `/guide/`, `/guide/<slug>/`, `/api/search-posts/`, dan `/sitemap.xml` kini
+  membaca database. Artikel baru langsung punya halaman.
+- Halaman blog **di-cache sampai ada perubahan dari admin** (tanpa ISR
+  berkala): setiap simpan di admin membangun ulang `/guide/` dan semua
+  artikel, plus purge Cloudflare bila `CLOUDFLARE_*` diisi. Kunjungan biasa
+  tidak menyentuh database (diukur: 0 query dari 9 kunjungan), jadi compute
+  Neon tetap bisa tidur. Kalau database error saat membangun ulang, versi
+  terakhir yang baik tetap disajikan. Edit langsung di konsol Neon baru
+  tampil setelah ada simpan di admin atau deploy.
+- `/sitemap.xml` dirender per request dengan `s-maxage=3600` (sama dengan
+  live): CDN menyimpannya 1 jam.
+- `src/content/guide/*`, `src/data/blog/*`, `src/content/pages/guide.tsx`
+  dan `src/app/sitemap.xml` (file statis) dihapus; isinya kini di
+  `seed-posts.json`, `src/components/sections/GuideArchive.tsx` dan
+  `src/data/sitemap.ts` + `src/app/sitemap.xml/route.ts`.
+- Diverifikasi: `<head>` dan seluruh `<main>` 8 halaman blog identik dengan
+  sebelum perubahan (juga saat dibaca dari Postgres ber-zona waktu GMT+8);
+  sitemap, search, dan menu API identik byte per byte; tidak ada utility
+  Tailwind baru.
+- Menu "Blog" (header & HP) **tetap daftar tetap** di `navigation.ts`
+  (tanpa IV Drip, permintaan pemilik). Artikel baru tidak otomatis masuk
+  menu.
+- Artikel dengan cover hasil upload tidak punya file `-sm`; `PageTitle`
+  memakai foto aslinya di HP.
+- Admin tidak memuat preloader, tombol/bar WhatsApp, dan smooth scroll
+  (`SiteChrome` di root layout).
+
+**Uji:** 45 tes end-to-end di build produksi terhadap Postgres sungguhan
+(PGlite, di balik tiruan endpoint HTTP Neon) dan tiruan S3 R2 (cek tanda
+tangan AWS4): login/cookie, draft, publish, slug bentrok, rename slug,
+unpublish, hapus, upload + tolak SVG/>5MB, sanitasi skrip & link keluar,
+sitemap, search, revalidasi halaman — semua lolos; ditambah alur UI publish
+& hapus di browser. Lalu diuji langsung ke Neon dan R2 sungguhan (lihat di atas).
+
+## Satu folder komponen beranda (2 Oktober)
+
+`src/components/home-v2/` digabung ke `src/components/home/`:
+
+- Isinya hanya yang dipakai beranda `/`, price list `/seminyak/` dan outcall
+  (`MenuDurations`), serta menu mobile (`treatments.ts`).
+- `HomeV2Layout` berganti nama menjadi `HomeLayout`.
+- Ikon bersama (`ArrowBox`, `PACKAGE_ICONS`, `ICON_BOXES`) kini di
+  `home/icons.tsx`.
+- Komponen yang hanya dipakai draf `/home-v2/`, `/home-v2/options/`, dan
+  `/home-v4/` ada di `home/drafts/`. Kalau draf dihapus, folder itu ikut dihapus.
+- Section beranda lama yang sudah tidak di-import dihapus: Hero, Faq,
+  FeaturedTreatments, TreatmentCatalog, serta komponen Packages dan
+  WhyDifferent lama. Semuanya masih ada di commit awal git.
+- `src/components/ui/Frangipani.tsx` kini tidak dipakai (dulu hanya untuk hero
+  lama).
+
+Hasilnya sudah diverifikasi:
+
+- HTML 47 halaman identik sebelum dan sesudah penggabungan (`next start`,
+  tanpa script dan URL aset build).
+- Price list, tab, FAQ, dan slider di `/` dan `/seminyak/` tetap jalan, tanpa
+  error di console.
+
+Nama file CSS (`home-v2*.css`, `home-v3.css`) dan class `.home-v2`/`.home-v3`
+sengaja tidak diubah.
+
+## Cek SEO sebelum go-live (2 Oktober)
+
+Build produksi (`next start`) dibandingkan dengan spabalimoon.com untuk 419 URL:
+semua URL sitemap, versi tanpa garis miring, semua aturan redirect di
+`next.config.js` project lama (`D:\Next.js Data\spabalimoon`), url-map, dan
+halaman di folder `pages/` lama.
+
+- **Redirect:** 60 aturan redirect live belum ada dan akan menjadi 404 (halaman
+  treatment lama seperti `/balinese-massage/`, slug lama di `/seminyak/`,
+  `/blog/*` dan `/news/*` → `/guide/*`, `/terms-conditions/`, `/wellness-bali/`,
+  `page-sitemap.xml`, dll). Semuanya kini ada di `src/data/redirects.ts`.
+  Kodenya kini 301 seperti live (sebelumnya 308) lewat `statusCode` di
+  `next.config.ts`. Hasil: 349 URL identik dengan live, termasuk jumlah hop.
+- **Sengaja beda:** 28 halaman demo template (`/faq/`, `/testimonials/`,
+  `/index-*`, `/shop-*`, dll.) dan 3 redirect ke sana (`/page-faq/`,
+  `/page-testimonial/`, `/page-team-details/`) menjadi 404. Di live semuanya
+  `noindex, nofollow`, tidak di sitemap, dan tidak di-link dari halaman asli.
+  `/wp-admin/` dan `/wp-login.php` 403 di live karena Cloudflare, jadi tetap
+  403 setelah deploy.
+- **Sama persis dengan live:** robots.txt, sitemap.xml (termasuk lastmod dan
+  gambar artikel), canonical, meta description, robots, og/twitter (kecuali
+  judul), schema DaySpa di beranda, `lang`, status 404 halaman tak dikenal.
+  Googlebot menerima head yang sama. 487 link internal, gambar, og:image, dan
+  URL sitemap di build baru semuanya 200.
+- **Beda yang disengaja:** 16 judul dari sheet pemilik, beranda baru, price
+  list `/seminyak/` dan outcall (semua nama treatment dan harga live tetap
+  ada), serta header, menu mobile, dan footer.
+
+## Draf: beranda v2 di `/home-v2/` (30 September)
+
+Duplikat beranda dengan layout sedikit diubah; isi, warna, huruf dan dekorasi
+tetap sama. Halaman ini `noindex` dan tidak ada di sitemap; `/` tidak berubah
+(dicek `compare.mjs` 1440 + 390: geom 0, style 0).
+
+- Rute: `src/app/(site)/home-v2/page.tsx`. Section yang diubah ada di
+  `src/components/home-v2/`, sisanya memakai komponen beranda yang sama.
+- CSS: `src/styles/home-v2.css`, semua aturan di bawah `.home-v2`.
+- Perubahan: hero bergaya referensi pemilik (teks + tombol WhatsApp/Price
+  List + 3 fakta berikon di kiri, foto `contact-1.webp` di kanan yang memudar
+  ke krem; di HP foto di atas); slider 23 treatment diganti 5 kartu
+  "Our Most-Loved Treatments" (Balinese, Thai, Sports, Hair Cream Bath,
+  Manicure Pedicure — semuanya dari tab "Most Popular" di halaman outcall)
+  dengan tombol "View All Treatments" ke `/seminyak/`; menu spa
+  (`TreatmentMenu.tsx`) menampilkan harga di baris tiap treatment ("from
+  159K"; harga tunggal tanpa "from"; couple dengan "2 pax" di bawahnya; add-on
+  seperti "Additional Body Mask" tidak dihitung sebagai harga awal), dan harga
+  + panah jadi satu tombol yang membuka daftar lengkap (animasi 0,25 detik,
+  live 0,4); panah punya kolom sendiri di kanan, dan deskripsi + daftar yang
+  terbuka berhenti di garis yang sama sehingga semua harga lurus (live di HP
+  membiarkan daftar melebar ke bawah panah); ulasan dipindah ke antara menu dan paket, dan gambar nampan spa
+  kini hanya di ulasan (di menu dulu tertimpa harga); intro
+  "Looking for More Than One Treatment?" dilebur ke judul paket dua kolom;
+  "What Makes Spa Bali Moon Different" jadi kartu 2×2 di samping judulnya.
+  Di tablet/HP langkah booking jadi baris ringkas.
+- Baris geser (`ScrollRow.tsx`): kartu "Most-Loved" (<992px) dan paket
+  (<768px) bisa digeser dengan swipe, seret mouse, trackpad, atau tombol
+  panah + titik di bawahnya. Snap per kartu hanya di layar sentuh (snap wajib
+  membuat scroll trackpad selalu kembali ke kartu pertama). Baris diberi
+  `data-lenis-prevent-horizontal` agar Lenis tidak menelan geseran ke samping.
+  **Bug yang ditemukan pemilik di HP (30 September):** halaman tidak bisa
+  digulir melewati baris ini dengan jari. Penyebabnya aturan Lenis di
+  `live.css`, `.lenis [data-lenis-prevent-horizontal] { overscroll-behavior:
+  contain }`: geseran vertikal yang dimulai di atas kartu tertahan di baris
+  dan tidak diteruskan ke halaman. Perbaikan di `home-v2.css`:
+  `overscroll-behavior-y: auto` (x tetap `contain`) untuk semua elemen
+  ber-atribut itu di draf, plus `overflow-y: hidden` di tiap baris yang
+  menggeser. Diuji dengan sentuhan jari asli (CDP `Input.dispatchTouchEvent`,
+  390px, Lenis aktif): sebelum 0px, sesudah ~300px, sama dengan geseran di
+  luar baris; geseran ke samping tetap menggeser kartu. Berlaku juga untuk
+  slider 23 treatment dan tabel harga (Opsi B).
+- Responsif dicek otomatis di 30 lebar (320–2560px): tidak ada scroll
+  horizontal, teks yang saling tumpuk, atau harga yang keluar kartu di keempat
+  tab menu.
+- Font & tombol: tidak ada gaya huruf baru. Semua teks memakai class situs
+  (`.section-header .sub-title/.title`, judul hero live, `h3`/`h6` slider lama,
+  `.btn-two`; fakta hero = kartu "Spa Bali Moon" di About). Dicek dengan
+  computed style vs `/` di 1920–390px. Yang beda hanya atas permintaan
+  pemilik: "Learn More" emas, dan judul hero ("Our Seminyak Day Spa") kini
+  hitam lembut #343434 (warna gelap yang sudah ada di palet situs), tebal 400
+  (live 600), dengan bayangan teks tipis menggantikan bayangan gelap besar di
+  belakangnya (sempat dicoba emas, pemilik memilih hitam). Harga di
+  menu spa memakai gaya harga kartu paket (Literata 300 26px emas) dan
+  "2 pax"-nya (`.pax-note`). Label "Seminyak · Since 2009" di kartu About
+  ikut perubahan di beranda asli (lihat "Sengaja berbeda dari live").
+- Untuk dipakai sebagai beranda: pindahkan isi `home-v2/page.tsx` ke
+  `(site)/page.tsx` (metadata & JSON-LD beranda), lalu hapus rute draf.
+
+### Pilihan yang sedang ditimbang pemilik: `/home-v2/options/`
+
+Halaman `noindex` yang memajang tiap opsi dengan label, untuk dipilih pemilik:
+- **Treatments · Opsi 1** (`options/AllTreatmentsSlider.tsx`): ke-23 halaman
+  treatment sebagai kartu v2 dalam satu baris geser di semua lebar (4 kartu +
+  sedikit kartu ke-5 di desktop), panah bergeser satu "layar", dan progress
+  bar di antaranya.
+- **Treatments · Opsi 2** (`options/AllTreatmentsGrid.tsx`): semua treatment
+  sebagai tile ringkas (6 per baris di layar lebar) dengan filter All /
+  Massage / Beauty; di bawah 992px tampil 6 dulu + tombol "Show All".
+- **Price list · Opsi A** (`options/MenuDurations.tsx`): satu pilihan durasi
+  (30 Mins / 1 Hr / 1.5 Hrs / 2 Hrs) di bawah tab mengubah semua harga
+  sekaligus; treatment tanpa durasi itu memudar dengan "Not available".
+  Beauty dan paket couple: harga di baris, varian di satu baris kecil (yang
+  harganya sama digabung).
+- **Price list · Opsi B** (`options/MenuTable.tsx`): tabel harga (baris =
+  treatment, kolom = durasi) dua tabel berdampingan di desktop; Beauty
+  sebagai kartu kecil berisi semua varian; paket couple sebagai tabel isi
+  paket + harga.
+- Bersama: `TreatmentCard.tsx`, `treatments.ts` (23 treatment; Hair Braiding
+  dan Nail Art memakai foto dari halamannya sendiri, bukan foto Cream Bath /
+  Manicure seperti slider live), `price.ts`, `MenuIntro.tsx`.
+  `src/data/pages/home.ts` kini juga mengekspor `menuItem` di tiap
+  `treatmentSlides` (tidak mengubah tampilan `/`).
+- CSS opsi: `src/styles/home-v2-options.css`. Setelah pemilik memilih,
+  pindahkan komponen + blok CSS-nya ke `/home-v2/` dan hapus sisanya.
+- Opsi yang sama juga terpasang di beranda utuh (atas permintaan pemilik),
+  semuanya `noindex`:
+  - `/home-v3/` = Treatments Opsi 1 (slider) + Price list Opsi A (durasi).
+  - `/home-v4/` = Treatments Opsi 2 (grid) + Price list Opsi B (tabel).
+  Ketiga beranda memakai `HomeV2Layout.tsx`; hanya section treatments dan
+  menu yang dioper sebagai slot, jadi bagian lain selalu sama.
+- Umpan balik pemilik (30 September): harga Opsi A (pilih durasi) "awesome",
+  slider 23 treatment (Opsi 1) "nice … it has all treatment" — keduanya ada
+  di `/home-v3/`. Atas permintaan pemilik, judul slider di `/home-v3/` saja
+  kini "Find Your Spa Treatment" (dari "Find the Treatment for You") dengan
+  kicker "Massage & Beauty" (dari "Our Treatments"; teks kicker pilihan
+  sendiri karena pemilik hanya minta diganti). `AllTreatmentsSlider` menerima
+  `subTitle`/`title`; halaman opsi tetap teks lama.
+- **Putaran berikutnya, khusus `/home-v3/` (30 September)**, semua di
+  `src/styles/home-v3.css` (di bawah `.home-v3`, kelas dari prop `className`
+  `HomeV2Layout`) dan prop komponen, sehingga v2/v4 tidak berubah:
+  - teks slider: "23 massages and spa services, in-call or outcall." (kata
+    pemilik "in call or out call", ejaan dirapikan: "outcall" seperti menu
+    situs; sebelumnya "All 23 of our massages and services, at our Seminyak
+    spa or as home service."; prop `text`, kini `ReactNode`). "in-call or
+    outcall." tidak dipotong (`white-space: nowrap`), jadi di HP <380px
+    barisnya patah di koma, bukan menyisakan "outcall." sendirian;
+  - kicker About "Beyond Relaxation" terasa "too AI" bagi pemilik → "About
+    Us" (pilihan sendiri, kata biasa untuk section About), hanya di
+    `/home-v3/`: prop opsional `subTitle` di `home/About.tsx` lewat
+    `aboutSubTitle` di `HomeV2Layout`; `/` tetap teks live;
+  - switch durasi di price list ikut turun: menempel di bawah header selama
+    daftar di-scroll ("change without scrolling up"), lepas bersama baris
+    terakhir. Prop `sticky` di `MenuDurations` (hanya v3), CSS di akhir
+    bagian Opsi A `home-v2-options.css`: section `overflow: clip` (live
+    `hidden` mencegah sticky), `top` = tinggi header yang diukur komponen
+    (`--v2-stick-top`: 68px HP, 73px tablet, 106px desktop, ~149–156px di
+    lebar tempat nav desktop terbungkus dua baris); strip putih selebar layar
+    + bayangan halus muncul saat menempel (`is-stuck`); di HP baris "Prices
+    for" naik ke bawah header sehingga hanya switch yang tampak (strip 66px
+    di bawah header 68px). Padding diimbangi margin negatif, jadi tata letak
+    saat tidak menempel sama persis. Ganti durasi saat menempel tidak
+    menggeser baris yang sedang dibaca (scroll anchoring). Setelah review
+    desain: bayangan header dimatikan selama strip menempel (header + strip
+    jadi satu blok putih, bayangan hanya di bawah strip); `is-stuck` lepas
+    begitu switch sudah naik ke bawah header bersama baris terakhir (dulu
+    tetap menyala sampai bawah halaman); latar strip mulai 2px di bawah
+    header agar tidak ada garis tipis di layar 125%; layar pendek
+    (≤500px, HP miring) strip + pill lebih ramping: header + strip 32–35%
+    tinggi layar (sebelumnya 37–39%);
+  - di bawah 992px dua kolom menu bersusun jadi satu daftar; live tidak
+    memberi garis pemisah di baris terakhir tiap kolom, sehingga satu baris
+    di tengah daftar tanpa garis. Kini baris itu bergaris seperti yang lain
+    (`home-v2.css`, semua menu draf);
+  - judul menu: "Browse Our Spa Menu" (dari "Browse Our Spa Treatments"),
+    kicker "Price List" (dari "Our Spa Menu"; pemilik hanya minta diganti,
+    teksnya pilihan sendiri) — prop `subTitle`/`title` di `MenuDurations` →
+    `MenuIntro`;
+  - FAQ: panah garis tipis tanpa lingkaran (`<Faq arrow="line" />`, slot
+    `faq` di `HomeV2Layout`), berputar saat dibuka; nomor emas #B88C35
+    (lihat di bawah), panah **abu** `var(--text-color)` #707070, abu teks
+    situs (pemilik: "maybe these can be grey"; 4,95:1 di putih), tetap abu
+    saat pertanyaannya jadi emas karena hover/dibuka;
+  - jarak FAQ → banner penutup di HP (≤767px): 174px → 119px (padding bawah
+    FAQ 52 → 20px, padding atas section penutup 89 → 66px). Desktop tetap
+    340px mengikuti ritme section desktop;
+  - pembanding emas A/B/C/D (sementara, di kartu "Different") sudah dipakai
+    pemilik untuk memilih lalu dihapus. **Pemilik memilih B #B88C35** untuk
+    seluruh `/home-v3/`, termasuk logo — hanya halaman ini (pilihan pemilik;
+    halaman lain dan `/` tetap #A78627). Cara kerjanya, semua di
+    `home-v3.css` bagian atas: variabel `--theme-color1`/`-rgb` ditimpa pada
+    setiap `.lh` (header, menu HP, halaman, footer, tombol WhatsApp) lewat
+    `body:has(.home-v3)`; ikon SVG ber-atribut `fill`/`stroke="#A78627"`
+    ditimpa CSS; logo SVG (header, menu HP, footer), logo preloader, lotus
+    `sbm.webp` (kartu About, watermark ulasan, lotus kecil di catatan paket
+    dan banner penutup) diwarnai ulang dengan filter SVG `#v3-gold` (flood
+    #b88c35 + alpha, didefinisikan di `home-v3/page.tsx`) sehingga bentuknya
+    utuh; beberapa warna tetap di `live.css` (pencarian header, hover tombol
+    telepon & menu HP → #987426, input/tombol newsletter footer) ditimpa
+    satu per satu. Warna `rgba(167,134,39,…)` di `home-v2*.css` diganti
+    `rgba(var(--theme-color1-rgb),…)` (v2/v4 tampil sama). Bunga kamboja dan
+    logo Mastercard sengaja tidak diubah. Ditemukan dengan sweep 3 arah
+    (literal sumber, aset, gaya terhitung per state) dan dicek ulang: 0 nilai
+    emas lama di 5 state, logo header rgb(184,140,53) di v3 dan tetap
+    rgb(167,134,39) di `/`. Verifikasi 3 agen: 0 emas lama di ±4.800 state
+    hover/fokus/aktif per lebar, 0 kebocoran ke halaman lain (juga setelah
+    navigasi klien; `compare.mjs` di `/` hanya selisih yang sudah dikenal),
+    logo bersih di DPR 1/2/3. Dibiarkan: bila tiba di v3 lewat navigasi klien
+    (mis. tombol Back), tombol "Book an Appointment" dan ikon telepon di
+    header memudar ±0,25 detik dari emas lama ke baru, karena header tetap
+    terpasang antar-halaman dan punya `transition: all .3s` dari live
+    (mematikan transisi saat pindah halaman ikut mematikan animasi menu HP);
+  - HP: harga + deskripsi menu masuk 16px dari tepi ("prices could still come
+    in a bit");
+  - catatan di bawah paket jadi kartu putih kecil bergaris emas tipis, lotus
+    di atas, teks di tengah; jarak ke "Why It Matters" 98 → 60px di
+    tablet/HP (desktop 163 → 120px).
+- **FAQ draf** (`home-v2/Faq.tsx`, dipakai ketiga beranda draf; beranda asli
+  `/` tetap FAQ live): pemilik merasa "jumbly" dan minta judul lebih kecil
+  dengan kata kunci. Judul kini "Questions About Our Spa" (40px desktop /
+  36px tablet / 26px HP; live "Everything You Need to Know" 55px / 30px).
+  Nomor pertanyaan di kolom emas terpisah sehingga baris yang terbungkus
+  lurus; tiap pertanyaan memakai panah lingkaran emas milik menu spa
+  (live: kotak abu "−" dan "+" polos); pertanyaan Literata 20px/18px 500,
+  jawaban Mulish 15px/14px (gaya deskripsi menu) yang lurus di bawah teks
+  pertanyaan; buka/tutup beranimasi seperti menu, satu jawaban terbuka.
+  Foto, kicker, dan jarak section tetap live.
+
 ## Yang belum beres
 
 - **`/api/subscribe/` belum menyimpan apa pun.** Form membalas sukses; arahkan
@@ -521,9 +1389,12 @@ beranda dari sesi 3.
 - **Form kontak tidak mengirim email** — sama seperti live saat ini (mode
   WhatsApp). Bila nanti ada endpoint, logikanya di
   `src/components/sections/ContactSection.tsx`.
-- **Data lama hanya untuk metadata:** `src/data/treatments/*.ts` dan
-  `src/data/blog/*.ts` masih memuat teks halaman versi lama, padahal kini
-  hanya judul/deskripsi/gambar SEO-nya yang dipakai. Bisa dipangkas.
+- **Admin blog: env Neon + R2 belum diisi di Vercel.** Lihat "Admin blog di
+  `/admin/`".
+- **Data lama hanya untuk metadata:** `src/data/treatments/*.ts` masih
+  memuat teks halaman versi lama, padahal kini hanya judul/deskripsi/gambar
+  SEO-nya yang dipakai. Bisa dipangkas. (`src/data/blog/*.ts` sudah dihapus:
+  artikel kini dari database.)
 - **Duplikasi harga:** `src/data/pricelist.ts` (dipakai data treatment lama),
   `src/data/pages/pricelist.ts` dan `src/data/pages/home-catalog.ts` memuat
   harga yang sama. Semuanya cocok dengan live, tapi sebaiknya disatukan.

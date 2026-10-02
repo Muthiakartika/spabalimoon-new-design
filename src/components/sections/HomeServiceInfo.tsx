@@ -22,7 +22,7 @@ const brandMark = (
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{
-        color: "#A78627",
+        color: "var(--theme-color1)",
         flex: "0 0 22px",
       }}
       aria-hidden="true"
@@ -230,7 +230,7 @@ export default function HomeServiceInfo({ plain = false }: HomeServiceInfoProps)
                   {"Home service fee: "}
                   <span
                     style={{
-                      color: "#A78627",
+                      color: "var(--theme-color1)",
                       fontWeight: "600",
                     }}
                   >

@@ -5,12 +5,16 @@ const S = "jsx-page-title";
 
 /**
  * Title band with breadcrumb at the top of the blog and text pages — the live
- * "page-title". With a background photo, phones get its `-sm` file (both
- * preloaded with media queries, as live).
+ * "page-title". With a background photo from /public, phones get its `-sm`
+ * file (both preloaded with media queries, as live). A photo uploaded in the
+ * blog admin (an absolute Cloudflare R2 URL) has no `-sm` file and is used as is.
  */
 export default function PageTitle({ pageName, backgroundImage }: { pageName: string; backgroundImage?: string }) {
   const large = backgroundImage || "/images/bg/page-title-bg.jpg";
-  const small = backgroundImage ? backgroundImage.replace(/(\.[a-z0-9]+)$/i, "-sm$1") : null;
+  const small =
+    backgroundImage && !/^https?:\/\//i.test(backgroundImage)
+      ? backgroundImage.replace(/(\.[a-z0-9]+)$/i, "-sm$1")
+      : null;
   const style = (
     small ? { "--pt-bg-lg": `url(${large})`, "--pt-bg-sm": `url(${small})` } : { backgroundImage: `url(${large})` }
   ) as CSSProperties;

@@ -1,0 +1,87 @@
+/**
+ * ROLLOVERS IN WHITE INSTEAD OF SOLID GOLD (owner, 1 Oct: "maybe white roll
+ * over … the pure gold is too intense for the roll over").
+ *
+ * Live fills its buttons with solid gold and turns their text white on hover
+ * (every .btn-one / .btn-two, "Book an Appointment", "Reserve", the price
+ * list tabs, the contact page buttons, the treatment slider's icon circle,
+ * slider arrows). Here they turn white instead: text, border, arrow and icon
+ * stay gold. White on a white section or card would not show, so a soft gold
+ * shadow comes with it. The active price-list tab is white with its gold
+ * border (it was solid gold too), like the chosen duration's gold outline.
+ *
+ * Loaded after live.css, custom.css and gold.css (src/app/layout.tsx), with
+ * live's own selectors, so each rule wins at the same specificity. Remove the
+ * import to bring live's gold rollovers back. Colours use the theme
+ * variables, so they follow the site gold (gold.css).
+ */
+.lh {
+  --rollover-shadow: 0 8px 22px -12px rgba(var(--theme-color1-rgb), 0.6);
+}
+
+/* Buttons. */
+.btn-one:hover,
+.btn-two:hover,
+.btn-two-light:hover,
+.header__main .menu-btns .book-now:hover,
+.reserve-cta-button:hover,
+.cf-map__btn.jsx-contact-form:hover,
+.feature-arrys button:hover,
+.wa-prompt.jsx-wa-prompt .wa-prompt__btn.jsx-wa-prompt:is(:hover, :focus-visible),
+.treatment-catalog__category:is(:hover, :focus-visible),
+.home-v2 .v2-scroll-nav__arrow.v2-scroll-nav__arrow:hover:not(:disabled) {
+  border-color: var(--theme-color1);
+  background-color: #fff;
+  color: var(--theme-color1);
+  box-shadow: var(--rollover-shadow);
+}
+/* The arrow that slides in on hover was white. */
+.btn-one:hover .icon_box .icon_second,
+.btn-two:hover .icon_box .icon_second,
+.btn-two-light:hover .icon_box .icon_second {
+  color: var(--theme-color1);
+}
+.btn-two-light:hover .icon_first,
+.btn-two-light:hover .icon_second {
+  color: var(--theme-color1) !important; /* live: white !important */
+}
+.header__main .menu-btns .book-now:hover svg path {
+  fill: var(--theme-color1);
+}
+
+/* Price-list tabs: the active one white with its gold border; keyboard focus
+   gets a ring (live took the outline away and relied on the gold fill). */
+.treatment-catalog__category.is-active {
+  border-color: var(--theme-color1);
+  background-color: #fff;
+  color: var(--theme-color1);
+}
+.treatment-catalog__category:focus-visible {
+  outline: 2px solid var(--theme-color1);
+  outline-offset: 3px;
+}
+
+/* Treatment slider cards (24 treatment pages): the icon circle stays white
+   with its gold ring and gold icon when the card is hovered (live: gold
+   circle, white icon); the icon still turns. With the site gold on
+   (gold.css), the icon keeps its recolouring filter. */
+.service-block-two .inner-box:hover .icon {
+  background-color: #fff;
+  box-shadow: var(--rollover-shadow);
+}
+.service-block-two .inner-box:hover .icon svg [fill="white"] {
+  fill: var(--theme-color1);
+}
+.service-block-two .inner-box:hover .icon .service-treatment-icon {
+  filter: none;
+}
+:where(:root.gold-b, :root:has(.home-v3)) .service-block-two .inner-box:hover .icon .service-treatment-icon {
+  filter: url(#gold-b);
+}
+
+/* Contact page: the round icons beside phone, address and hours. */
+.cf-rail__list.jsx-contact li.jsx-contact:hover .cf-rail__icon.jsx-contact {
+  background-color: #fff;
+  color: var(--theme-color1);
+  box-shadow: var(--rollover-shadow);
+}

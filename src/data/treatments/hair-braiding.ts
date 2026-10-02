@@ -12,7 +12,7 @@ const hairBraiding: Treatment = {
   category: "beauty",
   cardImage: { src: "/images/beauty/hair-braiding/hairbraiding-3.webp", alt: "Hair Braiding", width: 630, height: 580 },
   seo: {
-    title: "Hair Braiding Bali – Stylish Braided Hair & Braid Services at Spa Bali Moon",
+    title: "Hair Braiding Bali – Stylish Braided Hair Services",
     description: "Experience professional hair braiding in Bali at Spa Bali Moon, Seminyak. From casual braid hair to intricate braided hair styles, enjoy glossy, protective braids that suit the beach, events, or everyday wear.",
   },
   hero: {

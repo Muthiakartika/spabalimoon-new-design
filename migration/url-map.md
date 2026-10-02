@@ -65,6 +65,8 @@ The brief suggested `/treatments/[slug]`, `/pricelist`, `/home-service`, `/blog/
 ## B. Redirects the live site ALREADY serves: reproduce all (permanent)
 
 > **Step 18: ✅ built and tested.** All 35 rows are in `src/data/redirects.ts` → `liveRedirects`, loaded by `next.config.ts`.
+>
+> **2026-10-02:** the live project's own `next.config.js` turned out to serve 60 more redirects than this table (old treatment paths such as `/balinese-massage/`, old `/seminyak/` slugs, `/blog/*` and `/news/*` → `/guide/*`, `/terms-conditions/`, `/page-sitemap.xml`, …). They are now in `liveRedirects` too, and every redirect answers 301 as on live. Not carried over: `/page-faq/`, `/page-testimonial/`, `/page-team-details/`, whose live targets are section E demo pages.
 
 Verified live on 2026-09-23. Many of these have external backlinks (count from Ahrefs in brackets).
 

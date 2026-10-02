@@ -1,0 +1,360 @@
+/**
+ * SPA MENU — the price list with each treatment's price in its row, as the
+ * homepage shows it (price-list option A, "pick a duration"), and the drafts'
+ * variants of it (/home-v2/ opens prices per row, /home-v4/ is a table).
+ * Since 1 October the price lists on /seminyak/ and
+ * /outcall-home-service-massage/ use the homepage one too (owner's request).
+ *
+ * Imported by MenuIntro (src/components/home/MenuIntro.tsx), which every
+ * one of these menus renders, so any page with such a menu gets these rules.
+ * They hang off `.lh .v2-menu…` (every page wrapper is `.lh`), one class
+ * above the live rule each overrides, as `.home-v2 …` did when they lived
+ * in home-v2.css / home-v2-options.css. Colours use the theme variables, so
+ * the homepage shows its own gold (home-v3.css) and other pages the site's.
+ */
+
+/* Inactive tabs and the prices of the durations not chosen stay in the HTML
+   (search engines read the whole price list, as on the live price pages)
+   with `hidden`; live.css styles these elements with a display, which would
+   otherwise outrank the browser's [hidden] rule. */
+.lh .v2-menu [hidden] {
+  display: none !important;
+}
+/* "1.5 Hrs:" before each duration's price, for screen readers and search
+   engines; on screen the switch already says which duration is shown. */
+.lh .v2-menu .v2-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ------------------------------------------------------------------------
+   Spa menu: the live list, with each treatment's price in its row — "from
+   159K", or its one price — set like the package-card prices (Literata 300,
+   26px, gold); "from" in the description's type, couple prices with the
+   package cards' "2 pax" under them. Price and arrow are one button that
+   opens the live price panel, a little faster.
+   ------------------------------------------------------------------------ */
+/* The price stays right of the title; if a long word leaves no room, it
+   drops to its own line, still on the right. */
+.lh .v2-menu .treatment-catalog__heading {
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: 4px;
+}
+.lh .v2-menu .v2-price {
+  display: inline-flex;
+  flex-shrink: 0;
+  margin-left: auto;
+  align-items: center;
+  gap: var(--v2-arrow-gap);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+/* The arrow keeps a column of its own at the right: the description and the
+   opened price list stop where the arrow's gap starts, so the row's price and
+   every price in the list line up (live: 48px on desktop, none on phones). */
+.lh .v2-menu--toggle {
+  --v2-arrow-gap: 14px;
+}
+.lh .v2-menu--toggle .treatment-catalog__description,
+.lh .v2-menu--toggle .treatment-catalog__dropdown-inner {
+  margin-right: calc(34px + var(--v2-arrow-gap));
+}
+.lh .v2-menu .v2-price__tag {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  white-space: nowrap;
+}
+.lh .v2-menu .v2-price__line {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}
+/* The package cards' "2 pax" note (.pax-note: Mulish 14px 500, ink). */
+.lh .v2-menu .v2-price__pax {
+  margin-top: -4px;
+  color: var(--headings-color);
+  font-family: var(--text-font);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18px;
+}
+.lh .v2-menu .v2-price__note {
+  color: #5f5a54;
+  font-family: var(--text-font);
+  font-size: 15px;
+  line-height: 24px;
+}
+.lh .v2-menu .v2-price__amount {
+  color: var(--theme-color1);
+  font-family: var(--title-font);
+  font-size: 26px;
+  font-weight: 300;
+  line-height: 34px;
+}
+/* The whole button lights the arrow, as hovering the live arrow does. */
+.lh .v2-menu .v2-price:hover .treatment-catalog__toggle,
+.lh .v2-menu .v2-price:focus-visible .treatment-catalog__toggle {
+  color: #8a6f1c;
+  border-color: #8a6f1c;
+}
+.lh .v2-menu .v2-price:focus-visible {
+  outline: 2px solid var(--theme-color1);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+/* 992–1199px: the two columns are narrowest here; slightly tighter gaps
+   keep "Aromatherapy" and its price on one line. */
+@media (min-width: 992px) and (max-width: 1199px) {
+  .lh .v2-menu .treatment-catalog__heading {
+    column-gap: 12px;
+  }
+  .lh .v2-menu--toggle {
+    --v2-arrow-gap: 10px;
+  }
+}
+/* Live opens in 0.4s. */
+.lh .v2-menu .treatment-catalog__dropdown {
+  transition-duration: 0.25s, 0.2s;
+}
+/* Below 992px the two columns stack into one list. Live drops the divider
+   under the last row of each column, which then leaves one row mid-list
+   without it; that row keeps it here, as every other row has. */
+@media (max-width: 991px) {
+  .lh .v2-menu .treatment-catalog__column:first-child .package-block:last-child .treatment-catalog__item {
+    padding-bottom: 28px;
+    border-bottom: 1px solid rgba(95, 90, 84, 0.14);
+  }
+}
+@media (max-width: 767px) {
+  .lh .v2-menu--toggle {
+    --v2-arrow-gap: 10px;
+  }
+  /* The live description drops to 14px here; the notes follow it. */
+  .lh .v2-menu .v2-price__note {
+    font-size: 14px;
+  }
+}
+
+/* ------------------------------------------------------------------------
+   Price list option A — "pick a duration": a switch under the tabs sets the
+   duration for the whole list. Caption = the fee line's value (Literata
+   18px); switch = the category pills at their phone size (Literata 15px
+   600); price = the package-card price, as in the current menu.
+   ------------------------------------------------------------------------ */
+.lh .v2-menu--durations .treatment-catalog__categories {
+  margin-bottom: 26px;
+}
+.lh .v2-duration {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 16px;
+  margin-bottom: 56px;
+}
+.lh .v2-duration__caption {
+  color: #707070;
+  font-family: var(--title-font);
+  font-size: 18px;
+  line-height: 28px;
+}
+.lh .v2-duration__switch {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid rgba(var(--theme-color1-rgb), 0.35);
+  border-radius: 999px;
+  background-color: #fff;
+}
+.lh .v2-duration__switch button {
+  min-height: 42px;
+  padding: 8px 18px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--theme-color1);
+  font-family: var(--title-font);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 18px;
+  white-space: nowrap;
+  transition: background-color 0.25s, color 0.25s, box-shadow 0.25s;
+}
+.lh .v2-duration__switch button:hover {
+  background-color: rgba(var(--theme-color1-rgb), 0.1);
+}
+/* The chosen duration: a gold outline (owner, 1 Oct: "gold outline only";
+   it was filled gold with white text), the category pills' 1px border
+   drawn inside so the pill keeps its size. */
+.lh .v2-duration__switch button[aria-pressed="true"] {
+  box-shadow: inset 0 0 0 1px var(--theme-color1);
+}
+.lh .v2-menu--durations .treatment-catalog__heading {
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: 4px;
+}
+.lh .v2-dprice {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+  margin-left: auto;
+  white-space: nowrap;
+}
+/* A new price fades up when the duration changes. */
+.lh .v2-menu--durations .v2-price__amount {
+  animation: v2-price-in 0.3s ease-out;
+}
+@keyframes v2-price-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lh .v2-menu--durations .v2-price__amount {
+    animation: none;
+  }
+}
+/* No such duration: the row fades, "—" and "Not available" instead of a price. */
+.lh .v2-menu--durations .is-unavailable .treatment-catalog__image,
+.lh .v2-menu--durations .is-unavailable .title,
+.lh .v2-menu--durations .is-unavailable .treatment-catalog__description,
+.lh .v2-menu--durations .is-unavailable .v2-notes {
+  opacity: 0.45;
+}
+.lh .v2-menu--durations .is-unavailable .v2-price__amount {
+  color: var(--text-color2);
+}
+.lh .v2-menu--durations .is-unavailable .v2-price__pax {
+  color: #707070;
+  font-weight: 400;
+}
+/* Variants and extras under the description: the live price panel's dotted
+   detail list, prices in gold. */
+.lh .v2-menu .v2-notes {
+  padding: 0;
+  border: 0;
+}
+.lh .v2-menu .v2-notes ul {
+  margin-top: 10px;
+}
+@media (max-width: 767px) {
+  .lh .v2-duration {
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 40px;
+  }
+  .lh .v2-duration__switch button {
+    min-height: 40px;
+    padding: 8px 14px;
+  }
+}
+@media (max-width: 374px) {
+  .lh .v2-duration__switch button {
+    padding: 8px 10px;
+  }
+}
+/* `sticky` (MenuDurations, on the homepage; owner: "change without scrolling
+   up"): the switch stays under the site header down the whole list, on a
+   white full-width strip with a soft shadow, and leaves with the last row.
+   --v2-stick-top is the header's height, measured by the component. The
+   padding is taken back by the margins, so the page is laid out as before. */
+.lh .v2-menu--sticky {
+  overflow: clip; /* live: hidden, which would hold the switch in place */
+}
+.lh .v2-duration--sticky {
+  position: sticky;
+  top: var(--v2-stick-top, 106px);
+  z-index: 5;
+  margin-top: -10px;
+  margin-bottom: 46px;
+  padding: 10px 0;
+}
+/* The strip starts 2px up under the header, so no hairline of the list shows
+   between them where the header's edge falls between pixels (125% screens). */
+.lh .v2-duration--sticky::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -2px calc(50% - 50vw) 0;
+  background-color: #fff;
+  box-shadow: 0 12px 20px -16px rgba(28, 26, 29, 0.3);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.lh .v2-duration--sticky.is-stuck::before {
+  opacity: 1;
+}
+/* Header and pinned strip read as one white block: the header's own shadow
+   (live) would fall across the strip, so it goes while the strip is there. */
+body:has(.v2-duration--sticky.is-stuck) .header-three-area.menu-fixed {
+  box-shadow: none;
+}
+/* The list keeps a focused link clear of the header and the strip. */
+.lh .v2-menu--sticky .treatment-catalog__item :is(a, button) {
+  scroll-margin-top: calc(var(--v2-stick-top, 106px) + 90px);
+}
+@media (max-width: 767px) {
+  /* On phones "Prices for" sits above the switch: it goes up under the
+     header (28px line + 8px gap), so only the switch shows. */
+  .lh .v2-duration--sticky {
+    top: calc(var(--v2-stick-top, 68px) - 36px);
+    margin-top: -8px;
+    margin-bottom: 32px;
+    padding: 8px 0;
+  }
+  .lh .v2-duration--sticky.is-stuck .v2-duration__caption {
+    visibility: hidden;
+  }
+  .lh .v2-menu--sticky .treatment-catalog__item :is(a, button) {
+    scroll-margin-top: calc(var(--v2-stick-top, 68px) + 76px);
+  }
+}
+/* Short screens (a phone turned sideways): a slimmer strip and pill, so the
+   header and the switch keep to about a third of the height (37% before). */
+@media (max-height: 500px) {
+  .lh .v2-duration--sticky {
+    margin-top: -4px;
+    margin-bottom: 52px;
+    padding: 4px 0;
+  }
+  .lh .v2-duration--sticky .v2-duration__switch button {
+    min-height: 34px;
+    padding: 6px 16px;
+  }
+}
+@media (max-height: 500px) and (max-width: 767px) {
+  .lh .v2-duration--sticky {
+    margin-bottom: 36px;
+  }
+  .lh .v2-duration--sticky .v2-duration__switch button {
+    padding: 6px 14px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lh .v2-duration--sticky::before {
+    transition: none;
+  }
+}
+
+/* Phones: the prices (and the descriptions with them) come in from the
+   screen edge a little (owner, on the homepage: "the prices could still come
+   in a bit"); live runs them to the container edge below 768px. */
+@media (max-width: 767px) {
+  .lh .v2-menu--durations .treatment-catalog__content {
+    padding-right: 16px;
+  }
+}

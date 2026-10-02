@@ -1,0 +1,64 @@
+import { home } from "@/data/pages/home";
+import { catalog, catalogCategories, type CatalogCategory, type CatalogItem } from "@/data/pages/home-catalog";
+import "@/styles/spa-menu.css";
+
+/** The spa-menu entries of one tab, A–Z, as the live catalog lists them. */
+export const menuItems = (category: CatalogCategory): CatalogItem[] =>
+  catalog
+    .filter((item) => (item.categories || [item.category]).includes(category))
+    .sort((a, b) => a.name.localeCompare(b.name));
+
+/** Two columns, the first one longer when the count is odd. */
+export function halves<T>(items: T[]): [T[], T[]] {
+  const half = Math.ceil(items.length / 2);
+  return [items.slice(0, half), items.slice(half)];
+}
+
+/**
+ * The live catalog's heading (or a page's own), home-service fee and category
+ * tabs. `tabs` defaults to the homepage catalog's four; a price page passes
+ * its own.
+ */
+export default function MenuIntro<T extends string = CatalogCategory>({
+  category,
+  onCategory,
+  subTitle,
+  title,
+  tabs = catalogCategories as { id: T; label: string }[],
+}: {
+  category: T;
+  onCategory: (id: T) => void;
+  subTitle?: string;
+  title?: string;
+  tabs?: { id: T; label: string }[];
+}) {
+  const { catalog: text } = home;
+  return (
+    <>
+      <div className="jsx-catalog section-header mb-60 center">
+        <h4 className="jsx-catalog sub-title">{subTitle ?? text.subTitle}</h4>
+        <h2 className="jsx-catalog title">{title ?? text.title}</h2>
+      </div>
+      <div aria-label="Home service fee" className="jsx-catalog treatment-catalog__fee">
+        <strong className="jsx-catalog">{text.fee.label}</strong>
+        <span className="jsx-catalog">{text.fee.value}</span>
+      </div>
+      <div aria-label="Treatment categories" className="jsx-catalog treatment-catalog__categories">
+        {tabs.map((c) => {
+          const active = category === c.id;
+          return (
+            <button
+              key={c.id}
+              type="button"
+              aria-pressed={active}
+              onClick={() => onCategory(c.id)}
+              className={`jsx-catalog treatment-catalog__category${active ? " is-active" : ""}`}
+            >
+              <span className="jsx-catalog">{c.label}</span>
+            </button>
+          );
+        })}
+      </div>
+    </>
+  );
+}

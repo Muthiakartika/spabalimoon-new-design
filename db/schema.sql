@@ -1,0 +1,32 @@
+-- Blog database (Neon Postgres) for the admin at /admin/.
+-- `npm run blog:setup` runs this file and then loads the seven built-in
+-- articles. It is safe to run again: nothing is dropped or overwritten.
+-- (One statement per `;`-terminated block; the setup script splits on that.)
+
+-- Articles. Same columns as the live site's Supabase table, so rows can move
+-- between the two unchanged.
+create table if not exists posts (
+    id uuid primary key default gen_random_uuid(),
+    slug text unique not null,
+    title text not null,
+    excerpt text,
+    cover_image text,
+    content_html text not null default '',
+    category text,
+    tags text[] default '{}',
+    author text default 'Admin',
+    status text not null default 'draft' check (status in ('draft', 'published')),
+    seo_title text,
+    seo_description text,
+    published_at timestamptz,
+    created_at timestamptz default now(),
+    updated_at timestamptz default now()
+);
+
+-- The public list: published articles, newest first.
+create index if not exists posts_status_published_idx
+    on posts (status, published_at desc);
+
+-- The admin dashboard: last edited first.
+create index if not exists posts_updated_idx
+    on posts (updated_at desc);

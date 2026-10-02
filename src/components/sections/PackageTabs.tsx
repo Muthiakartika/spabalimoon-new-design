@@ -197,7 +197,7 @@ function ServiceRow({
                       key={i}
                       style={{ fontSize: "13px", color: "#5f5a54", display: "flex", gap: "10px", marginBottom: "5px", lineHeight: "1.4" }}
                     >
-                      <i className="fa-solid fa-circle" style={{ fontSize: "5px", marginTop: "8px", color: "#A78627" }} />
+                      <i className="fa-solid fa-circle" style={{ fontSize: "5px", marginTop: "8px", color: "var(--theme-color1)" }} />
                       <span>{b}</span>
                     </li>
                   ))}

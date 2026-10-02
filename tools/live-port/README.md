@@ -58,6 +58,7 @@ node interact-search.mjs                                            # dropdown p
 node interact-treatment.mjs /seminyak/thai-massage/                 # FAQ + panah slider treatment
 node matched.mjs /guide/ ".blog-block" width,flex                   # aturan CSS mana yang menentukan properti (CDP)
 node headcmp.mjs                                                    # tag <head> (judul, meta, canonical, JSON-LD) ke-42 halaman
+node dropdowns.mjs                                                  # buka SEMUA dropdown (FAQ, harga, katalog, read more, menu, cari) -> teks yang tak terlihat
 ```
 
 Laporan `compare.mjs` juga menghitung `subpx`: elemen yang lolos toleransi
@@ -65,8 +66,17 @@ Laporan `compare.mjs` juga menghitung `subpx`: elemen yang lolos toleransi
 pergeseran subpiksel seperti pembulatan angka oleh Lightning CSS (lihat
 `TWELFTHS` di `build-css.mjs`).
 
+**Sejak 1 Oktober beranda `/` adalah desain baru pilihan pemilik** (draf v3,
+lihat PROGRESS.md "Beranda baru"), bukan salinan live. Untuk `/`,
+`compare.mjs`, `pixdiff.mjs`, `interact.mjs`, `survey.mjs` dan
+`dropdowns.mjs` akan melaporkan selisih — itu disengaja. Judul, deskripsi,
+canonical, robots dan JSON-LD beranda sengaja dibiarkan sama dengan live.
+41 halaman lainnya tetap dibandingkan seperti biasa.
+
 `compare.mjs` membekukan animasi dan slider, memaksa semua gambar lazy
 termuat, lalu membandingkan tag, kelas, teks, `src`/`href`, posisi, ukuran,
-font, warna, radius dan opacity setiap elemen header, menu mobile, isi halaman
-dan footer (toleransi 1px). `LOCAL_URL` mengganti alamat rebuild
+font, warna, radius, opacity dan visibility setiap elemen header, menu mobile,
+isi halaman dan footer (toleransi 1px). Isi yang baru muncul setelah diklik
+(jawaban FAQ, baris harga) tidak ikut terukur di sini — itu tugas
+`dropdowns.mjs`. `LOCAL_URL` mengganti alamat rebuild
 (bawaan `http://localhost:3100`).

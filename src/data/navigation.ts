@@ -60,7 +60,12 @@ export const treatmentMenu: (NavItem & { keywords: string })[] = [
   { label: "Waxing", href: "/seminyak/waxing-salon/", keywords: "waxing hair removal beauty" },
 ];
 
-/** Blog dropdown: the live site's list of articles, in its order and wording. */
+/**
+ * Blog dropdown: the live site's list of articles, in its order and wording,
+ * without "IV Drip Therapy in Bali" (/guide/iv-drip/), which the owner took
+ * out of the menu on 2 Oct ("we can take that one out of the menu"). The
+ * article itself stays, on /guide/, in search and in the sitemap.
+ */
 export const blogMenu: NavItem[] = [
   { label: "A Guide To Lymphatic Drainage Massage", href: "/guide/lymphatic-drainage-massage-benefits-techniques-what-to-expect/" },
   { label: "What Is a Balinese Massage? A Complete Guide for First Timer", href: "/guide/what-is-a-balinese-massage/" },
@@ -68,7 +73,6 @@ export const blogMenu: NavItem[] = [
   { label: "Facial Massage Benefits for Modern Self‑Care", href: "/guide/understanding-of-facial-massage/" },
   { label: "Slimming Massage Benefits & How It Works", href: "/guide/understanding-slimming-massage/" },
   { label: "Best Massages for Jet Lag Recovery After a Long Flight", href: "/guide/best-massages-after-a-long-flight/" },
-  { label: "IV Drip Therapy in Bali", href: "/guide/iv-drip/" },
 ];
 
 /* ---------------------------------- Footer --------------------------------- */

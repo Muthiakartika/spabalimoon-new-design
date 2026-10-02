@@ -782,29 +782,61 @@ export const pricelistPage = {
           ],
           id: "couple-4",
           image: "/images/listmenu/couplewarmcandle.webp"
-        },
+        }
+      ]
+    },
+    {
+      // Not on the live page: there the four packages were one row at the end of
+      // "For Couples". The owner asked for them as a tab of their own.
+      label: "Couple Packages",
+      services: [
         {
-          name: "Couple Massage Packages",
+          name: "Couple Package A",
+          desc: "Balinese Massage + Ear Candle · 2 Pax",
           options: [
             {
-              time: "Package A · 1 Hour Balinese Massage · 2 pax + 30 Mins Ear Candle",
+              time: "1 Hour Balinese Massage + 30 Mins Ear Candle · 2 Pax",
               price: "IDR 639K"
-            },
+            }
+          ],
+          id: "couple-package-a",
+          image: "/images/listmenu/couplemassagepackage.webp"
+        },
+        {
+          name: "Couple Package B",
+          desc: "Balinese Massage + Bali Moon Facial · 2 Pax",
+          options: [
             {
-              time: "Package B · 1 Hour Balinese Massage · 2 pax + 1 Hour Bali Moon Facial",
+              time: "1 Hour Balinese Massage + 1 Hour Bali Moon Facial · 2 Pax",
               price: "IDR 709K"
-            },
+            }
+          ],
+          id: "couple-package-b",
+          image: "/images/listmenu/couplebalinesemassage.webp"
+        },
+        {
+          name: "Couple Package C",
+          desc: "Warm Candle Massage + Ear Candle · 2 Pax",
+          options: [
             {
-              time: "Package C · 1 Hour Warm Candle · 2 pax + 30 Mins Ear Candle",
+              time: "1 Hour Warm Candle Massage + 30 Mins Ear Candle · 2 Pax",
               price: "IDR 849K"
-            },
+            }
+          ],
+          id: "couple-package-c",
+          image: "/images/listmenu/couplewarmcandle.webp"
+        },
+        {
+          name: "Couple Package D",
+          desc: "Warm Candle Massage + Bali Moon Facial · 2 Pax",
+          options: [
             {
-              time: "Package D · 1 Hour Warm Candle · 2 pax + 1 Hour Bali Moon Facial",
+              time: "1 Hour Warm Candle Massage + 1 Hour Bali Moon Facial · 2 Pax",
               price: "IDR 929K"
             }
           ],
-          id: "couple-5",
-          image: "/images/listmenu/couplemassagepackage.webp"
+          id: "couple-package-d",
+          image: "/images/listmenu/couplemassage.webp"
         }
       ]
     }

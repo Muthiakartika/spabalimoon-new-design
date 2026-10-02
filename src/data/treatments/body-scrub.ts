@@ -13,7 +13,7 @@ const bodyScrub: Treatment = {
   shortDescription: "A gentle exfoliation treatment to refresh the skin and leave it smooth and clean.",
   cardImage: { src: "/images/treatments/cards/bodyscrub.webp", alt: "Body Scrub", width: 630, height: 580 },
   seo: {
-    title: "Body Scrub in Seminyak – Exfoliating Spa Therapy",
+    title: "Body Scrub in Bali – Exfoliating Spa Therapy",
     description: "Experience a rejuvenating body scrub treatment in Bali. Refresh your skin, restore softness, and enjoy a calming spa escape in Seminyak.",
   },
   hero: {
