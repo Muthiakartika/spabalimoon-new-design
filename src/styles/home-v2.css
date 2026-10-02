@@ -417,8 +417,11 @@
   margin: 10px 0 20px;
 }
 /* The spa menu's "View … details" link (Literata 600, arrow 9px after), in
-   gold; ink on hover. */
+   gold; ink on hover. `position: relative` keeps its hidden sr-only words
+   inside the card: unpositioned, they escaped the scrolling treatments row
+   and made the homepage 7000px wide. */
 .home-v2 .v2-treat .v2-treat__link {
+  position: relative;
   display: inline-flex;
   align-items: center;
   align-self: flex-start;
