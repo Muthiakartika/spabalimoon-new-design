@@ -41,6 +41,25 @@ const nextConfig: NextConfig = {
       statusCode: 301 as const,
     }));
   },
+
+  // Everything in /public is served `max-age=0, must-revalidate` by default, so
+  // a returning visitor re-checks ~80 images and both fonts on every page.
+  // These are the live site's headers (the old project's next.config.js):
+  // photos are kept 30 days and refreshed in the background, fonts a year. A
+  // photo replaced under the same name can take up to 30 days to reach someone
+  // who already has it; give a changed photo a new file name to show it at once.
+  async headers() {
+    return [
+      {
+        source: "/images/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=2592000, stale-while-revalidate=86400" }],
+      },
+      {
+        source: "/webfonts/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
+    ];
+  },
 };
 
 export default nextConfig;
