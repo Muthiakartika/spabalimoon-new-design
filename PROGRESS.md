@@ -1478,8 +1478,14 @@ Halaman `noindex` yang memajang tiap opsi dengan label, untuk dipilih pemilik:
 
 ## Yang belum beres
 
-- **`/api/subscribe/` belum menyimpan apa pun.** Form membalas sukses; arahkan
-  ke backend sebenarnya sebelum go-live.
+- **`/api/subscribe/` sudah sama dengan live sejak 2 Oktober.** Email disimpan
+  ke Google Sheet lewat Apps Script (`GOOGLE_SHEET_WEBAPP_URL`), lalu email
+  selamat datang dikirim lewat SendGrid (`SENDGRID_API_KEY`,
+  `SENDGRID_FROM_EMAIL`, `BUSINESS_NAME`).
+  - Nilainya disalin dari `.env.local` project lama.
+  - Kunci SendGrid sudah dicek dengan sandbox mode.
+  - Yang belum: isi keempat variabel di Vercel (project `spa-redesign`), lalu
+    redeploy dan lakukan satu tes nyata.
 - **Form kontak tidak mengirim email** — sama seperti live saat ini (mode
   WhatsApp). Bila nanti ada endpoint, logikanya di
   `src/components/sections/ContactSection.tsx`.
