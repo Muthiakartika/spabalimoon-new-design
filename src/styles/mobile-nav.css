@@ -3,13 +3,15 @@
  * the menu button:
  *  - the logo in the middle of the header ("center the spa bali moon text"),
  *    the WhatsApp phone on its left, the menu button on its right;
- *  - the menu button is the logo's lotus instead of four squares ("could
- *    this be a flower", then "a flower like the Spa Bali Moon logo"), gold
- *    like the phone;
+ *  - the menu button is hot stones in a white square instead of four
+ *    squares (client, 3 Oct: "a hot stone icon inside a white square", after
+ *    a lotus); the phone sits in the same square, the logo a little smaller
+ *    (170px on phones, 200px on tablets), so the three read as even
+ *    ("even these items sizes");
  *  - the menu ("modernize the menu"; the owner picked "opsi 2" of three)
  *    fills the screen on phones and is a 420px panel on tablets. Its top row
  *    repeats the header (logo in the middle, the close button where the
- *    lotus was). First panel, on paper: each item a white row with its icon
+ *    menu button was). First panel, on paper: each item a white row with its icon
  *    in a circle, its name and a line about it (the current page gold, with
  *    a gold border), then a white card with the opening hours, address,
  *    phone and a WhatsApp pill. "Treatments" and "Blog" slide in a panel of
@@ -39,6 +41,9 @@
   .header__main > .menu-btns {
     display: contents;
   }
+  .header__main > .logo {
+    width: 200px;
+  }
   .header__main .menu-btns .header-call {
     grid-row: 1;
     grid-column: 1;
@@ -48,34 +53,46 @@
     grid-row: 1;
     grid-column: 3;
     justify-self: end;
-    /* a 44px target around the 30px lotus, reaching 7px past it */
-    width: 44px;
-    height: 44px;
-    margin: -7px;
-    padding: 7px;
+  }
+  /* The phone and the menu button: two even white squares like the menu's
+     rows, a 22px gold line icon in each, the rollover's gold border and
+     shadow on hover. */
+  .header__main .menu-btns :is(.header-call, .menubars) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin: 0;
+    padding: 0;
     line-height: 0;
     color: var(--theme-color1);
-    background: none;
-    border: 0;
-    transition: color 0.3s;
+    background-color: var(--theme-color-white);
+    border: 1px solid rgba(95, 90, 84, 0.14);
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(28, 26, 29, 0.05);
+    transition: color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  }
+  .header__main .menu-btns :is(.header-call, .menubars):is(:hover, :focus-visible) {
+    color: #987426;
+    border-color: var(--theme-color1);
+    box-shadow: var(--rollover-shadow, none);
+  }
+  .header__main .menu-btns :is(.header-call, .menubars) svg {
+    display: block;
+    width: 22px;
+    height: 22px;
   }
 }
-.header__main .menubars .menubars__lotus {
-  display: block;
-  width: 30px;
-  height: 30px;
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+@media (max-width: 575px) {
+  .header__main > .logo {
+    width: 170px;
+  }
 }
-/* live fills the old icon's path gold on hover */
-.header__main .menubars svg.menubars__lotus path,
-.header__main .menubars:hover svg.menubars__lotus path {
-  fill: currentColor;
-}
-.header__main .menubars:is(:hover, :focus-visible) {
-  color: #987426;
-}
-.header__main .menubars:is(:hover, :focus-visible) .menubars__lotus {
-  transform: scale(1.08);
+/* live fills the old icon's path gold on hover; these are line icons */
+.header__main .menubars svg.menubars__icon path,
+.header__main .menubars:hover svg.menubars__icon path {
+  fill: none;
 }
 
 /* ---- The menu ---- */
@@ -98,13 +115,14 @@ html.mnav-open body {
   overflow: hidden;
 }
 
-/* Top row: the header's height (12 + 44 + 12px), its logo in the middle. */
+/* Top row: the header's height (15 + 40 + 15px), its logo in the middle and
+   the close button a white square where the menu button was. */
 .mnav .mnav__top {
   display: grid;
-  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  grid-template-columns: 40px minmax(0, 1fr) 40px;
   align-items: center;
   column-gap: 12px;
-  padding: 12px 7px;
+  padding: 15px;
   border-bottom: 1px solid rgba(95, 90, 84, 0.1);
 }
 @media (min-width: 576px) {
@@ -116,23 +134,39 @@ html.mnav-open body {
 .mnav .mnav__logo {
   grid-column: 2;
   justify-self: center;
+  width: 200px;
+}
+@media (max-width: 575px) {
+  .mnav .mnav__logo {
+    width: 170px;
+  }
+}
+.mnav .mnav__top .mnav__logo img {
+  width: 100%;
+  height: auto;
 }
 .mnav .mnav__close {
   grid-column: 3;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   padding: 0;
   color: var(--theme-color1);
-  background: none;
-  border: 0;
-  border-radius: 50%;
-  transition: transform 0.4s ease, color 0.3s;
+  background-color: var(--theme-color-white);
+  border: 1px solid rgba(95, 90, 84, 0.14);
+  border-radius: 12px;
+  transition: color 0.3s, border-color 0.3s;
+}
+.mnav .mnav__close svg {
+  transition: transform 0.4s ease;
 }
 .mnav .mnav__close:is(:hover, :focus-visible) {
   color: #987426;
+  border-color: var(--theme-color1);
+}
+.mnav .mnav__close:is(:hover, :focus-visible) svg {
   transform: rotate(90deg);
 }
 
@@ -455,8 +489,7 @@ html.mnav-open body {
 }
 @media (prefers-reduced-motion: reduce) {
   .mnav.sidebar-area.offcanvas,
-  .mnav .mnav__panel,
-  .header__main .menubars .menubars__lotus {
+  .mnav .mnav__panel {
     transition: none;
   }
   .mnav.show .mnav__anim {

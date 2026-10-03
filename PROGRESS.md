@@ -1069,6 +1069,39 @@ sama:
 - **Kode:** typecheck bersih; lint `src` bersih (sisa 1 error + 7 warning di
   `tools/live-port`, sudah ada sejak commit pertama); build produksi sukses.
 
+## Permintaan klien, putaran 4 (3 Oktober)
+
+Dari tangkapan layar klien di HP (lebarnya di bawah 390px):
+
+1. **Header HP: ukuran item disamakan** ("even these items sizes") **dan
+   nama spa lebih kecil** (permintaan pemilik). Ikon telepon dan tombol menu
+   kini dua kotak putih 40px yang sama (sudut 12px, garis tepi tipis,
+   bayangan lembut, ikon garis emas 22px; hover: garis tepi emas + bayangan
+   rollover). Logo 210 → 170px di HP, 240 → 200px di tablet. Tinggi header
+   68 → 70px. Desktop tidak berubah (`mobile-nav.css`).
+2. **Tombol menu: batu panas dalam kotak putih** ("a hot stone icon inside
+   a white square … more like a menu button"), menggantikan teratai dari
+   putaran 3. Ikonnya ikon "stones" milik menu HP (`MenuIcons.tsx`). Baris
+   atas menu yang terbuka ikut: logo 170/200px dan tombol tutup kotak putih
+   yang sama, tepat di posisi tombol menu.
+3. **Tiga fakta hero berjajar di HP < 390px** ("could these be across").
+   Dulu satu per baris di bawah 390px (putaran 3, butir 5); kini tetap tiga
+   kolom dengan jarak 8px, judul 15px (14px di bawah 340px), keterangan
+   11/17px (`home-v2.css`). Dicek di 320/340/360/375/389px: judul satu
+   baris, tanpa luberan ke samping.
+4. **Foto banner utama baru** ("just the main banner image"). Dari lima foto
+   pijat milik situs yang dipasang langsung di hero (desktop + HP), pemilik
+   memilih pijat kepala yang terang (sampul artikel Jet Lag). Tidak ada foto
+   pijat besar yang belum terpakai: dari 970 file di `public/images`, 782
+   tampil di 42 halaman; sisanya placeholder abu-abu template, tekstur,
+   ikon, plus foto foot scrub 1024px dan handuk 388px.
+   - File: `public/images/home/hero-massage.webp` (salinan 1920×1080, 73 KB)
+     dan `hero-massage-1200.webp` (30 KB, sharp q82).
+   - `sizes` di `Hero.tsx` dihitung ulang untuk rasio 1,78: HP sampai ±2,4x
+     kepadatan piksel mendapat file 1200px (dulu ±1,8x).
+   - Posisi foto 50% 50% di semua lebar (dulu 26%/30% untuk foto lama).
+   - Foto lama `contact-1.webp` tetap dipakai halaman Contact.
+
 ## Admin blog di `/admin/` (2 Oktober)
 
 Duplikat admin blog dari project lama (`D:Next.js Dataspabalimoon`):

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import MainMenu from "@/components/layout/MainMenu";
+import { MenuIcon } from "@/components/layout/MenuIcons";
 import MobileMenu from "@/components/layout/MobileMenu";
 import type { MobileMenuData } from "@/components/layout/mobileMenuData";
 import { LotusPaths } from "@/components/ui/Lotus";
@@ -72,7 +73,7 @@ export default function Header({ menu }: { menu: MobileMenuData }) {
   }, [searchOpen]);
 
   // While the menu is open: the page behind it stays put, Escape closes it,
-  // and focus moves into it and back to the lotus button afterwards.
+  // and focus moves into it and back to the menu button afterwards.
   useEffect(() => {
     if (sidebar !== "open") return;
     const root = document.documentElement;
@@ -220,12 +221,10 @@ export default function Header({ menu }: { menu: MobileMenuData }) {
                 aria-controls="menubar"
                 aria-expanded={sidebar === "open"}
                 aria-label="Open menu"
-                className="jsx-header menubars d-block d-lg-none"
+                className="jsx-header menubars d-lg-none"
               >
-                {/* The logo's lotus (owner, 2 Oct: "a flower like the Spa Bali Moon logo") */}
-                <svg viewBox="0 0 25 26" aria-hidden="true" className="menubars__lotus">
-                  <LotusPaths fill="currentColor" />
-                </svg>
+                {/* Hot stones in a white square (client, 3 Oct: "a hot stone icon inside a white square") */}
+                <MenuIcon name="stones" className="menubars__icon" />
               </button>
             </div>
           </div>
@@ -242,7 +241,7 @@ export default function Header({ menu }: { menu: MobileMenuData }) {
       )}
       {/* The menu (owner, 2 Oct: "modernize the menu"): the whole screen on
           phones, 420px from the right on tablets; its top row repeats the
-          header (logo in the middle, the close button where the lotus was).
+          header (logo in the middle, the close button where the menu button was).
           Styles: src/styles/mobile-nav.css. */}
       <div
         ref={drawerRef}
