@@ -51,7 +51,7 @@ export default function PricelistPage() {
       <PackageGroups groups={page.packageGroups} icons={page.packageIcons} />
       <Testimonials />
       <div className="jsx-pricelist pricing-faq-section">
-        <FaqSection {...page.faq} />
+        <FaqSection {...page.faq} imageTitleAsHeading />
       </div>
       <div className="jsx-pricelist pricing-closing-section section__decoration-top section__decoration-bottom bg-sub">
         <ReserveCta standardSpacing {...page.reserve} />

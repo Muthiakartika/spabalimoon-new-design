@@ -85,60 +85,68 @@ export default function SessionOptions({
           ))}
         </div>
       ) : (
-        rows.map((e, i) => (
-          <div className="jsx-treatment-layout session-option-group" key={e.title || `session-group-${i}`}>
-            {e.title ? (
-              <h3 data-wow-duration="1500ms" className="jsx-treatment-layout session-option-group__title wow fadeInUp">
-                {e.title}
-              </h3>
-            ) : null}
-            <div className="jsx-treatment-layout row g-4 align-items-stretch justify-content-center">
-              {e.sessions.map((e) => (
-                <div
-                  className="jsx-treatment-layout col-lg-4 col-md-6 service-block-two"
-                  key={`${e.duration}-`.concat(e.price)}
-                >
-                  <div className="jsx-treatment-layout inner-box session-option-card">
-                    <div aria-hidden="true" className="jsx-treatment-layout session-option-shape">
-                      <img
-                        loading="lazy"
-                        decoding="async"
-                        src="/images/pricing/shape.png"
-                        alt=""
-                        className="jsx-treatment-layout"
-                      />
-                    </div>
-                    <div className="jsx-treatment-layout image-box">
-                      <div className="jsx-treatment-layout icon">
+        rows.map((e, i) => {
+          // Under a group title (h3) the durations are h4, with the h3 look.
+          const Duration = e.title ? "h4" : "h3";
+          return (
+            <div className="jsx-treatment-layout session-option-group" key={e.title || `session-group-${i}`}>
+              {e.title ? (
+                <h3 data-wow-duration="1500ms" className="jsx-treatment-layout session-option-group__title wow fadeInUp">
+                  {e.title}
+                </h3>
+              ) : null}
+              <div className="jsx-treatment-layout row g-4 align-items-stretch justify-content-center">
+                {e.sessions.map((e) => (
+                  <div
+                    className="jsx-treatment-layout col-lg-4 col-md-6 service-block-two"
+                    key={`${e.duration}-`.concat(e.price)}
+                  >
+                    <div className="jsx-treatment-layout inner-box session-option-card">
+                      <div aria-hidden="true" className="jsx-treatment-layout session-option-shape">
                         <img
                           loading="lazy"
                           decoding="async"
-                          src={e.icon || icon}
+                          src="/images/pricing/shape.png"
                           alt=""
-                          aria-hidden="true"
-                          className="jsx-treatment-layout service-treatment-icon"
+                          className="jsx-treatment-layout"
                         />
                       </div>
-                    </div>
-                    <div className="jsx-treatment-layout content">
-                      <p className="jsx-treatment-layout session-option-price">{stripIdr(e.price)}</p>
-                      <h3 className="jsx-treatment-layout title session-option-duration">{e.duration}</h3>
-                      {e.details && e.details.length ? (
-                        <ul className="jsx-treatment-layout session-option-list">
-                          {e.details.map((e) => (
-                            <li className="jsx-treatment-layout" key={e}>
-                              {e}
-                            </li>
-                          ))}
-                        </ul>
-                      ) : null}
+                      <div className="jsx-treatment-layout image-box">
+                        <div className="jsx-treatment-layout icon">
+                          <img
+                            loading="lazy"
+                            decoding="async"
+                            src={e.icon || icon}
+                            alt=""
+                            aria-hidden="true"
+                            className="jsx-treatment-layout service-treatment-icon"
+                          />
+                        </div>
+                      </div>
+                      <div className="jsx-treatment-layout content">
+                        <p className="jsx-treatment-layout session-option-price">{stripIdr(e.price)}</p>
+                        <Duration
+                          className={`jsx-treatment-layout title session-option-duration${Duration === "h4" ? " look-h3" : ""}`}
+                        >
+                          {e.duration}
+                        </Duration>
+                        {e.details && e.details.length ? (
+                          <ul className="jsx-treatment-layout session-option-list">
+                            {e.details.map((e) => (
+                              <li className="jsx-treatment-layout" key={e}>
+                                {e}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : null}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        ))
+          );
+        })
       )}
     </div>
   );

@@ -49,7 +49,7 @@ export default function Funfacts({ items }: FunfactsProps) {
                   </svg>
                 </div>
                 <div className="content">
-                  <h3 className="title">{items[0].title}</h3>
+                  <div className="title look-h3">{items[0].title}</div>
                   <span>{items[0].text}</span>
                 </div>
               </div>
@@ -91,7 +91,7 @@ export default function Funfacts({ items }: FunfactsProps) {
                   </svg>
                 </div>
                 <div className="content">
-                  <h3 className="title">{items[1].title}</h3>
+                  <div className="title look-h3">{items[1].title}</div>
                   <span>{items[1].text}</span>
                 </div>
               </div>
@@ -107,7 +107,7 @@ export default function Funfacts({ items }: FunfactsProps) {
                   </svg>
                 </div>
                 <div className="content">
-                  <h3 className="title">{items[2].title}</h3>
+                  <div className="title look-h3">{items[2].title}</div>
                   <span>{items[2].text}</span>
                 </div>
               </div>
@@ -147,7 +147,7 @@ export default function Funfacts({ items }: FunfactsProps) {
                   </svg>
                 </div>
                 <div className="content">
-                  <h3 className="title">{items[3].title}</h3>
+                  <div className="title look-h3">{items[3].title}</div>
                   <span>{items[3].text}</span>
                 </div>
               </div>

@@ -92,7 +92,7 @@ export default function DaySpaPage() {
           image="/images/services/dayspaseminyak/dayspa-6.webp"
         />
       </div>
-      <TreatmentTestimonials paperDecoration={false} namesAsHeadings={false} />
+      <TreatmentTestimonials paperDecoration={false} />
       <FaqSection
         paperDecoration
         imageTitle="Your Seminyak Day Spa"

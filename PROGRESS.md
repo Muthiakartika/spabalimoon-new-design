@@ -1101,6 +1101,18 @@ Dari tangkapan layar klien di HP (lebarnya di bawah 390px):
      kepadatan piksel mendapat file 1200px (dulu ±1,8x).
    - Posisi foto 50% 50% di semua lebar (dulu 26%/30% untuk foto lama).
    - Foto lama `contact-1.webp` tetap dipakai halaman Contact.
+   - **Diganti 5 Oktober** dengan foto pilihan pemilik: terapis Spa Bali Moon
+     (seragam hitam berlogo lotus) memijat kepala tamu. Sumbernya file klien
+     `D:\Office\Clients\spa\Homepage.jpg` (1920×850, JPEG 599 KB), dijadikan
+     `public/images/home/hero-head-massage.webp` (1920×850, 48 KB) dan
+     `hero-head-massage-1200.webp` (1200×531, 26 KB), sharp WebP q82. Nama
+     file baru dipakai supaya cache `/images` yang panjang tidak menampilkan
+     foto lama. `hero-massage*.webp` dihapus. `sizes` dihitung ulang untuk
+     rasio 2,26: HP sampai ±1,9x kepadatan piksel mendapat file 1200px. Posisi
+     tetap 50% 50%. Sudah dicek di 1920/1440/1280/1024/390px: logo seragam,
+     tangan terapis, dan wajah tamu terlihat; di HP komposisinya utuh.
+     Versi crop sempitnya sudah lebih dulu dipakai di `/seminyak/head-massage/`
+     (`headmassage-6.webp`, kartu "2 Hours").
 
 ## Admin blog di `/admin/` (2 Oktober)
 
@@ -1393,6 +1405,24 @@ lebar layar, untuk `/`, `/seminyak/`, dan outcall.
   yang memakai komponen itu masih H4. Kalau nanti semua halaman diubah, cukup
   balik default prop-nya. Ketiga halaman sudah dicek: 0 beda di 12 lebar
   layar.
+- **Sisa heading, putaran 2 (5 Oktober).** Pemilik minta: "perbaiki kecuali
+  footer dan faq di / dan /seminyak", blog tidak termasuk.
+  - Nama reviewer di semua halaman treatment, Kuta, dan Villa menjadi
+    `div.look-h4`. Prop `namesAsHeadings` di `TreatmentTestimonials`
+    dihapus.
+  - Label funfact (`Funfacts.tsx`: treatment, Kuta, Villa, outcall) menjadi
+    `div.title.look-h3`.
+  - Teks di atas foto FAQ (`FaqSection.tsx`) menjadi `div.look-h2`, kecuali
+    di `/seminyak/` (prop `imageTitleAsHeading`). FAQ beranda (`home/Faq.tsx`)
+    tidak diubah.
+  - Couple-spa: durasi di bawah judul grup naik dari H3 ke H4 (`h4.look-h3`,
+    `SessionOptions.tsx`). Halaman lain yang tidak memakai grup tetap H3.
+  - Footer tetap H3.
+  - Sudah dicek: 0 beda gaya dan posisi di 12 lebar layar untuk `/`,
+    `/seminyak/`, outcall, Kuta, Villa, couple-spa, day-spa, balinese, dan
+    contact. Dari 42 halaman, 33 sudah bersih. Sisanya 7 artikel blog (H3
+    judul duplikat) serta dua H2 di FAQ `/` dan `/seminyak/`, yang memang
+    sengaja dibiarkan.
 
 ## Draf: beranda v2 di `/home-v2/` (30 September)
 

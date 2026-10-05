@@ -27,6 +27,7 @@ export default function FaqSection({
   largeTopPadding = false,
   removeTopPadding = false,
   paperDecoration = false,
+  imageTitleAsHeading = false,
 }: {
   imageTitle?: string;
   subTitle?: string;
@@ -38,6 +39,9 @@ export default function FaqSection({
   largeTopPadding?: boolean;
   removeTopPadding?: boolean;
   paperDecoration?: boolean;
+  /** The words on the photo are a <div class="look-h2"> (same look), so the
+   *  section has one H2 (owner, 5 Oct); `true` keeps them an h2, as /seminyak/. */
+  imageTitleAsHeading?: boolean;
 }) {
   const twoColumns = columns === 2;
   const half = Math.ceil(items.length / 2);
@@ -55,7 +59,11 @@ export default function FaqSection({
             <div className={`${S} col-xxl-6 image-column`}>
               <div className={`${S} inner-column gsap__parallax`}>
                 <img loading="lazy" decoding="async" src={image} alt="Spa facial treatment" className={S} />
-                <h2 className={`${S} title`}>{imageTitle}</h2>
+                {imageTitleAsHeading ? (
+                  <h2 className={`${S} title`}>{imageTitle}</h2>
+                ) : (
+                  <div className={`${S} title look-h2`}>{imageTitle}</div>
+                )}
               </div>
             </div>
           )}
