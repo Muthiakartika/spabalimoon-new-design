@@ -94,8 +94,8 @@ export default function HomeServiceInfo({ plain = false }: HomeServiceInfoProps)
       </div>
       <div className="container">
         <div className="section-header center mb-60">
-          <h4
-            className="sub-title"
+          <div
+            className="sub-title look-h4"
             style={{
               display: "flex",
               justifyContent: "center",
@@ -104,7 +104,7 @@ export default function HomeServiceInfo({ plain = false }: HomeServiceInfoProps)
             }}
           >
             {brandMark}Treat yourself to a Balinese spa experience right where you are
-          </h4>
+          </div>
           <h2
             className="title"
             style={{
@@ -183,17 +183,18 @@ export default function HomeServiceInfo({ plain = false }: HomeServiceInfoProps)
                         {lotusIcon}
                       </span>
                       <div>
-                        <h5
+                        <h3
                           style={{
                             marginBottom: "6px",
                             fontWeight: "500",
                             color: "#1c1a1d",
                             fontSize: "20px",
+                            lineHeight: "30px",
                             fontFamily: "var(--title-font)",
                           }}
                         >
                           {e.title}
-                        </h5>
+                        </h3>
                         <p
                           className="text"
                           style={{
@@ -218,9 +219,10 @@ export default function HomeServiceInfo({ plain = false }: HomeServiceInfoProps)
                   paddingTop: "25px",
                 }}
               >
-                <h5
+                <h3
                   style={{
                     fontSize: "20px",
+                    lineHeight: "30px",
                     fontWeight: "500",
                     color: "#1c1a1d",
                     fontFamily: "var(--title-font)",
@@ -237,7 +239,7 @@ export default function HomeServiceInfo({ plain = false }: HomeServiceInfoProps)
                     IDR 75,000
                   </span>
                   {" per therapist"}
-                </h5>
+                </h3>
               </div>
             </div>
           </div>

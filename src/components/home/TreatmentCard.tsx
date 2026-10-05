@@ -19,7 +19,7 @@ export default function TreatmentCard({ name, href, image, icon, desc, price }: 
             {name}
           </Link>
         </h3>
-        {price && <h6 className="v2-treat__price">{price}</h6>}
+        {price && <div className="v2-treat__price look-h6">{price}</div>}
         <p className="v2-treat__text">{desc}</p>
         {/* The hidden words make the link text say where it goes (search
             engines and Lighthouse flag a bare "Learn More"). */}

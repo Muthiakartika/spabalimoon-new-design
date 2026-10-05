@@ -65,10 +65,10 @@ export default function About({ subTitle }: { subTitle?: string } = {}) {
             <div className="jsx-about col-xl-6 content-column">
               <div className="jsx-about inner-column">
                 <div className="jsx-about section-header">
-                  <h4 data-wow-delay="00ms" data-wow-duration="1500ms" className="jsx-about sub-title wow fadeInUp">
+                  <div data-wow-delay="00ms" data-wow-duration="1500ms" className="jsx-about sub-title look-h4 wow fadeInUp">
                     <LotusIcon className="icon" scope="jsx-about" />
                     {subTitle ?? about.subTitle}
-                  </h4>
+                  </div>
                   <h2 data-wow-delay="200ms" data-wow-duration="1500ms" className="jsx-about title wow fadeInUp">
                     {about.title}
                   </h2>

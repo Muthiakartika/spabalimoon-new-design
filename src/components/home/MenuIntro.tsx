@@ -36,7 +36,7 @@ export default function MenuIntro<T extends string = CatalogCategory>({
   return (
     <>
       <div className="jsx-catalog section-header mb-60 center">
-        <h4 className="jsx-catalog sub-title">{subTitle ?? text.subTitle}</h4>
+        <div className="jsx-catalog sub-title look-h4">{subTitle ?? text.subTitle}</div>
         <h2 className="jsx-catalog title">{title ?? text.title}</h2>
       </div>
       <div aria-label="Home service fee" className="jsx-catalog treatment-catalog__fee">

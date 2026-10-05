@@ -50,7 +50,8 @@ export default function PrivacyPolicyPage() {
                   you visit our spa or request home service treatments.
                 </p>
                 <div className="mb-40">
-                  <h3
+                  <h2
+                    className="look-h3"
                     style={{
                       fontFamily: "var(--title-font)",
                       fontSize: "26px",
@@ -67,7 +68,7 @@ export default function PrivacyPolicyPage() {
                       style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     Information We Collect
-                  </h3>
+                  </h2>
                   <p
                     style={{ fontFamily: "var(--text-font)", fontSize: "15px", color: "#707070", marginBottom: "15px" }}
                   >
@@ -135,7 +136,8 @@ export default function PrivacyPolicyPage() {
                   </p>
                 </div>
                 <div className="mb-40">
-                  <h3
+                  <h2
+                    className="look-h3"
                     style={{
                       fontFamily: "var(--title-font)",
                       fontSize: "26px",
@@ -152,7 +154,7 @@ export default function PrivacyPolicyPage() {
                       style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     How We Use Your Information
-                  </h3>
+                  </h2>
                   <p
                     style={{ fontFamily: "var(--text-font)", fontSize: "15px", color: "#707070", marginBottom: "15px" }}
                   >
@@ -240,7 +242,8 @@ export default function PrivacyPolicyPage() {
                   </ul>
                 </div>
                 <div className="mb-40">
-                  <h3
+                  <h2
+                    className="look-h3"
                     style={{
                       fontFamily: "var(--title-font)",
                       fontSize: "26px",
@@ -257,7 +260,7 @@ export default function PrivacyPolicyPage() {
                       style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     Data Protection
-                  </h3>
+                  </h2>
                   <p style={{ fontFamily: "var(--text-font)", fontSize: "15px", lineHeight: "1.75", color: "#5f5a54" }}>
                     We implement physical, electronic, and managerial safeguards to protect your information against
                     unauthorized access, misuse, or disclosure. While we strive to maintain high standards of security,
@@ -265,7 +268,8 @@ export default function PrivacyPolicyPage() {
                   </p>
                 </div>
                 <div className="mb-40">
-                  <h3
+                  <h2
+                    className="look-h3"
                     style={{
                       fontFamily: "var(--title-font)",
                       fontSize: "26px",
@@ -282,7 +286,7 @@ export default function PrivacyPolicyPage() {
                       style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     Sharing of Information
-                  </h3>
+                  </h2>
                   <p
                     style={{ fontFamily: "var(--text-font)", fontSize: "15px", color: "#707070", marginBottom: "15px" }}
                   >
@@ -334,7 +338,8 @@ export default function PrivacyPolicyPage() {
                   </ul>
                 </div>
                 <div className="mb-40">
-                  <h3
+                  <h2
+                    className="look-h3"
                     style={{
                       fontFamily: "var(--title-font)",
                       fontSize: "26px",
@@ -351,7 +356,7 @@ export default function PrivacyPolicyPage() {
                       style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     Home Service Privacy
-                  </h3>
+                  </h2>
                   <p
                     style={{ fontFamily: "var(--text-font)", fontSize: "15px", color: "#707070", marginBottom: "15px" }}
                   >
@@ -402,7 +407,8 @@ export default function PrivacyPolicyPage() {
                   </ul>
                 </div>
                 <div className="mb-40">
-                  <h3
+                  <h2
+                    className="look-h3"
                     style={{
                       fontFamily: "var(--title-font)",
                       fontSize: "26px",
@@ -419,7 +425,7 @@ export default function PrivacyPolicyPage() {
                       style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     Your Rights
-                  </h3>
+                  </h2>
                   <p
                     style={{ fontFamily: "var(--text-font)", fontSize: "15px", color: "#707070", marginBottom: "15px" }}
                   >
@@ -489,7 +495,8 @@ export default function PrivacyPolicyPage() {
                     border: "1px solid rgba(232, 227, 218, 0.8)",
                   }}
                 >
-                  <h4
+                  <div
+                    className="look-h4"
                     style={{
                       fontFamily: "var(--title-font)",
                       fontSize: "20px",
@@ -505,14 +512,15 @@ export default function PrivacyPolicyPage() {
                       style={{ color: "var(--theme-color1)", marginRight: "10px", fontSize: "22px" }}
                     />
                     Hours of Operation
-                  </h4>
+                  </div>
                   <p style={{ fontFamily: "var(--text-font)", fontSize: "15px", color: "#5f5a54", margin: 0 }}>
                     {"Spa Bali Moon operates daily from "}
                     <strong>9:00 AM to 11:00 PM</strong>, offering both in‑spa and home service treatments.
                   </p>
                 </div>
                 <div style={{ borderTop: "1px solid rgba(95, 90, 84, 0.12)", paddingTop: "40px" }}>
-                  <h3
+                  <h2
+                    className="look-h3"
                     style={{
                       fontFamily: "var(--title-font)",
                       fontSize: "26px",
@@ -529,7 +537,7 @@ export default function PrivacyPolicyPage() {
                       style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     Contact Us
-                  </h3>
+                  </h2>
                   <p
                     style={{ fontFamily: "var(--text-font)", fontSize: "15px", color: "#707070", marginBottom: "25px" }}
                   >
@@ -555,11 +563,12 @@ export default function PrivacyPolicyPage() {
                           <i className="fa-light fa-envelope" />
                         </div>
                         <div>
-                          <h6
+                          <div
+                            className="look-h6"
                             style={{ fontFamily: "var(--title-font)", margin: 0, fontSize: "14px", color: "#1c1a1d" }}
                           >
                             Email
-                          </h6>
+                          </div>
                           <a
                             href="mailto:spabalimoon@gmail.com"
                             style={{ fontFamily: "var(--text-font)", fontSize: "14px", color: "#707070" }}
@@ -587,11 +596,12 @@ export default function PrivacyPolicyPage() {
                           <i className="fa-brands fa-whatsapp" />
                         </div>
                         <div>
-                          <h6
+                          <div
+                            className="look-h6"
                             style={{ fontFamily: "var(--title-font)", margin: 0, fontSize: "14px", color: "#1c1a1d" }}
                           >
                             WhatsApp
-                          </h6>
+                          </div>
                           <a
                             href="https://wa.me/6287863175144"
                             target="_blank"
@@ -621,11 +631,12 @@ export default function PrivacyPolicyPage() {
                           <i className="fa-light fa-location-dot" />
                         </div>
                         <div>
-                          <h6
+                          <div
+                            className="look-h6"
                             style={{ fontFamily: "var(--title-font)", margin: 0, fontSize: "14px", color: "#1c1a1d" }}
                           >
                             Address
-                          </h6>
+                          </div>
                           <span style={{ fontFamily: "var(--text-font)", fontSize: "14px", color: "#707070" }}>
                             Jl. Pangkung Sari No. 30, Seminyak, Bali
                           </span>

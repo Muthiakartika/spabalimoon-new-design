@@ -102,7 +102,7 @@ export default function ContactSection({
                       <i className={`jsx-contact fa-classic fa-light ${item.icon} fa-fw`} />
                     </span>
                     <div className="jsx-contact">
-                      <h6 className="jsx-contact">{item.title}</h6>
+                      <h3 className="jsx-contact">{item.title}</h3>
                       {item.href ? (
                         <a href={item.href} className="jsx-contact">
                           {item.text}

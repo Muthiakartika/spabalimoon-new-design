@@ -25,10 +25,10 @@ export default function AllTreatmentsSlider({
     <section className="v2-popular v2-alltreat">
       <div className="container">
         <div className="section-header center mb-60">
-          <h4 className="sub-title">
+          <div className="sub-title look-h4">
             <LotusIcon className="icon" />
             {subTitle}
-          </h4>
+          </div>
           <h2 className="title">{title}</h2>
           <p>{text}</p>
         </div>

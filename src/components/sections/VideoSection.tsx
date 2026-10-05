@@ -69,9 +69,9 @@ export default function VideoSection(p: VideoSectionProps) {
       </div>
       <div className="container">
         <div className="section-header mb-60 center">
-          <h4 className="sub-title wow fadeInUp" data-wow-delay="00ms" data-wow-duration="1500ms">
+          <div className="sub-title look-h4 wow fadeInUp" data-wow-delay="00ms" data-wow-duration="1500ms">
             {p.topSubTitle}
-          </h4>
+          </div>
           <h2 className="title wow fadeInUp" data-wow-delay="200ms" data-wow-duration="1500ms">
             {p.topTitle}
           </h2>
@@ -83,9 +83,9 @@ export default function VideoSection(p: VideoSectionProps) {
           <div className="col-lg-6 video-column">
             <div className="inner-box">
               <div className="section-header mb-30">
-                <h4 className="sub-title wow fadeInUp" data-wow-delay="300ms" data-wow-duration="1500ms">
+                <div className="sub-title look-h4 wow fadeInUp" data-wow-delay="300ms" data-wow-duration="1500ms">
                   {p.contentSubTitle}
-                </h4>
+                </div>
                 <h2 className="title wow fadeInUp" data-wow-delay="400ms" data-wow-duration="1500ms">
                   {p.contentTitle}
                 </h2>

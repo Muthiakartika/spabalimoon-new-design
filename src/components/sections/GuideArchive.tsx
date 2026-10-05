@@ -44,13 +44,13 @@ export default function GuideArchive({ posts }: { posts: PostSummary[] }) {
                         </div>
                       </div>
                       <div className="content-box">
-                        <h6 className="info">
+                        <div className="info look-h6">
                           <span>{post.author || "Admin"}</span>
                           {post.category ? <span className="dot">{post.category}</span> : null}
-                        </h6>
-                        <h4 className="title">
+                        </div>
+                        <h2 className="title look-h4">
                           <Link href={href}>{post.title}</Link>
-                        </h4>
+                        </h2>
                         {/* The hidden title makes the link text say which
                             article it opens (a bare "Read More" is flagged). */}
                         <Link className="readMore-btn" href={href}>

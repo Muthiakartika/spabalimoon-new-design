@@ -23,10 +23,10 @@ export default function WhyDifferent() {
           <div className="v2-why__grid">
             <div className="v2-why__intro">
               <div className="section-header">
-                <h4 className="sub-title">
+                <div className="sub-title look-h4">
                   <LotusIcon className="icon" />
                   {services.subTitle}
-                </h4>
+                </div>
                 <h2 className="title">{services.title}</h2>
                 <p className="text">{about.brandMark.text}</p>
               </div>
@@ -41,11 +41,11 @@ export default function WhyDifferent() {
                   <div className="inner-box">
                     <div className="icon-box">{ICON_BOXES[i]}</div>
                     <div className="v2-why__body">
-                      <h4 className="title">
+                      <div className="title look-h4">
                         <Link prefetch={false} href={s.href}>
                           {s.title}
                         </Link>
-                      </h4>
+                      </div>
                       <p className="text">{s.text}</p>
                     </div>
                   </div>

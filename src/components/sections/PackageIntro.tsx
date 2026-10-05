@@ -22,9 +22,9 @@ export default function PackageIntro({
       <div className="container">
         <div style={{ maxWidth: "820px", margin: "0 auto", textAlign: "center" }}>
           {intro.subTitle && (
-            <h4 className="sub-title wow fadeInUp" data-wow-delay="00ms" data-wow-duration="1500ms">
+            <div className="sub-title look-h4 wow fadeInUp" data-wow-delay="00ms" data-wow-duration="1500ms">
               {intro.subTitle}
-            </h4>
+            </div>
           )}
           <h2 className="title wow fadeInUp" data-wow-delay="200ms" data-wow-duration="1500ms" style={{ marginBottom: 0 }}>
             {intro.title}

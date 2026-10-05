@@ -77,10 +77,10 @@ export default function Steps() {
       </div>
       <div className="container">
         <div className="section-header center mb-60">
-          <h4 className="sub-title wow fadeInUp" data-wow-delay="00ms" data-wow-duration="1500ms">
+          <div className="sub-title look-h4 wow fadeInUp" data-wow-delay="00ms" data-wow-duration="1500ms">
             <LotusIcon className="icon" />
             {steps.subTitle}
-          </h4>
+          </div>
           <h2 className="title wow fadeInUp" data-wow-delay="200ms" data-wow-duration="1500ms">
             {steps.title}
           </h2>
@@ -95,7 +95,7 @@ export default function Steps() {
                 {/* The live site marks the middle step as the highlighted one. */}
                 <div className={`inner-box hover-item${i === 1 ? " active" : ""}`}>
                   <div className="icon-box">
-                    <h6 className="number">{String(i + 1).padStart(2, "0")}</h6>
+                    <div className="number look-h6">{String(i + 1).padStart(2, "0")}</div>
                     <IconBackground />
                     {STEP_ICONS[i]}
                   </div>

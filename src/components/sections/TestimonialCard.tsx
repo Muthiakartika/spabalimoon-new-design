@@ -26,7 +26,7 @@ export default function TestimonialCard({
       </div>
       <ReviewText text={testimonial.text} onExpandChange={onExpandChange} onMeasure={onMeasure} />
       <div className="info">
-        <h4>{testimonial.name}</h4>
+        <div className="look-h4">{testimonial.name}</div>
         <span>Customer review</span>
         <div className="star">
           {[0, 1, 2, 3, 4].map((s) => (

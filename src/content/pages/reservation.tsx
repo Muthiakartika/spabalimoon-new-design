@@ -48,7 +48,9 @@ function Option({
         style={{ margin: "0 auto" }}
       >
         <div className="section-header">
-          <h3 style={{ marginBottom: "10px" }}>{title}</h3>
+          <h2 className="look-h3" style={{ marginBottom: "10px" }}>
+            {title}
+          </h2>
           <p style={{ color: "var(--theme-color1)", marginBottom: "30px" }}>{tagline}</p>
         </div>
         <div className="list mt-25">
@@ -59,7 +61,9 @@ function Option({
                   <LotusIcon className="brand-lotus-icon-svg" />
                 </span>
                 <div>
-                  <h5 style={{ marginBottom: "5px" }}>{item.title}</h5>
+                  <h3 className="look-h5" style={{ marginBottom: "5px" }}>
+                    {item.title}
+                  </h3>
                   <p className="text" style={{ margin: 0 }}>
                     {item.text}
                   </p>
@@ -73,7 +77,12 @@ function Option({
   );
 }
 
-/** /reservation/ — the live page: one "Book Your Treatment" band (it has no banner and no H1, as live). */
+/**
+ * /reservation/ — the live page: one "Book Your Treatment" band, no banner.
+ * Live has no H1; since 5 October (owner) the band title is the H1, the two
+ * booking routes H2 and their points H3, each keeping its old heading look
+ * (look-h2/h3/h5 in src/styles/custom.css).
+ */
 export default function ReservationPage() {
   return (
     <div className="page-wrapper lh p-reservation">
@@ -92,13 +101,13 @@ export default function ReservationPage() {
         </div>
         <div className="container">
           <div className="section-header center mb-60">
-            <h4 className="sub-title wow fadeInUp" data-wow-delay="00ms" data-wow-duration="1500ms">
+            <div className="sub-title look-h4 wow fadeInUp" data-wow-delay="00ms" data-wow-duration="1500ms">
               <LotusIcon className="brand-lotus-icon-svg" />
               Your Spa Experience is One Click Away
-            </h4>
-            <h2 className="title wow fadeInUp" data-wow-delay="200ms" data-wow-duration="1500ms" style={{ marginBottom: "20px" }}>
+            </div>
+            <h1 className="title look-h2 wow fadeInUp" data-wow-delay="200ms" data-wow-duration="1500ms" style={{ marginBottom: "20px" }}>
               Book Your Treatment
-            </h2>
+            </h1>
             <p
               className="text wow fadeInUp"
               data-wow-delay="400ms"

@@ -49,7 +49,8 @@ export default function TermsPage() {
                   agree to comply with and be bound by the following terms and conditions. Please read them carefully.
                 </p>
                 <div className="mb-40">
-                  <h3
+                  <h2
+                    className="look-h3"
                     style={{
                       fontFamily: "var(--title-font)",
                       fontSize: "26px",
@@ -66,7 +67,7 @@ export default function TermsPage() {
                       style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     Spa Etiquette
-                  </h3>
+                  </h2>
                   <p style={{ fontFamily: "var(--text-font)", fontSize: "15px", color: "#5f5a54", lineHeight: "1.75" }}>
                     Our spa warmly welcomes guests of all genders aged 18 and above. Visitors between 16–18 years may
                     join with written parental consent, while children under 16 must be accompanied by a parent
@@ -74,7 +75,8 @@ export default function TermsPage() {
                   </p>
                 </div>
                 <div className="mb-40">
-                  <h3
+                  <h2
+                    className="look-h3"
                     style={{
                       fontFamily: "var(--title-font)",
                       fontSize: "26px",
@@ -91,7 +93,7 @@ export default function TermsPage() {
                       style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     {"Bookings & Arrival"}
-                  </h3>
+                  </h2>
                   <p style={{ fontFamily: "var(--text-font)", fontSize: "15px", color: "#5f5a54", lineHeight: "1.75" }}>
                     We recommend arriving at least 12 minutes before your scheduled appointment. This allows time for a
                     short consultation to understand your treatment goals. Please note that late arrivals may shorten
@@ -99,7 +101,8 @@ export default function TermsPage() {
                   </p>
                 </div>
                 <div className="mb-40">
-                  <h3
+                  <h2
+                    className="look-h3"
                     style={{
                       fontFamily: "var(--title-font)",
                       fontSize: "26px",
@@ -116,7 +119,7 @@ export default function TermsPage() {
                       style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     Maintaining Serenity
-                  </h3>
+                  </h2>
                   <p
                     style={{ fontFamily: "var(--text-font)", fontSize: "15px", color: "#707070", marginBottom: "15px" }}
                   >
@@ -181,7 +184,8 @@ export default function TermsPage() {
                   </ul>
                 </div>
                 <div className="mb-40">
-                  <h3
+                  <h2
+                    className="look-h3"
                     style={{
                       fontFamily: "var(--title-font)",
                       fontSize: "26px",
@@ -198,7 +202,7 @@ export default function TermsPage() {
                       style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     {"Respect & Professional Conduct"}
-                  </h3>
+                  </h2>
                   <p style={{ fontFamily: "var(--text-font)", fontSize: "15px", color: "#5f5a54", lineHeight: "1.75" }}>
                     We uphold a strict zero‑tolerance policy against inappropriate behavior, including harassment of
                     therapists or staff. Should such conduct occur, the treatment will be stopped immediately and the
@@ -206,7 +210,8 @@ export default function TermsPage() {
                   </p>
                 </div>
                 <div className="mb-40">
-                  <h3
+                  <h2
+                    className="look-h3"
                     style={{
                       fontFamily: "var(--title-font)",
                       fontSize: "26px",
@@ -223,7 +228,7 @@ export default function TermsPage() {
                       style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     {"Cancellation & Rescheduling"}
-                  </h3>
+                  </h2>
                   <p style={{ fontFamily: "var(--text-font)", fontSize: "15px", color: "#5f5a54", lineHeight: "1.75" }}>
                     Appointments may be canceled or rescheduled up to 12 hours in advance without penalty. Cancellations
                     made within 12 hours will incur a 50% fee, while no‑shows are charged the full treatment cost or
@@ -231,7 +236,8 @@ export default function TermsPage() {
                   </p>
                 </div>
                 <div className="mb-40">
-                  <h3
+                  <h2
+                    className="look-h3"
                     style={{
                       fontFamily: "var(--title-font)",
                       fontSize: "26px",
@@ -248,7 +254,7 @@ export default function TermsPage() {
                       style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     Home Service Transport
-                  </h3>
+                  </h2>
                   <p style={{ fontFamily: "var(--text-font)", fontSize: "15px", color: "#5f5a54", lineHeight: "1.75" }}>
                     For home service treatments, a transport fee of 75k applies to accommodations within Seminyak. Fees
                     for locations outside Seminyak vary depending on distance and travel time, and can be confirmed via
@@ -256,7 +262,8 @@ export default function TermsPage() {
                   </p>
                 </div>
                 <div className="mb-40">
-                  <h3
+                  <h2
+                    className="look-h3"
                     style={{
                       fontFamily: "var(--title-font)",
                       fontSize: "26px",
@@ -273,7 +280,7 @@ export default function TermsPage() {
                       style={{ color: "var(--theme-color1)", fontSize: "28px", width: "32px", textAlign: "center" }}
                     />
                     Liability
-                  </h3>
+                  </h2>
                   <p style={{ fontFamily: "var(--text-font)", fontSize: "15px", color: "#5f5a54", lineHeight: "1.75" }}>
                     Spa Bali Moon is not responsible for any accidents, injuries, or health issues that may occur during
                     or after treatments.
@@ -288,7 +295,8 @@ export default function TermsPage() {
                     border: "1px solid rgba(232, 227, 218, 0.8)",
                   }}
                 >
-                  <h4
+                  <div
+                    className="look-h4"
                     style={{
                       fontFamily: "var(--title-font)",
                       fontSize: "20px",
@@ -304,7 +312,7 @@ export default function TermsPage() {
                       style={{ color: "var(--theme-color1)", marginRight: "10px", fontSize: "22px" }}
                     />
                     Hours of Operation
-                  </h4>
+                  </div>
                   <p style={{ fontFamily: "var(--text-font)", fontSize: "15px", color: "#5f5a54", margin: 0 }}>
                     {"We are open daily from "}
                     <strong>9:00 AM to 11:00 PM</strong>, seven days a week.

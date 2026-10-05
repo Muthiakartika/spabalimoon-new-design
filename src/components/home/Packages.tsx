@@ -21,10 +21,10 @@ export default function Packages() {
         <div className="container">
           <div className="v2-split-head">
             <div className="section-header">
-              <h4 className="sub-title">
+              <div className="sub-title look-h4">
                 <LotusIcon className="icon" />
                 {packages.subTitle}
-              </h4>
+              </div>
               <h2 className="title">{packages.title}</h2>
             </div>
             <div className="v2-split-head__aside">
@@ -43,12 +43,12 @@ export default function Packages() {
                     <img loading="lazy" decoding="async" src="/images/pricing/shape.png" alt="" />
                   </div>
                   <div className="icon">{PACKAGE_ICONS[i]}</div>
-                  <h4>
+                  <div className="look-h4">
                     {`${card.treatment} `}
                     <br />
                     {` ${card.name}`}
-                  </h4>
-                  <h2 className="price">{card.price}</h2>
+                  </div>
+                  <div className="price look-h2">{card.price}</div>
                   <ul>
                     {card.items.map(([duration, service]) => (
                       <li key={service}>
