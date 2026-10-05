@@ -17,6 +17,7 @@ export type GuidePostSummary = {
 };
 
 export type GuidePostFull = GuidePostSummary & {
+  heading?: string | null;
   content_html: string;
   tags?: string[] | null;
   [key: string]: unknown;
@@ -109,7 +110,8 @@ export default function GuidePost({
                       </li>
                     )}
                   </ul>
-                  <h3 className={`${S} blog-details__title`}>{post.title}</h3>
+                  {/* h2 under the banner's h1 (owner, 5 Oct: heading order); look-h3 keeps the old h3 look. */}
+                  <h2 className={`${S} blog-details__title look-h3`}>{post.heading || post.title}</h2>
                   <div dangerouslySetInnerHTML={{ __html: post.content_html || "" }} className={`${S} blog-details__rich`} />
                 </div>
                 {tags.length > 0 && (

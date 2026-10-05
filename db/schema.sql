@@ -23,6 +23,10 @@ create table if not exists posts (
     updated_at timestamptz default now()
 );
 
+-- The heading above the article body, when it should differ from the title
+-- (owner, 5 Oct 2026). Empty: the title is shown. Not in the live table.
+alter table posts add column if not exists heading text;
+
 -- The public list: published articles, newest first.
 create index if not exists posts_status_published_idx
     on posts (status, published_at desc);

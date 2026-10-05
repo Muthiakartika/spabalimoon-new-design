@@ -18,6 +18,7 @@ const RichTextEditor = dynamic(() => import("./RichTextEditor"), {
 
 type Fields = {
   title: string;
+  heading: string;
   slug: string;
   excerpt: string;
   category: string;
@@ -31,6 +32,7 @@ type Fields = {
 
 const fieldsOf = (post: Post | null): Fields => ({
   title: post?.title || "",
+  heading: post?.heading || "",
   slug: post?.slug || "",
   excerpt: post?.excerpt || "",
   category: post?.category || "",
@@ -47,6 +49,7 @@ const fieldsOfDraft = (saved: Record<string, unknown>): Fields => {
   const s = (key: string, fallback = "") => (typeof saved[key] === "string" ? (saved[key] as string) : fallback);
   return {
     title: s("title"),
+    heading: s("heading"),
     slug: s("slug"),
     excerpt: s("excerpt"),
     category: s("category"),
@@ -213,6 +216,7 @@ export default function PostEditor({ initialPost, setup }: { initialPost: Post |
     setError("");
     const payload = {
       title: fields.title.trim(),
+      heading: fields.heading.trim(),
       slug: fields.slug.trim(),
       excerpt: fields.excerpt,
       category: fields.category,
@@ -305,6 +309,19 @@ export default function PostEditor({ initialPost, setup }: { initialPost: Post |
             onChange={(e) => onTitleChange(e.target.value)}
             placeholder="Article title"
           />
+          <p className="pe-hint">The banner at the top, the blog list, the menu and the sidebar.</p>
+
+          <label className="pe-label" htmlFor="pe-heading">
+            Article Heading
+          </label>
+          <input
+            id="pe-heading"
+            className="pe-input"
+            value={fields.heading}
+            onChange={(e) => set("heading", e.target.value)}
+            placeholder={fields.title || "Default: article title"}
+          />
+          <p className="pe-hint">The heading under the date, above the content. Leave empty to repeat the title.</p>
 
           <label className="pe-label" htmlFor="pe-slug">
             Slug (URL)
