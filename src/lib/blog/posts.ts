@@ -1,5 +1,6 @@
 import { cache } from "react";
 import seedPosts from "@/data/guide/seed-posts.json";
+import { blogMenuHidden } from "@/data/navigation";
 import { getSql, isDatabaseConfigured, toTimestamp } from "./db";
 import type { Post, PostInput, PostRow, PostSummary } from "./types";
 
@@ -78,7 +79,28 @@ export async function getMenuPosts(): Promise<Pick<Post, "id" | "slug" | "title"
   return rows as Pick<Post, "id" | "slug" | "title">[];
 }
 
-type SearchHit = Pick<Post, "id" | "slug" | "title" | "excerpt" | "cover_image" | "author" | "published_at">;
+export type BlogMenuPost = Pick<Post, "slug" | "title" | "cover_image">;
+
+/**
+ * The header's blog menu (desktop dropdown and mobile panel): the 12 newest
+ * articles with their covers, without the ones the owner keeps out of the
+ * menu (blogMenuHidden in navigation.ts).
+ */
+export async function getBlogMenu(): Promise<BlogMenuPost[]> {
+  if (!isDatabaseConfigured()) {
+    return seedPublished()
+      .filter((p) => !blogMenuHidden.includes(p.slug))
+      .slice(0, 12)
+      .map(({ slug, title, cover_image }) => ({ slug, title, cover_image }));
+  }
+  const rows = await getSql()`
+    SELECT slug, title, cover_image FROM posts
+    WHERE status = 'published' AND NOT (slug = ANY(${blogMenuHidden}))
+    ORDER BY published_at DESC LIMIT 12`;
+  return rows as BlogMenuPost[];
+}
+
+type SearchHit =Pick<Post, "id" | "slug" | "title" | "excerpt" | "cover_image" | "author" | "published_at">;
 
 /** Published articles whose title or excerpt contains `query` (case-insensitive), at most 10. */
 export async function searchPublishedPosts(query: string): Promise<SearchHit[]> {

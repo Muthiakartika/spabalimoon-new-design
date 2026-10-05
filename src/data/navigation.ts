@@ -15,7 +15,7 @@ export type NavItem = {
   href: string;
 };
 
-/** A header item. `dropdown` names the list it opens (see treatmentMenu / blogMenu below). */
+/** A header item. `dropdown` names the list it opens (see treatmentMenu / blogMenuHidden below). */
 export type MainNavItem = NavItem & { dropdown?: "treatments" | "blog" };
 
 /** Main menu (desktop header and mobile menu), in the live website's order. */
@@ -61,19 +61,13 @@ export const treatmentMenu: (NavItem & { keywords: string })[] = [
 ];
 
 /**
- * Blog dropdown: the live site's list of articles, in its order and wording,
- * without "IV Drip Therapy in Bali" (/guide/iv-drip/), which the owner took
- * out of the menu on 2 Oct ("we can take that one out of the menu"). The
+ * Blog dropdown: the articles come from the blog database with the titles set
+ * in /admin/, newest first (getBlogMenu in src/lib/blog/posts.ts). These slugs
+ * stay out of it: "IV Drip Therapy in Bali" (/guide/iv-drip/), which the owner
+ * took out of the menu on 2 Oct ("we can take that one out of the menu"). The
  * article itself stays, on /guide/, in search and in the sitemap.
  */
-export const blogMenu: NavItem[] = [
-  { label: "A Guide To Lymphatic Drainage Massage", href: "/guide/lymphatic-drainage-massage-benefits-techniques-what-to-expect/" },
-  { label: "What Is a Balinese Massage? A Complete Guide for First Timer", href: "/guide/what-is-a-balinese-massage/" },
-  { label: "Thai Massage Benefits & Techniques Explained", href: "/guide/what-is-thai-massage/" },
-  { label: "Facial Massage Benefits for Modern Self‑Care", href: "/guide/understanding-of-facial-massage/" },
-  { label: "Slimming Massage Benefits & How It Works", href: "/guide/understanding-slimming-massage/" },
-  { label: "Best Massages for Jet Lag Recovery After a Long Flight", href: "/guide/best-massages-after-a-long-flight/" },
-];
+export const blogMenuHidden: string[] = ["iv-drip"];
 
 /* ---------------------------------- Footer --------------------------------- */
 

@@ -113,7 +113,10 @@ export default function MobileMenu({
             className={`mnav__entry mnav__entry--${kind}`}
           >
             <span className="mnav__thumb">
-              {opened && entry.image && <Image src={entry.image} alt="" fill sizes="72px" />}
+              {/* A cover uploaded in /admin/ lives on another host (R2), which the optimiser does not allow. */}
+              {opened && entry.image && (
+                <Image src={entry.image} alt="" fill sizes="72px" unoptimized={!entry.image.startsWith("/")} />
+              )}
             </span>
             <span className="mnav__entry-text">
               <span className="mnav__entry-name">{entry.label}</span>

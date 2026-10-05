@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { blogMenu, treatmentMenu, treatmentMenuColumns } from "@/data/navigation";
+import type { MobileMenuEntry } from "@/components/layout/mobileMenuData";
+import { treatmentMenu, treatmentMenuColumns } from "@/data/navigation";
 
 const strip = (path: string) => path.replace(/\/$/, "") || "/";
 
@@ -10,10 +11,11 @@ const strip = (path: string) => path.replace(/\/$/, "") || "/";
  * Desktop menu with the treatments mega menu and the blog dropdown — the live
  * markup, class for class (`jsx-nav` is the live styled-jsx scope).
  *
- * The live site fetches the blog list after hydration; here it is rendered on
- * the server from the same data, so the links are in the HTML from the start.
+ * The live site fetches the blog list after hydration; here `posts` (the blog
+ * menu from the database, read by the server) is rendered with the page, so
+ * the links are in the HTML from the start.
  */
-export default function MainMenu() {
+export default function MainMenu({ posts }: { posts: MobileMenuEntry[] }) {
   const current = strip(usePathname() || "/");
   const isCurrent = (href: string) => current === strip(href);
   const inTreatments = treatmentMenu.some((t) => isCurrent(t.href));
@@ -69,7 +71,7 @@ export default function MainMenu() {
           Blog <i className="jsx-nav fa-solid fa-angle-down" />
         </Link>
         <ul className="jsx-nav sub-menu blog-dropdown-menu">
-          {blogMenu.map((post) => (
+          {posts.map((post) => (
             <li key={post.href} className="jsx-nav">
               <Link prefetch={false} href={post.href}>
                 {post.label}

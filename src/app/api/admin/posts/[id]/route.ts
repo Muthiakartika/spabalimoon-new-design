@@ -1,7 +1,7 @@
 import { isDatabaseConfigured } from "@/lib/blog/db";
 import { readPostInput } from "@/lib/blog/input";
 import { deletePost, ensureUniqueSlug, getPostById, isPostId, updatePost } from "@/lib/blog/posts";
-import { refreshGuidePages } from "@/lib/blog/refresh";
+import { readBlogMenu, refreshGuidePages } from "@/lib/blog/refresh";
 import { denyUnlessAdmin } from "@/lib/blog/session";
 import { DATABASE_MISSING } from "@/lib/blog/setup";
 
@@ -50,14 +50,15 @@ export async function PUT(request: Request, context: Context) {
     const slug = await ensureUniqueSlug(input.slug, id);
     // Keep the first publish date; a draft has none.
     const publishedAt = input.status === "published" ? existing.published_at || new Date().toISOString() : null;
+    // Only a draft staying a draft changes nothing public.
+    const isPublic = input.status === "published" || existing.status === "published";
+    const menuBefore = isPublic ? await readBlogMenu() : null;
     const post = await updatePost(id, { ...input, slug }, publishedAt);
     if (!post) return notFound();
 
-    // Only a draft staying a draft changes nothing public.
-    const cache =
-      input.status === "published" || existing.status === "published"
-        ? await refreshGuidePages({ slug: post.slug, previousSlug: existing.slug })
-        : null;
+    const cache = isPublic
+      ? await refreshGuidePages({ slug: post.slug, previousSlug: existing.slug, menuBefore })
+      : null;
     return Response.json({ post, cache });
   } catch (e) {
     return failed(e, "Failed to save.");
@@ -73,9 +74,10 @@ export async function DELETE(_request: Request, context: Context) {
     // Read the slug before the row is gone: afterwards nothing says which URL to purge.
     const doomed = await getPostById(id);
     if (!doomed) return notFound();
+    const menuBefore = doomed.status === "published" ? await readBlogMenu() : null;
     await deletePost(id);
 
-    const cache = doomed.status === "published" ? await refreshGuidePages({ slug: doomed.slug }) : null;
+    const cache = doomed.status === "published" ? await refreshGuidePages({ slug: doomed.slug, menuBefore }) : null;
     return Response.json({ ok: true, cache });
   } catch (e) {
     return failed(e, "Failed to delete.");

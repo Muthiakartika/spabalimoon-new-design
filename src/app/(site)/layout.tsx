@@ -3,7 +3,7 @@ import Header from "@/components/layout/Header";
 import { mobileMenuData } from "@/components/layout/mobileMenuData";
 
 /** Every page except the 404: header, the page inside <main>, footer. */
-export default function SiteLayout({ children }: { children: React.ReactNode }) {
+export default async function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       {/* Lets keyboard users skip the 23-item treatments menu */}
@@ -13,7 +13,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       >
         Skip to content
       </a>
-      <Header menu={mobileMenuData()} />
+      <Header menu={await mobileMenuData()} />
       <main id="main-content">{children}</main>
       <Footer />
     </>

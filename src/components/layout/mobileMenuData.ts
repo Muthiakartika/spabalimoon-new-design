@@ -1,6 +1,6 @@
 import { allTreatments } from "@/components/home/treatments";
-import { guidePosts } from "@/data/guide/posts";
-import { blogMenu, treatmentMenu } from "@/data/navigation";
+import { treatmentMenu } from "@/data/navigation";
+import { getBlogMenu } from "@/lib/blog/posts";
 
 /** One row in the mobile menu's Treatments or Blog panel. */
 export type MobileMenuEntry = { label: string; href: string; image: string; note?: string };
@@ -14,9 +14,10 @@ export type MobileMenuData = { treatments: MobileMenuGroup[]; posts: MobileMenuE
  *  - Treatments: the header's 23 treatments in their menu order and wording,
  *    split into massage and beauty as the homepage menu does, each with the
  *    homepage slider's photo and starting price ("From IDR 159K").
- *  - Blog: the articles in the blog menu, in its order, with their cover photos.
+ *  - Blog: the blog menu from the database (titles as set in /admin/), with
+ *    the cover photos. The desktop Blog dropdown lists the same entries.
  */
-export function mobileMenuData(): MobileMenuData {
+export async function mobileMenuData(): Promise<MobileMenuData> {
   const entries = treatmentMenu.map((t) => {
     const card = allTreatments.find((a) => a.href === t.href);
     return {
@@ -29,10 +30,10 @@ export function mobileMenuData(): MobileMenuData {
       { title: "Massage", items: entries.filter((e) => e.group === "massage").map((e) => e.entry) },
       { title: "Beauty & Body", items: entries.filter((e) => e.group === "beauty").map((e) => e.entry) },
     ],
-    posts: blogMenu.map((b) => ({
-      label: b.label,
-      href: b.href,
-      image: guidePosts.find((p) => b.href === `/guide/${p.slug}/`)?.cover_image ?? "",
+    posts: (await getBlogMenu()).map((p) => ({
+      label: p.title,
+      href: `/guide/${p.slug}/`,
+      image: p.cover_image ?? "",
     })),
   };
 }

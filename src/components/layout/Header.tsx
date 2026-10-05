@@ -24,7 +24,7 @@ type Sidebar = "closed" | "open" | "closing";
  *   - the sidebar slides out over 400ms ("closing") before it unmounts.
  * Every root element carries `lh` so src/styles/live.css applies.
  * `menu` (built on the server, src/app/(site)/layout.tsx) fills the mobile
- * menu's Treatments and Blog panels.
+ * menu's Treatments and Blog panels and the desktop Blog dropdown.
  */
 export default function Header({ menu }: { menu: MobileMenuData }) {
   const router = useRouter();
@@ -119,7 +119,7 @@ export default function Header({ menu }: { menu: MobileMenuData }) {
             </Link>
             <div className="jsx-header main-menu">
               <nav className="jsx-header">
-                <MainMenu />
+                <MainMenu posts={menu.posts} />
               </nav>
             </div>
             <div className="jsx-header menu-btns">
