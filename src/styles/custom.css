@@ -406,3 +406,22 @@
   text-transform: uppercase;
   color: var(--theme-color1);
 }
+/* /guide/ cards (owner, 5 Oct): titles of one line and of two made the cards
+   in a row end at different heights. Every card now fills its column (the
+   row already makes the columns equal), and "Read More" sits at the bottom,
+   level across the row. Its div keeps the line box it had (a Literata link
+   on a Mulish line is 1px taller than the link). A one-column phone layout
+   is unchanged. */
+.p-guide .blog-block .inner-box {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.p-guide .blog-block .inner-box .content-box {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+.p-guide .blog-block .inner-box .content-box .read-more {
+  margin-top: auto;
+}

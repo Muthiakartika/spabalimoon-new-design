@@ -52,10 +52,14 @@ export default function GuideArchive({ posts }: { posts: PostSummary[] }) {
                           <Link href={href}>{post.title}</Link>
                         </h2>
                         {/* The hidden title makes the link text say which
-                            article it opens (a bare "Read More" is flagged). */}
-                        <Link className="readMore-btn" href={href}>
-                          Read More<span className="sr-only">: {post.title}</span>
-                        </Link>
+                            article it opens (a bare "Read More" is flagged).
+                            The div keeps it on a line of its own, at the
+                            bottom of the card (custom.css). */}
+                        <div className="read-more">
+                          <Link className="readMore-btn" href={href}>
+                            Read More<span className="sr-only">: {post.title}</span>
+                          </Link>
+                        </div>
                       </div>
                     </div>
                   </div>
