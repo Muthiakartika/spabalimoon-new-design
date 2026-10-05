@@ -1298,6 +1298,69 @@ Cek ulang, masih 2 Oktober:
   hasilnya 80/82/82, sama dengan hot-stone. Sesekali Chrome menunda gambar
   pertama sampai sekitar 2,2 detik di mesin ini, di halaman mana saja.
 
+## Urutan heading (5 Oktober)
+
+Pemilik minta struktur heading dirapikan per halaman, dimulai dari `/`. Teks
+yang hanya *terlihat* seperti heading kini memakai `<div>` dengan class
+`look-h2` / `look-h4` / `look-h6` (`src/styles/custom.css`). Class ini
+mengulang aturan h2/h4/h6 milik live.css dengan specificity nol, jadi tampilan
+tidak berubah. Sudah dicek: 0 beda di 21 properti CSS dan posisi elemen, pada 12
+lebar layar, untuk `/`, `/seminyak/`, dan outcall.
+
+- **`/`:** kicker di atas judul (6×), nomor langkah 01–03, harga kartu
+  treatment, nama dan harga paket (harga sebelumnya H2), judul kartu "What
+  Makes Spa Bali Moon Different", serta nama reviewer. Hasilnya H1 → H2 → H3
+  tanpa lompatan, dan jumlah heading turun dari 151 menjadi 84.
+- **Ikut berubah karena komponennya sama:** nama reviewer di `/seminyak/`
+  (`TestimonialCard`), serta kicker price list di `/seminyak/` ("Best Price")
+  dan outcall ("Prices") (`MenuIntro`).
+- **Masih tersisa di `/`:** dua H2 di FAQ ("Time to Unwind" di atas foto +
+  "Questions About Our Spa"), nomor pertanyaan yang ikut masuk teks H3 FAQ, dan
+  4 H3 di footer (semua halaman).
+- **`/seminyak/` (Pricelist):** 11 kicker H4 lagi menjadi `div.look-h4`
+  (VideoSection, PackageIntro, judul kecil di atas 8 grup paket). Atas
+  permintaan pemilik, kartu paket memakai nama **H3** (sebelumnya H4) dan harga
+  **H4** (sebelumnya H2), tanpa perubahan tampilan. Aturannya ada di
+  `custom.css`. Hasilnya H1 → H2 (grup) → H3 (paket) → H4 (harga) tanpa
+  lompatan, dan heading turun dari 172 menjadi 137. Sudah dicek: 0 beda di 12
+  lebar layar. Yang tersisa sama seperti `/`: dua H2 di FAQ dan H3 di footer.
+  Di beranda, nama dan harga paket tetap `<div>`.
+- **Outcall:** 6 poin keunggulan dan baris "Home service fee: IDR 75,000 per
+  therapist" di section "Home Service Massage" diubah dari H5 menjadi **H3**
+  (`HomeServiceInfo.tsx`), atas permintaan pemilik. Line-height 30px dikunci di
+  inline style supaya tidak ikut line-height H3 (35px). Sudah dicek: 0 beda di
+  12 lebar layar. Kicker H4 "Treat yourself to a Balinese spa experience right
+  where you are" kini `div.look-h4`.
+- **`/reservation/` kini punya H1** (live tidak punya). Kicker "Your Spa
+  Experience is One Click Away" diubah dari H4 menjadi `div`. "Book Your
+  Treatment" naik dari H2 ke **H1**. Dua rute booking ("Home Service Massage
+  (Hotel & Villa)", "Day Spa Bookings (Seminyak Location)") naik dari H3 ke
+  **H2**. Delapan poinnya naik dari H5 ke **H3**. Tiap tag membawa class
+  `look-h2/3/5` sesuai level lamanya. Di `custom.css`, class `look-h*` kini
+  juga berlaku pada tag heading, dengan specificity yang sama dengan heading
+  sehingga menang karena dimuat lebih akhir. Hasilnya H1 → H2 → H3. Sudah
+  dicek: 0 beda di 12 lebar layar untuk `/`, `/seminyak/`, outcall, dan
+  reservation.
+- **`/guide/` (Blog):** baris "Spa Bali Moon · Blog" di tiap kartu diubah dari
+  H6 menjadi `div.look-h6`. Judul artikel naik dari H4 ke **H2**
+  (`h2.look-h4`, `GuideArchive.tsx`). Hasilnya H1 → H2. Sudah dicek: 0 beda di
+  12 lebar layar.
+- **`/contact/`:** label "WhatsApp Message / Visit anytime / Opening Times"
+  diubah dari H6 menjadi **H3** (`ContactSection.tsx`). `custom.css` menyalin
+  aturan live `.cf-rail__list.jsx-contact h6` untuk `h3`. Hasilnya H1 → H2 →
+  H3. Sudah dicek: 0 beda di 12 lebar layar.
+- **`/privacy-policy/` dan `/terms-and-conditions/`:** judul bagian (7 di
+  tiap halaman) diubah dari H3 menjadi **H2** (`h2.look-h3`; ukuran 26px tetap
+  dari inline style). Kotak "Hours of Operation" diubah dari H4 menjadi `div`,
+  dan label Email / WhatsApp / Address di privacy dari H6 menjadi `div`.
+  Hasilnya H1 → H2.
+- **`/seminyak/day-spa/`:** 23 nama reviewer diubah dari H4 menjadi
+  `div.look-h4`, sehingga lompatan H2→H4 hilang. Perubahan ini lewat prop
+  `namesAsHeadings={false}` di `TreatmentTestimonials`, jadi 25 halaman lain
+  yang memakai komponen itu masih H4. Kalau nanti semua halaman diubah, cukup
+  balik default prop-nya. Ketiga halaman sudah dicek: 0 beda di 12 lebar
+  layar.
+
 ## Draf: beranda v2 di `/home-v2/` (30 September)
 
 Duplikat beranda dengan layout sedikit diubah; isi, warna, huruf dan dekorasi

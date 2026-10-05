@@ -30,10 +30,14 @@ const Quote = () => (
 export default function TreatmentTestimonials({
   paperDecoration = true,
   rightShapeSrc = "/images/shape/testimonial-two-shape-right.png",
+  namesAsHeadings = true,
 }: {
   paperDecoration?: boolean;
   /** `null` hides the right-hand leaf. */
   rightShapeSrc?: string | null;
+  /** `false` sets the reviewer names as <div class="look-h4"> (same look)
+   *  instead of h4: owner, 5 Oct, heading order (so far only /seminyak/day-spa/). */
+  namesAsHeadings?: boolean;
 }) {
   const swiperRef = useRef<SwiperInstance | null>(null);
   const live = () => {
@@ -109,7 +113,7 @@ export default function TreatmentTestimonials({
                   </div>
                   <ReviewText text={t.text} onExpandChange={onExpandChange} onMeasure={onMeasure} />
                   <div className="info">
-                    <h4>{t.name}</h4>
+                    {namesAsHeadings ? <h4>{t.name}</h4> : <div className="look-h4">{t.name}</div>}
                     <span>Customer review</span>
                     <div className="star" aria-label="5 out of 5 stars">
                       {[0, 1, 2, 3, 4].map((s) => (

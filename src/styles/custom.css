@@ -305,3 +305,104 @@
     visibility: hidden;
   }
 }
+
+/* Heading look on another tag (owner, 5 Oct: heading order). Text that was a
+   heading only for its look is now a <div>, and on /reservation/ some
+   headings moved to another level. Either way the tag carries
+   class="look-h2…look-h6" for the level it used to be. These rules repeat
+   live.css's h2–h6 rules: on a div at zero specificity, on a heading at the
+   heading's own specificity, so they win over live.css's rules for that tag
+   by coming later. Every class rule that styled the old heading still wins,
+   as it did before: same font, size and spacing. */
+:where(.look-h2, .look-h3, .look-h4, .look-h5, .look-h6),
+:is(h1, h2, h3, h4, h5, h6):where(.look-h2, .look-h3, .look-h4, .look-h5, .look-h6) {
+  margin: 0;
+  padding: 0;
+  color: var(--headings-color);
+  font-family: var(--title-font);
+}
+:where(.look-h2),
+:is(h1, h2, h3, h4, h5, h6):where(.look-h2) {
+  font-size: 55px;
+  font-weight: 300;
+  line-height: 65px;
+}
+:where(.look-h3),
+:is(h1, h2, h3, h4, h5, h6):where(.look-h3) {
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 35px;
+}
+:where(.look-h4),
+:is(h1, h2, h3, h4, h5, h6):where(.look-h4) {
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 32px;
+}
+:where(.look-h5),
+:is(h1, h2, h3, h4, h5, h6):where(.look-h5) {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 30px;
+}
+:where(.look-h6),
+:is(h1, h2, h3, h4, h5, h6):where(.look-h6) {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 28px;
+}
+@media (max-width: 767px) {
+  :where(.look-h2),
+  :is(h1, h2, h3, h4, h5, h6):where(.look-h2) {
+    font-size: 30px;
+    line-height: 40px;
+  }
+  :where(.look-h3),
+  :is(h1, h2, h3, h4, h5, h6):where(.look-h3) {
+    font-size: 20px;
+    line-height: 30px;
+  }
+  :where(.look-h4),
+  :is(h1, h2, h3, h4, h5, h6):where(.look-h4) {
+    font-size: 18px;
+    line-height: 26px;
+  }
+}
+/* live.css's ".pricing-block-five .inner-box h4" (the package name), and its
+   line break, which stays on below 1400px where live hides other <br>s. */
+.pricing-block-five .inner-box :where(.look-h4) {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 400;
+}
+.pricing-block-five .inner-box :where(.look-h4) br {
+  display: inline;
+}
+/* /seminyak/ package cards (owner, 5 Oct): the name is now h3 (was h4) and
+   the price h4 (was h2), with the same look. The name repeats live.css's
+   ".pricing-block-five .inner-box h4" rule. The price's size and colour come
+   from ".pricing-block-five .inner-box .price"; only the weight came from h2. */
+.pricing-block-five .inner-box h3 {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 400;
+}
+.pricing-block-five .inner-box h3 br {
+  display: inline;
+}
+.pricing-block-five .inner-box h4.price {
+  font-weight: 300;
+}
+/* /contact/ (owner, 5 Oct): the three labels beside the icons (WhatsApp
+   Message, Visit anytime, Opening Times) are now h3 (were h6), with the look
+   of live.css's ".cf-rail__list.jsx-contact h6" rule. */
+.cf-rail__list.jsx-contact h3 {
+  margin: 0 0 2px;
+  font-family: var(--text-font);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--theme-color1);
+}

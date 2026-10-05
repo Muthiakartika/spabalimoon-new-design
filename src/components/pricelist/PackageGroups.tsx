@@ -26,9 +26,9 @@ export default function PackageGroups({ groups, icons }: { groups: PackageGroup[
           >
             <div className="container">
               <div className="section-header mb-60 center">
-                <h4 className="sub-title wow fadeInUp" data-wow-delay="00ms" data-wow-duration="1500ms">
+                <div className="sub-title look-h4 wow fadeInUp" data-wow-delay="00ms" data-wow-duration="1500ms">
                   {group.subTitle}
-                </h4>
+                </div>
                 <h2 className="title wow fadeInUp" data-wow-delay="200ms" data-wow-duration="1500ms">
                   {group.title}
                 </h2>
@@ -51,13 +51,13 @@ export default function PackageGroups({ groups, icons }: { groups: PackageGroup[
                       <div className="icon">
                         <img loading="lazy" decoding="async" src={icon} alt={`${group.cardTitle} icon`} />
                       </div>
-                      <h4>
+                      <h3>
                         {group.cardTitle} <br /> Package {String.fromCharCode(65 + i)}
-                      </h4>
-                      <h2 className="price">
+                      </h3>
+                      <h4 className="price">
                         {shortPrice(pack.price)}
                         {group.twoPax && <span className="pax-note">2 pax</span>}
-                      </h2>
+                      </h4>
                       <ul>
                         {pack.items.map((item, j) => (
                           <li key={j}>
