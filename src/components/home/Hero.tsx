@@ -15,12 +15,12 @@ const FEATURES = [
 
 /**
  * How wide the hero photo is drawn, for picking its file. Below 992px it
- * covers a full-width box clamp(280px, 64vw, 440px) tall, so a 1920x1080
- * photo is drawn at least 1.78 times that height wide; phones up to about
- * 2.4x pixel density then get the 1200px file, sharper ones the original.
+ * covers a full-width box clamp(280px, 64vw, 440px) tall, so a 1920x850
+ * photo is drawn at least 2.26 times that height wide; phones up to about
+ * 1.9x pixel density then get the 1200px file, sharper ones the original.
  * Wider screens always get the original.
  */
-const PHOTO_SIZES = "(max-width: 991px) max(100vw, calc(clamp(280px, 64vw, 440px) * 1.78)), 1920px";
+const PHOTO_SIZES = "(max-width: 991px) max(100vw, calc(clamp(280px, 64vw, 440px) * 2.26)), 1920px";
 
 /**
  * Homepage v2 hero — text left (kicker, title, copy, two buttons, three
@@ -34,11 +34,11 @@ export default function Hero() {
   return (
     <section id="home" className="banner-five-area section__decoration-bottom mb-130 v2-hero">
       <div className="v2-hero__photo">
-        {/* The client, 3 Oct: "just the main banner image"; the owner picked this
-            head massage (also the Jet Lag guide's cover) from five site photos. */}
+        {/* The owner's banner photo, 5 Oct: a Spa Bali Moon therapist giving a
+            head massage (client file Homepage.jpg, 1920x850, as WebP). */}
         <img
-          src="/images/home/hero-massage.webp"
-          srcSet="/images/home/hero-massage-1200.webp 1200w, /images/home/hero-massage.webp 1920w"
+          src="/images/home/hero-head-massage.webp"
+          srcSet="/images/home/hero-head-massage-1200.webp 1200w, /images/home/hero-head-massage.webp 1920w"
           sizes={PHOTO_SIZES}
           alt="A guest relaxing during a head massage at Spa Bali Moon"
           fetchPriority="high"
