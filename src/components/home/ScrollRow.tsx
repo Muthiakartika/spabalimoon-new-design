@@ -185,7 +185,14 @@ export default function ScrollRow({ className, below, indicator = "dots", label,
         </button>
         {indicator === "bar" ? (
           <div className="v2-scroll-nav__bar" aria-hidden="true">
-            <span style={{ width: `${pos.size * 100}%`, left: `${pos.offset * 100}%` }} />
+            {/* Moved with a transform (a share of its own width), which the
+                browser animates off the main thread; `left` was not. */}
+            <span
+              style={{
+                width: `${pos.size * 100}%`,
+                transform: `translateX(${pos.size ? (pos.offset / pos.size) * 100 : 0}%)`,
+              }}
+            />
           </div>
         ) : (
           <div className="v2-scroll-nav__dots">

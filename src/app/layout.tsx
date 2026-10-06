@@ -48,8 +48,9 @@ export const viewport: Viewport = {
  * the live 404 page has neither header nor footer.
  */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  // The live site preloads the Latin subsets of its two families.
-  preload("/webfonts/or3hQ6P12-iJxAIgLYTwJrUXnTPm.woff2", { as: "font", type: "font/woff2", crossOrigin: "anonymous" });
+  // The live site preloads the Latin subsets of its two families. Literata's
+  // is the trimmed copy live.css now uses (see its @font-face).
+  preload("/webfonts/literata-latin-opsz12-72.woff2", { as: "font", type: "font/woff2", crossOrigin: "anonymous" });
   preload("/webfonts/1Ptvg83HX_SGhgqk3wotYKNnBQ.woff2", { as: "font", type: "font/woff2", crossOrigin: "anonymous" });
 
   return (

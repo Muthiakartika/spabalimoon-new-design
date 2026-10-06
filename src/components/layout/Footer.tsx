@@ -137,7 +137,16 @@ export default function Footer() {
           </div>
           <div className="site-footer__brand">
             <Link prefetch={false} href="/" className="site-footer__logo">
-              <img loading="lazy" decoding="async" src="/images/logo/SMBtitle-footer.svg" alt={business.name} />
+              {/* The SVG's proportions (viewBox 476 x 95), so its height is kept
+                  before it loads; footer.css sets the width. */}
+              <img
+                loading="lazy"
+                decoding="async"
+                src="/images/logo/SMBtitle-footer.svg"
+                alt={business.name}
+                width="499"
+                height="100"
+              />
             </Link>
             <p className="site-footer__about">{business.aboutText}</p>
             <a href={whatsappChatUrl} target="_blank" rel="noopener noreferrer" className="btn-two site-footer__cta">

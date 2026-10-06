@@ -52,7 +52,17 @@ export default function Testimonials() {
         <img loading="lazy" decoding="async" className="animation__arryLeftRight" src="/images/shape/testimonial-two-shape-right.png" alt="image" />
       </div>
       <div className="shape3">
-        <img loading="lazy" decoding="async" className="bobble__animation" src="/images/logo/sbm.webp" alt="Spa Bali Moon watermark" />
+        {/* The file's own size, so PageSpeed sees a sized image; live.css
+            still draws it at min(420px, 70vw) wide. */}
+        <img
+          loading="lazy"
+          decoding="async"
+          className="bobble__animation"
+          src="/images/logo/sbm.webp"
+          alt="Spa Bali Moon watermark"
+          width="659"
+          height="515"
+        />
       </div>
       <div className="container">
         <div ref={box} className="outer-box">
