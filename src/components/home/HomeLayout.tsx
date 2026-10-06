@@ -7,6 +7,7 @@ import Hero from "@/components/home/Hero";
 import Packages from "@/components/home/Packages";
 import WhyDifferent from "@/components/home/WhyDifferent";
 import Testimonials from "@/components/sections/Testimonials";
+import HydrateLater from "@/components/ui/HydrateLater";
 
 /**
  * The v2 homepage, section by section. The treatments section, the spa menu
@@ -29,18 +30,32 @@ export default function HomeLayout({
   className?: string;
   aboutSubTitle?: string;
 }) {
+  // Everything under the hero wakes up after it, in small steps
+  // (HydrateLater), so the page never blocks a slow phone for long.
   return (
     <div className={`page-wrapper lh p-home home-v2${className ? ` ${className}` : ""}`}>
       <Hero />
-      <Steps />
-      <About subTitle={aboutSubTitle} />
-      {treatments}
-      {menu}
-      <Testimonials />
-      <Packages />
-      <WhyDifferent />
-      {faq}
-      <ReserveCta />
+      <HydrateLater>
+        <Steps />
+      </HydrateLater>
+      <HydrateLater>
+        <About subTitle={aboutSubTitle} />
+      </HydrateLater>
+      <HydrateLater>{treatments}</HydrateLater>
+      <HydrateLater>{menu}</HydrateLater>
+      <HydrateLater>
+        <Testimonials />
+      </HydrateLater>
+      <HydrateLater>
+        <Packages />
+      </HydrateLater>
+      <HydrateLater>
+        <WhyDifferent />
+      </HydrateLater>
+      <HydrateLater>{faq}</HydrateLater>
+      <HydrateLater>
+        <ReserveCta />
+      </HydrateLater>
     </div>
   );
 }

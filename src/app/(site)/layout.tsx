@@ -1,6 +1,7 @@
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import { mobileMenuData } from "@/components/layout/mobileMenuData";
+import HydrateLater from "@/components/ui/HydrateLater";
 
 /** Every page except the 404: header, the page inside <main>, footer. */
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
@@ -15,7 +16,10 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       </a>
       <Header menu={await mobileMenuData()} />
       <main id="main-content">{children}</main>
-      <Footer />
+      {/* Wakes up after the page above it (see HydrateLater). */}
+      <HydrateLater>
+        <Footer />
+      </HydrateLater>
     </>
   );
 }

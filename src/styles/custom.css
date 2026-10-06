@@ -425,3 +425,13 @@
 .p-guide .blog-block .inner-box .content-box .read-more {
   margin-top: auto;
 }
+
+/* Scroll areas that keep their scrolling to themselves (the phone menu, the
+   header search, the rows of cards). live.css has this from Lenis, but only
+   while Lenis runs (`.lenis [data-lenis-prevent]`); since 6 Oct Lenis does
+   not run on phones and tablets (src/components/layout/SmoothScroll.tsx,
+   PageSpeed), so the same rule is set here for every device. Lower
+   specificity than home-v2.css's rows, which still lift it vertically. */
+:where([data-lenis-prevent-horizontal], [data-lenis-prevent-touch], [data-lenis-prevent-vertical], [data-lenis-prevent-wheel], [data-lenis-prevent]):where(.lh, .lh *) {
+  overscroll-behavior: contain;
+}

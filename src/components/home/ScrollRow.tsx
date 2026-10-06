@@ -93,8 +93,15 @@ export default function ScrollRow({ className, below, indicator = "dots", label,
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => setPos(current()));
     };
-    update();
-    const resize = new ResizeObserver(update);
+    // The observer also reports once at the start, right after the browser
+    // has laid the row out, so its geometry is read for free. Reading it in
+    // a frame of its own, after other parts of the page had changed, made the
+    // browser lay out the whole page again just for this row (PageSpeed's
+    // "forced reflow", about 100ms on a slow phone).
+    const resize = new ResizeObserver(() => {
+      cancelAnimationFrame(frame);
+      setPos(current());
+    });
     resize.observe(track);
     track.addEventListener("scroll", update, { passive: true });
     return () => {

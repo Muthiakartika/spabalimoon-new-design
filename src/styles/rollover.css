@@ -75,7 +75,7 @@
 .service-block-two .inner-box:hover .icon .service-treatment-icon {
   filter: none;
 }
-:where(:root.gold-b, :root:has(.home-v3)) .service-block-two .inner-box:hover .icon .service-treatment-icon {
+:where(:root.gold-b) .service-block-two .inner-box:hover .icon .service-treatment-icon {
   filter: url(#gold-b);
 }
 

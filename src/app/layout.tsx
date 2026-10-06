@@ -5,6 +5,7 @@ import MobileActionBar from "@/components/layout/MobileActionBar";
 import Preloader from "@/components/layout/Preloader";
 import SiteChrome from "@/components/layout/SiteChrome";
 import SmoothScroll from "@/components/layout/SmoothScroll";
+import HydrateLater from "@/components/ui/HydrateLater";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import { business } from "@/data/business";
 import "./globals.css";
@@ -54,7 +55,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     // `gold-b`: the owner's gold #B88C35 on every page (1 Oct). Remove the
     // class to go back to the live gold #A78627, which live.css still
-    // defines; the homepage keeps gold B either way (src/styles/gold.css).
+    // defines, on every page (src/styles/gold.css).
     <html lang="en" className="gold-b">
       <body>
         {children}
@@ -63,7 +64,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <MobileActionBar />
           <Preloader />
           <SmoothScroll />
-          <ScrollReveal />
+          {/* Marks [data-reveal] elements all over the page, so it starts only
+              once the sections that wake up late (HydrateLater) are awake:
+              React would otherwise find its marks on them as a mismatch. */}
+          <HydrateLater>
+            <ScrollReveal />
+          </HydrateLater>
         </SiteChrome>
         {/* Repaints single-colour gold images (logos, the lotus mark,
             treatment icons) in #B88C35, keeping their shape: see gold.css. */}

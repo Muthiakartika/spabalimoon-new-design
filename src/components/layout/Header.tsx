@@ -7,6 +7,7 @@ import MainMenu from "@/components/layout/MainMenu";
 import { MenuIcon } from "@/components/layout/MenuIcons";
 import MobileMenu from "@/components/layout/MobileMenu";
 import type { MobileMenuData } from "@/components/layout/mobileMenuData";
+import HydrateLater from "@/components/ui/HydrateLater";
 import { LotusPaths } from "@/components/ui/Lotus";
 import { business } from "@/data/business";
 import { searchIndex } from "@/data/navigation";
@@ -277,34 +278,38 @@ export default function Header({ menu }: { menu: MobileMenuData }) {
           </button>
         </div>
         <div className="jsx-header offcanvas-body mnav__body">
-          <MobileMenu data={menu} open={sidebar === "open"} onNavigate={closeSidebar}>
-            <div className="mnav__card mnav__anim" style={{ "--i": 7 } as CSSProperties}>
-              <ul className="mnav__info">
-                <li>
-                  <i className="fa-light fa-clock" aria-hidden="true" />
-                  <span>
-                    {business.openingHours.label} · {business.openingHours.display}
-                  </span>
-                </li>
-                <li>
-                  <i className="fa-light fa-location-dot" aria-hidden="true" />
-                  <a href={business.mapsUrl} target="_blank" rel="noopener noreferrer">
-                    {business.address.short}
-                  </a>
-                </li>
-                <li>
-                  <i className="fa-light fa-phone-volume" aria-hidden="true" />
-                  <a href={whatsappChatUrl} target="_blank" rel="noopener noreferrer">
-                    {business.phoneDisplay}
-                  </a>
-                </li>
-              </ul>
-              <a href={whatsappChatUrl} target="_blank" rel="noopener noreferrer" className="btn-two mnav__cta">
-                <i className="fa-brands fa-whatsapp" aria-hidden="true" />
-                Book on WhatsApp
-              </a>
-            </div>
-          </MobileMenu>
+          {/* About 400 elements that stay off screen until the menu opens:
+              they wake up after the page (see HydrateLater). */}
+          <HydrateLater>
+            <MobileMenu data={menu} open={sidebar === "open"} onNavigate={closeSidebar}>
+              <div className="mnav__card mnav__anim" style={{ "--i": 7 } as CSSProperties}>
+                <ul className="mnav__info">
+                  <li>
+                    <i className="fa-light fa-clock" aria-hidden="true" />
+                    <span>
+                      {business.openingHours.label} · {business.openingHours.display}
+                    </span>
+                  </li>
+                  <li>
+                    <i className="fa-light fa-location-dot" aria-hidden="true" />
+                    <a href={business.mapsUrl} target="_blank" rel="noopener noreferrer">
+                      {business.address.short}
+                    </a>
+                  </li>
+                  <li>
+                    <i className="fa-light fa-phone-volume" aria-hidden="true" />
+                    <a href={whatsappChatUrl} target="_blank" rel="noopener noreferrer">
+                      {business.phoneDisplay}
+                    </a>
+                  </li>
+                </ul>
+                <a href={whatsappChatUrl} target="_blank" rel="noopener noreferrer" className="btn-two mnav__cta">
+                  <i className="fa-brands fa-whatsapp" aria-hidden="true" />
+                  Book on WhatsApp
+                </a>
+              </div>
+            </MobileMenu>
+          </HydrateLater>
         </div>
       </div>
     </>

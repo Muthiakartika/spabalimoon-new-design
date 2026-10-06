@@ -8,6 +8,12 @@
       "port": 3100
     },
     {
+      "name": "rebuild-3110",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--", "-p", "3110"],
+      "port": 3110
+    },
+    {
       "name": "rebuild-prod",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "start", "--", "-p", "3100"],

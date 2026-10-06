@@ -20,6 +20,8 @@
  *   A stylesheet only some pages load (a page's own styled-jsx) keeps that
  *   limit: its selectors that would also match on other pages get
  *   `:where(body:has(.p-<page>))` — every page root carries its `p-<page>`.
+ *   One exception, edited by hand (6 Oct): the homepage's font rules
+ *   (__jsx-home) use `:where(.p-home)`, see there.
  *
  * Renamed, consistently in markup and CSS
  *   styled-jsx hashes      jsx-fa73d67a1cbde21f -> jsx-header (etc.)
@@ -10208,24 +10210,31 @@ svg.icon[viewBox="0 0 25 26"]>*:where(.lh,.lh *) {
 }
 
 /* __jsx-home */
-:where(body:has(.p-home)) h1:where(.lh,.lh *),
-:where(body:has(.p-home)) h2:where(.lh,.lh *),
-:where(body:has(.p-home)) h3:where(.lh,.lh *),
-:where(body:has(.p-home)) h4:where(.lh,.lh *),
-:where(body:has(.p-home)) h6:where(.lh,.lh *),
-:where(body:has(.p-home)) .sub-title:where(.lh,.lh *) {
+/* Scoped to the homepage's own root (.p-home) rather than
+   `:where(body:has(.p-home))` (6 Oct, PageSpeed): with `body:has()` in front
+   of h1, p, li… every change to the page made the browser restyle every
+   heading, paragraph and list item on it (about 1,250 elements each time).
+   Nothing outside .p-home took these fonts: the header, menu and footer keep
+   their own, and the phone bar's button pins its font in custom.css. */
+:where(.p-home) h1:where(.lh,.lh *),
+:where(.p-home) h2:where(.lh,.lh *),
+:where(.p-home) h3:where(.lh,.lh *),
+:where(.p-home) h4:where(.lh,.lh *),
+:where(.p-home) h6:where(.lh,.lh *),
+:where(.p-home) .sub-title:where(.lh,.lh *) {
   font-family: var(--title-font);
 }
-:where(body:has(.p-home)) :where(.lh) {
+:where(.p-home):where(.lh),
+:where(.p-home) :where(.lh) {
   font-family: var(--text-font);
 }
-:where(body:has(.p-home)) p:where(.lh,.lh *),
-:where(body:has(.p-home)) li:where(.lh,.lh *),
-:where(body:has(.p-home)) input:where(.lh,.lh *),
-:where(body:has(.p-home)) button:where(.lh,.lh *),
-:where(body:has(.p-home)) .btn-two:where(.lh,.lh *),
-:where(body:has(.p-home)) .reserve-cta-button:where(.lh,.lh *),
-:where(body:has(.p-home)) .book-now:where(.lh,.lh *) {
+:where(.p-home) p:where(.lh,.lh *),
+:where(.p-home) li:where(.lh,.lh *),
+:where(.p-home) input:where(.lh,.lh *),
+:where(.p-home) button:where(.lh,.lh *),
+:where(.p-home) .btn-two:where(.lh,.lh *),
+:where(.p-home) .reserve-cta-button:where(.lh,.lh *),
+:where(.p-home) .book-now:where(.lh,.lh *) {
   font-family: var(--text-font);
 }
 .banner-five-area .banner-five__content .title:where(.lh,.lh *),

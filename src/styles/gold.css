@@ -9,12 +9,13 @@
  * proportion; live's other golds (#B39242, #B8952E) become B itself.
  *
  * THE SWITCH: every rule here hangs off the root element having the class
- * `gold-b` (set in src/app/layout.tsx) or containing the homepage
- * (`.home-v3`, which had gold B before the rest of the site). Nothing in
- * live.css is changed — the old gold is still defined there — so:
- *   - remove className="gold-b" in src/app/layout.tsx: the site goes back to
- *     #A78627 and only the homepage keeps gold B (the state before 1 Oct);
- *   - also drop `:has(.home-v3)` from the scopes below: #A78627 everywhere.
+ * `gold-b` (set in src/app/layout.tsx). Nothing in live.css is changed — the
+ * old gold is still defined there — so removing className="gold-b" in
+ * src/app/layout.tsx takes the whole site back to #A78627, the homepage
+ * included. Until 6 Oct the homepage kept gold B even then, through a second
+ * scope, `:root:has(.home-v3)`; it went for speed (PageSpeed): with `:has()`
+ * on the root, every change to a page made the browser restyle every element
+ * these rules reach (about 1,250 on the homepage) each time.
  *
  * What it takes, found by sweeping all 42 pages and the 404 (source
  * literals, images shown, computed styles):
@@ -33,10 +34,10 @@
       header, the mobile menu, the page, the footer, the WhatsApp button,
       the preloader), so they are overridden on each; everything drawn with
       them follows. --color-gold is the Tailwind theme's copy. */
-:root:is(.gold-b, :has(.home-v3)) {
+:root.gold-b {
   --color-gold: #b88c35;
 }
-:root:is(.gold-b, :has(.home-v3)) .lh {
+:root.gold-b .lh {
   --theme-color1: #b88c35;
   --theme-color1-rgb: 184, 140, 53;
 }
@@ -45,10 +46,10 @@
       "different" icons, hero facts, About ticks, review quotes, brand
       cards). Kept at the lowest specificity a CSS rule can have, so every
       live rule that recolours them (white on hover) still wins. */
-:where(:root.gold-b, :root:has(.home-v3)) [fill="#A78627" i] {
+:where(:root.gold-b) [fill="#A78627" i] {
   fill: #b88c35;
 }
-:where(:root.gold-b, :root:has(.home-v3)) [stroke="#A78627" i] {
+:where(:root.gold-b) [stroke="#A78627" i] {
   stroke: #b88c35;
 }
 
@@ -59,7 +60,7 @@
       icons, the guide list bullets) and the treatment icons. Low
       specificity again: the homepage's white icons on gold badges and the
       treatment slider's white icons on hover keep their own filter. */
-:where(:root.gold-b, :root:has(.home-v3))
+:where(:root.gold-b)
   img:is(
     [src*="/images/logo/SMBtitle" i],
     [src*="/images/logo/sbm.webp" i],
@@ -67,66 +68,66 @@
     [src*="/images/spa/" i],
     [src*="/images/icon/icon-spa/" i]
   ),
-:where(:root.gold-b, :root:has(.home-v3))
+:where(:root.gold-b)
   :is(.brand-lotus-icon-svg, .sub-title > svg[viewBox="0 0 25 25"], svg.icon[viewBox="0 0 25 26"]),
-:where(:root.gold-b, :root:has(.home-v3)) .blog-details__rich ul li::before {
+:where(:root.gold-b) .blog-details__rich ul li::before {
   filter: url(#gold-b);
 }
 
 /* 4. Fixed old-gold values in live.css (same selectors, so the same states). */
-:root:is(.gold-b, :has(.home-v3)) .header__main .menu-btns .header-call:is(:hover, :focus-visible) {
+:root.gold-b .header__main .menu-btns .header-call:is(:hover, :focus-visible) {
   color: #987426;
 }
-:root:is(.gold-b, :has(.home-v3)) .sidebar-area--white .btn-close:hover,
-:root:is(.gold-b, :has(.home-v3)) .sidebar-area--white .mobile-menu ul li .dropdown-btn:is(:hover, :focus-visible) i {
+:root.gold-b .sidebar-area--white .btn-close:hover,
+:root.gold-b .sidebar-area--white .mobile-menu ul li .dropdown-btn:is(:hover, :focus-visible) i {
   border-color: #987426;
   color: #987426;
 }
-:root:is(.gold-b, :has(.home-v3)) .sidebar__search-form input[type="search"]:focus {
+:root.gold-b .sidebar__search-form input[type="search"]:focus {
   box-shadow: 0 0 0 3px rgba(184, 140, 53, 0.18);
 }
-:root:is(.gold-b, :has(.home-v3)) .frangipani-spray__rule {
+:root.gold-b .frangipani-spray__rule {
   background: linear-gradient(90deg, rgba(184, 140, 53, 0) 0, rgba(184, 140, 53, 0.55));
 }
-:root:is(.gold-b, :has(.home-v3)) .header-search.jsx-header .search-trigger.jsx-header:hover,
-:root:is(.gold-b, :has(.home-v3)) .header-search__form-icon.jsx-header {
+:root.gold-b .header-search.jsx-header .search-trigger.jsx-header:hover,
+:root.gold-b .header-search__form-icon.jsx-header {
   color: #b88c35;
 }
-:root:is(.gold-b, :has(.home-v3)) .header-search__input.jsx-header:focus {
+:root.gold-b .header-search__input.jsx-header:focus {
   border-color: #b88c35;
   box-shadow: 0 0 0 3px rgba(184, 140, 53, 0.12);
 }
-:root:is(.gold-b, :has(.home-v3)) .treatment-catalog__toggle:is(:hover, :focus-visible),
-:root:is(.gold-b, :has(.home-v3)) .treatment-catalog__item.is-open .treatment-catalog__toggle {
+:root.gold-b .treatment-catalog__toggle:is(:hover, :focus-visible),
+:root.gold-b .treatment-catalog__item.is-open .treatment-catalog__toggle {
   color: #987426;
   border-color: #987426;
 }
-:root:is(.gold-b, :has(.home-v3)) .wa-prompt__btn.jsx-wa-prompt:is(:hover, :focus-visible) {
+:root.gold-b .wa-prompt__btn.jsx-wa-prompt:is(:hover, :focus-visible) {
   background: #987426;
   border-color: #987426;
 }
-:root:is(.gold-b, :has(.home-v3)) .footer__newsletter .input input {
+:root.gold-b .footer__newsletter .input input {
   border-color: rgba(184, 140, 53, 0.7) !important;
 }
 /* Below 768px the button is gold with white text (live), so only above. */
 @media (min-width: 768px) {
-  :root:is(.gold-b, :has(.home-v3)) .footer__newsletter .input button {
+  :root.gold-b .footer__newsletter .input button {
     color: #b88c35;
   }
 }
 /* Guide articles: the previous/next titles and the "more" cards. */
-:root:is(.gold-b, :has(.home-v3)) .post-nav__title,
-:root:is(.gold-b, :has(.home-v3)) .post-more__card:hover .post-more__heading {
+:root.gold-b .post-nav__title,
+:root.gold-b .post-more__card:hover .post-more__heading {
   color: #b88c35;
 }
-:root:is(.gold-b, :has(.home-v3)) .post-nav__link:hover .post-nav__title {
+:root.gold-b .post-nav__link:hover .post-nav__title {
   color: #987426;
 }
 /* The old tabbed price list (PackageTabs, unused since 1 Oct). */
-:root:is(.gold-b, :has(.home-v3)) :is(.outcall-page, .pricing-package-section) .package-tab ul.nav.nav-tabs li.nav-item button.nav-link:focus-visible {
+:root.gold-b :is(.outcall-page, .pricing-package-section) .package-tab ul.nav.nav-tabs li.nav-item button.nav-link:focus-visible {
   outline-color: rgba(184, 140, 53, 0.3);
 }
-:root:is(.gold-b, :has(.home-v3))
+:root.gold-b
   .package-spread-toggles
   .package-block
   .inner-box
@@ -140,8 +141,8 @@
 
 /* ...and in our own stylesheets: the spa menus' and the draft FAQ's circle
    arrows on hover (spa-menu.css, home-v2.css). */
-:root:is(.gold-b, :has(.home-v3)) .lh .v2-menu .v2-price:is(:hover, :focus-visible) .treatment-catalog__toggle,
-:root:is(.gold-b, :has(.home-v3)) .home-v2 .v2-faq :is(.v2-faq__question button:is(:hover, :focus-visible), .is-open) .treatment-catalog__toggle {
+:root.gold-b .lh .v2-menu .v2-price:is(:hover, :focus-visible) .treatment-catalog__toggle,
+:root.gold-b .home-v2 .v2-faq :is(.v2-faq__question button:is(:hover, :focus-visible), .is-open) .treatment-catalog__toggle {
   color: #987426;
   border-color: #987426;
 }

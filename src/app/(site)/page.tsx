@@ -21,7 +21,7 @@ export const metadata: Metadata = buildMetadata({ title: home.seo.title, descrip
  * list), plus the owner's changes: the slider, menu and About headings in the
  * owner's words, a plain grey FAQ arrow, tighter spacing in places, and the
  * owner's gold #B88C35, logos included (src/styles/gold.css; site-wide since
- * 1 October, and kept here even when the site-wide switch is off).
+ * 1 October).
  * /home-v3/ now redirects here; the other drafts stay as they are.
  */
 export default function HomePage() {
